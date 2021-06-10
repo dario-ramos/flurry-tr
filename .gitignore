@@ -82,3 +82,9 @@ utils/sc_warts2text/sc_warts2text
 utils/sc_wartscat/sc_wartscat
 utils/sc_wartsdump/sc_wartsdump
 utils/sc_wartsfix/sc_wartsfix
+
+# Eclipse CDT IDE-specific files
+.autotools
+.cproject
+.project
+.settings/
