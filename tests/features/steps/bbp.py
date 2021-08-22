@@ -1,18 +1,18 @@
 from behave import *
 import subprocess
-import os
 
 
 @given('I am running scamper from the command line')
 def step_impl(context):
-    # TODO Implement
-    pass
+    context.scamper_path = '../scamper/scamper'
+    context.flurry_tr_cmd = 'flurry-tr'
+    context.bbp_flag = 'b'
 
 
 @when('I run the "flurry-tr" scamper command with argument bbp = "3"')
 def step_impl(context):
-    result = subprocess.run(["../scamper/scamper", "-c", "flurry-tr",
-                             "-b", "3", "-i", "172.217.30.228"], check=True)
+    result = subprocess.run([context.scamper_path, '-c', context.flurry_tr_cmd,
+                             context.bbp_flag, '3', '-i', '172.217.30.228'], check=True)
     print(result)
     assert True is False
 
@@ -25,8 +25,8 @@ def step_impl(context):
 
 @when('I run the "flurry-tr" scamper command with argument bbp = "10"')
 def step_impl(context):
-    result = subprocess.run(["../scamper/scamper", "-c", "flurry-tr",
-                             "-b", "10", "-i", "172.217.30.228"], check=True)
+    result = subprocess.run([context.scamper_path, '-c', context.flurry_tr_cmd,
+                             context.bbp_flag, '10', '-i', '172.217.30.228'], check=True)
     print(result)
     assert True is False
 
