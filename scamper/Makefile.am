@@ -137,7 +137,8 @@ scamper_SOURCES = \
 	sniff/scamper_sniff_do.c \
 	host/scamper_host.c \
 	host/scamper_host_warts.c \
-	host/scamper_host_do.c
+	host/scamper_host_do.c \
+	bairestr/scamper_bairestr_do.c
 
 scamper_CFLAGS = $(AM_CFLAGS)
 
@@ -157,7 +158,8 @@ include_HEADERS = \
 	neighbourdisc/scamper_neighbourdisc.h \
 	tbit/scamper_tbit.h \
 	sniff/scamper_sniff.h \
-	host/scamper_host.h
+	host/scamper_host.h \
+	bairestr/scamper_bairestr_do.h
 
 man_MANS = \
 	scamper.1 \

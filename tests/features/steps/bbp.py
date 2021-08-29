@@ -5,13 +5,13 @@ import subprocess
 @given('I am running scamper from the command line')
 def step_impl(context):
     context.scamper_path = '../scamper/scamper'
-    context.flurry_tr_cmd = 'flurry-tr'
+    context.bairestr_cmd = 'bairestr'
     context.bbp_flag = 'b'
 
 
-@when('I run the "flurry-tr" scamper command with argument bbp = "3"')
+@when('I run the "bairestr" scamper command with argument bbp = "3"')
 def step_impl(context):
-    result = subprocess.run([context.scamper_path, '-c', context.flurry_tr_cmd,
+    result = subprocess.run([context.scamper_path, '-c', context.bairestr_cmd,
                              context.bbp_flag, '3', '-i', '172.217.30.228'], check=True)
     print(result)
     assert True is False
@@ -23,9 +23,9 @@ def step_impl(context):
     assert context.failed is False
 
 
-@when('I run the "flurry-tr" scamper command with argument bbp = "10"')
+@when('I run the "bairestr" scamper command with argument bbp = "10"')
 def step_impl(context):
-    result = subprocess.run([context.scamper_path, '-c', context.flurry_tr_cmd,
+    result = subprocess.run([context.scamper_path, '-c', context.bairestr_cmd,
                              context.bbp_flag, '10', '-i', '172.217.30.228'], check=True)
     print(result)
     assert True is False

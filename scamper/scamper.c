@@ -73,6 +73,7 @@ static const char rcsid[] =
 #include "tbit/scamper_tbit_do.h"
 #include "sniff/scamper_sniff_do.h"
 #include "host/scamper_host_do.h"
+#include <bairestr/scamper_bairestr_do.h>
 
 #include "utils.h"
 
@@ -469,6 +470,8 @@ static int check_options(int argc, char *argv[])
      scamper_do_sniff_arg_validate, scamper_do_sniff_usage},
     {"scamper-host", "host",
      scamper_do_host_arg_validate, scamper_do_host_usage},
+	{"scamper-bairestr", "bairestr",
+     scamper_do_bairestr_arg_validate, scamper_do_bairestr_usage},
   };
   int   i;
   long  lo_w = window, lo_p = pps;
