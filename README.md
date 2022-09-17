@@ -13,4 +13,4 @@ waiting for a response to send the next one.
  * Implement design by contract to ensure quality for all new functions and modified pre-existing ones.
  * Add continuous integration.
  
- These goals are intended to ensure quality for the new command, while opening the door to adding that to the remaining commands.
+ These goals are intended to ensure quality for the new command, while opening the door for adding that to the remaining commands.
