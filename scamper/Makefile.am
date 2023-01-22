@@ -49,7 +49,9 @@ libscamperfile_la_SOURCES = \
 	sniff/scamper_sniff.c \
 	sniff/scamper_sniff_warts.c \
 	host/scamper_host.c \
-	host/scamper_host_warts.c
+	host/scamper_host_warts.c \
+	traceb/scamper_traceb.c \
+	traceb/scamper_traceb_text.c
 
 scamper_SOURCES = \
 	../mjl_list.c \
@@ -138,7 +140,9 @@ scamper_SOURCES = \
 	host/scamper_host.c \
 	host/scamper_host_warts.c \
 	host/scamper_host_do.c \
-	bairestr/scamper_bairestr_do.c
+	traceb/scamper_traceb.c \
+	traceb/scamper_traceb_text.c \
+	traceb/scamper_traceb_do.c
 
 scamper_CFLAGS = $(AM_CFLAGS)
 
@@ -159,7 +163,7 @@ include_HEADERS = \
 	tbit/scamper_tbit.h \
 	sniff/scamper_sniff.h \
 	host/scamper_host.h \
-	bairestr/scamper_bairestr_do.h
+	traceb/scamper_traceb.h
 
 man_MANS = \
 	scamper.1 \
@@ -168,4 +172,4 @@ man_MANS = \
 
 CLEANFILES = *~ *.core \
 	trace/*~ ping/*~ tracelb/*~ dealias/*~ sting/*~ \
-	neighbourdisc/*~ tbit/*~ sniff/*~ host/*~
+	neighbourdisc/*~ tbit/*~ sniff/*~ host/*~ traceb/*~

@@ -1,13 +1,11 @@
 /*
- * scamper_bairestr_do.h
+ * scamper_traceb_text.h
  *
- * $Id: scamper_bairestr_do.h,v 1.13 2021/08/24 01:41:02 mjl Exp $
+ * $Id: scamper_traceb_text.h,v 1.2 2023/01/15 16:18:50 dario-ramos Exp $
  *
- * Copyright (C) 2005-2006 Matthew Luckie
+ * Copyright (C) 2003-2006 Matthew Luckie
  * Copyright (C) 2006-2010 The University of Waikato
- * Copyright (C) 2021 Dario Ramos
- *
- * Author: Matthew Luckie
+ * Copyright (C) 2021-2023 Dario Ramos
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,11 +22,10 @@
  *
  */
 
-#ifndef __SCAMPER_DO_BAIRESTR_H
-#define __SCAMPER_DO_BAIRESTR_H
+#ifndef __SCAMPER_TRACEB_TEXT_H
+#define __SCAMPER_TRACEB_TEXT_H
 
-int scamper_do_bairestr_arg_validate(int argc, char *argv[], int *stop);
+int scamper_file_text_traceb_write(const scamper_file_t *sf,
+                                   const struct scamper_traceb *trace);
 
-const char *scamper_do_bairestr_usage(void);
-
-#endif /* __SCAMPER_DO_BAIRESTR_H */
+#endif

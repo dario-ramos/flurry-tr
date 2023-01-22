@@ -53,6 +53,7 @@ static const char rcsid[] =
 #include "tbit/scamper_tbit_do.h"
 #include "sniff/scamper_sniff_do.h"
 #include "host/scamper_host_do.h"
+#include "traceb/scamper_traceb_do.h"
 
 #include "scamper_debug.h"
 
@@ -209,6 +210,12 @@ static const command_func_t command_funcs[] = {
     scamper_do_host_alloctask,
     scamper_do_host_free,
   },
+  {
+    "traceb", 6,
+    scamper_do_traceb_alloc,
+    scamper_do_traceb_alloctask,
+    scamper_do_traceb_free,
+  }
 };
 
 static size_t command_funcc = sizeof(command_funcs) / sizeof(command_func_t);
@@ -1320,14 +1327,14 @@ static const command_func_t *command_func_get(const char *command)
   size_t i;
 
   for(i=0; i<command_funcc; i++)
-    {
+  {
       func = &command_funcs[i];
       if(strncasecmp(command, func->command, func->len) == 0 &&
-	 isspace((int)command[func->len]) && command[func->len] != '\0')
-	{
-	  return func;
-	}
-    }
+          isspace((int)command[func->len]) && command[func->len] != '\0')
+      {
+        return func;
+      }
+  }
 
   return NULL;
 }
@@ -1342,11 +1349,12 @@ static void *command_func_allocdata(const command_func_t *f, const char *cmd)
 {
   char *opts = NULL;
   void *data;
+
   if((opts = strdup(cmd + f->len)) == NULL)
-    {
-      printerror(__func__, "could not strdup cmd opts");
-      return NULL;
-    }
+  {
+    printerror(__func__, "could not strdup cmd opts");
+    return NULL;
+  }
   data = f->allocdata(opts);
   free(opts);
   return data;
@@ -1882,61 +1890,62 @@ int scamper_sources_gettask(scamper_task_t **task)
     source_next();
 
   while((source = source_cur) != NULL)
+  {
+    assert(source->priority > 0);
+
+    while((command = dlist_head_pop(source->commands)) != NULL)
     {
-      assert(source->priority > 0);
 
-      while((command = dlist_head_pop(source->commands)) != NULL)
-	{
-	  if(source->take != NULL)
-	    source->take(source->data);
+      if(source->take != NULL)
+        source->take(source->data);
 
-	  switch(command->type)
-	    {
-	    case COMMAND_PROBE:
-	      if(command_probe_handle(source, command, task) != 0)
-		goto err;
-	      if(*task == NULL)
-		continue;
-	      source_cnt++;
-	      goto done;
+      switch(command->type)
+      {
+        case COMMAND_PROBE:
+          if(command_probe_handle(source, command, task) != 0)
+            goto err;
+          if(*task == NULL)
+            continue;
+          source_cnt++;
+          goto done;
 
-	    case COMMAND_TASK:
-	      if(command_task_handle(source, command, task) != 0)
-		goto err;
-	      if(*task == NULL)
-		continue;
-	      source_cnt++;
-	      goto done;
+        case COMMAND_TASK:
+          if(command_task_handle(source, command, task) != 0)
+            goto err;
+          if(*task == NULL)
+            continue;
+          source_cnt++;
+          goto done;
 
-	    case COMMAND_CYCLE:
-	      command_cycle_handle(source, command);
-	      break;
+        case COMMAND_CYCLE:
+          command_cycle_handle(source, command);
+          break;
 
-	    default:
-	      goto err;
-	    }
-	}
-
-      /* the previous source could not supply a command */
-      assert(dlist_count(source->commands) == 0);
-
-      /*
-       * if the source is not yet finished, put it on the blocked list;
-       * otherwise, the source is detached.
-       */
-      if(scamper_source_isfinished(source) == 0)
-	source_blocked_attach(source);
-      else
-	source_detach(source);
+        default:
+          goto err;
+      }
     }
+
+    /* the previous source could not supply a command */
+    assert(dlist_count(source->commands) == 0);
+
+    /*
+     * if the source is not yet finished, put it on the blocked list;
+     * otherwise, the source is detached.
+     */
+    if(scamper_source_isfinished(source) == 0)
+      source_blocked_attach(source);
+    else
+      source_detach(source);
+  }
 
   *task = NULL;
 
- done:
+done:
   sources_assert();
   return 0;
 
- err:
+err:
   sources_assert();
   return -1;
 }

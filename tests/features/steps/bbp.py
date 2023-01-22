@@ -5,7 +5,7 @@ import subprocess
 @given('I am running scamper from the command line')
 def step_impl(context):
     context.scamper_path = '../scamper/scamper'
-    context.bairestr_cmd = 'bairestr'
+    context.bairestr_cmd = 'traceb'
     context.bbp_flag = 'b'
 
 
