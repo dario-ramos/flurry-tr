@@ -3,7 +3,7 @@
 This is essentially a fork of Scamper's cvs-20210324 release from March 2021. Scamper is not on Github, so I basically copied their source ball
 and started editing. 
 
-The main goal of this fork is to add a new command to Scamper: Baires traceroute. This command sends probe packets back to back, without 
+The main goal of this fork is to add a new command to Scamper: Baires traceroute (traceb in the command line). This command sends probe packets back to back, without 
 waiting for a response to send the next one.
 
  Secondary goals:
