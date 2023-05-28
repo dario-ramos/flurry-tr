@@ -37,17 +37,16 @@ struct scamper_addr;
 
 typedef struct scamper_traceb
 {
-	  /* the current list, cycle, and defaults */
-    // TODO Add these back in later on
-	  // struct scamper_list   *list;
-	  // struct scamper_cycle  *cycle;
-	  // uint32_t               userid;
-
-	  struct scamper_addr   *src;
-	  struct scamper_addr   *dst;
+  /* the current list, cycle, and defaults */
+  // TODO Add these back in later on
+  // struct scamper_list   *list;
+  // struct scamper_cycle  *cycle;
+  // uint32_t               userid;
+  struct scamper_addr *src;
+  struct scamper_addr *dst;
 } scamper_traceb_t;
 
-scamper_traceb_t *scamper_traceb_alloc(void);
-void scamper_traceb_free(scamper_traceb_t *trace);
+scamper_traceb_t* scamper_traceb_alloc (void);
+void scamper_traceb_free (scamper_traceb_t *trace);
 
 #endif /* __SCAMPER_TRACEB_H */
