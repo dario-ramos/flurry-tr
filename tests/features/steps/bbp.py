@@ -1,5 +1,6 @@
 from behave import *
 import subprocess
+from public_ips import get_public_ip
 
 
 @given('I am running scamper from the command line')
@@ -7,11 +8,13 @@ def step_impl(context):
     context.scamper_path = '../scamper/scamper'
     context.bairestr_cmd = 'traceb'
     context.bbp_flag = 'b'
+    context.public_ip = get_public_ip()
+    print(f'\tselected public ip: {context.public_ip}\n')
 
 @when('I run the traceb scamper command with just an IP address argument')
 def step_impl(context):
 	result = subprocess.run(['sudo', context.scamper_path, '-c', context.bairestr_cmd,
-			'-i', '172.217.30.228'], check=True, capture_output=True, text=True)
+			'-i', context.public_ip], check=True, capture_output=True, text=True)
 	context.stdout = result.stdout
 	context.stderr = result.stderr
 	

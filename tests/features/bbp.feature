@@ -1,7 +1,7 @@
 Feature: Back-to-back packets (BBP)
 
    As a scamper user
-   I want to run the new "bairestr" command specifying BBP
+   I want to run the new "traceb" command specifying BBP
    So that I can perform different measurements
    
    Scenario: Default
