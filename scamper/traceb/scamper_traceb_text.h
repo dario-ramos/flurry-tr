@@ -25,7 +25,7 @@
 #ifndef __SCAMPER_TRACEB_TEXT_H
 #define __SCAMPER_TRACEB_TEXT_H
 
-int scamper_file_text_traceb_write(const scamper_file_t *sf,
-                                   const struct scamper_traceb *trace);
+int scamper_file_text_traceb_write (const scamper_file_t *sf,
+                                    const struct scamper_traceb *trace);
 
 #endif

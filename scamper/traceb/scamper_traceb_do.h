@@ -27,17 +27,16 @@
 #ifndef __SCAMPER_DO_TRACEB_H
 #define __SCAMPER_DO_TRACEB_H
 
-void *scamper_do_traceb_alloc(char *str);
+void* scamper_do_traceb_alloc (char *str);
 
-scamper_task_t *scamper_do_traceb_alloctask(void *data,
-                                            scamper_list_t *list,
-                                            scamper_cycle_t *cycle);
+scamper_task_t* scamper_do_traceb_alloctask (void *data, scamper_list_t *list,
+                                             scamper_cycle_t *cycle);
 
-int scamper_do_traceb_arg_validate(int argc, char *argv[], int *stop);
+int scamper_do_traceb_arg_validate (int argc, char *argv[], int *stop);
 
-void scamper_do_traceb_free(void *data);
+void scamper_do_traceb_free (void *data);
 
-const char *scamper_do_traceb_usage(void);
-int scamper_do_traceb_init(void);
+const char* scamper_do_traceb_usage (void);
+int scamper_do_traceb_init (void);
 
 #endif /* __SCAMPER_DO_TRACEB_H */

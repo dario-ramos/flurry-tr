@@ -26,7 +26,7 @@
 
 #ifndef lint
 static const char rcsid[] =
-  "$Id: scamper_traceb_text.c,v 1.30 2023/01/15 16:21:51 dario-ramos Exp $";
+    "$Id: scamper_traceb_text.c,v 1.30 2023/01/15 16:21:51 dario-ramos Exp $";
 #endif
 
 #ifdef HAVE_CONFIG_H
@@ -39,37 +39,36 @@ static const char rcsid[] =
 #include "scamper_traceb_text.h"
 #include "utils.h"
 
-
 /*
  * scamper_file_text_traceb_write
  *
  * return 0 on successful write, -1 otherwise.
  */
-int scamper_file_text_traceb_write(const scamper_file_t *sf,
-                                   const scamper_traceb_t *trace)
+int scamper_file_text_traceb_write (const scamper_file_t *sf,
+                                    const scamper_traceb_t *trace)
 {
   /* current return code */
   int rc = -1;
   /* variables for writing to the file */
   int fd;
-  off_t  foff = 0;
+  off_t foff = 0;
   size_t wc;
 
-  fd = scamper_file_getfd(sf);
-  if(fd != STDOUT_FILENO && (foff = lseek(fd, 0, SEEK_CUR)) == -1)
+  fd = scamper_file_getfd (sf);
+  if (fd != STDOUT_FILENO && (foff = lseek (fd, 0, SEEK_CUR)) == -1)
   {
     goto cleanup;
   }
 
   // TODO Write actual traceb results instead
-  if (write_wrap(fd, "placeholder response from traceb\n", &wc, 33) != 0)
+  if (write_wrap (fd, "placeholder response from traceb\n", &wc, 33) != 0)
   {
     goto cleanup;
   }
 
   rc = 0; /* we succeeded */
 
-  cleanup:
+cleanup:
 
   return rc;
 }

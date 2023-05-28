@@ -47,10 +47,11 @@
 /* the callback functions registered with the traceb task */
 static scamper_task_funcs_t trace_funcs;
 
-static const scamper_option_in_t opts[] = {
+static const scamper_option_in_t opts[] =
+  {
 //  {'A', NULL, TRACEB_OPT_PROBETCPACK,  SCAMPER_OPTION_TYPE_NUM},
 //  {'B', NULL, TRACEB_OPT_PAYLOAD,      SCAMPER_OPTION_TYPE_STR},
-  {'c', NULL, TRACEB_OPT_PROBECOUNT,   SCAMPER_OPTION_TYPE_NUM},
+        { 'c', NULL, TRACEB_OPT_PROBECOUNT, SCAMPER_OPTION_TYPE_NUM },
 //  {'C', NULL, TRACEB_OPT_PROBEICMPSUM, SCAMPER_OPTION_TYPE_STR},
 //  {'d', NULL, TRACEB_OPT_PROBEDPORT,   SCAMPER_OPTION_TYPE_NUM},
 //  {'F', NULL, TRACEB_OPT_PROBESPORT,   SCAMPER_OPTION_TYPE_NUM},
@@ -68,7 +69,7 @@ static const scamper_option_in_t opts[] = {
 //  {'U', NULL, TRACEB_OPT_USERID,       SCAMPER_OPTION_TYPE_NUM},
 //  {'W', NULL, TRACEB_OPT_PROBETIMEOUT, SCAMPER_OPTION_TYPE_NUM},
 //  {'z', NULL, TRACEB_OPT_PROBETOS,     SCAMPER_OPTION_TYPE_NUM},
-};
+    };
 
 static const int opts_cnt = SCAMPER_OPTION_COUNT(opts);
 
@@ -78,87 +79,89 @@ static int sunos = 0;
 /* address cache used to avoid reallocating the same address multiple times */
 extern scamper_addrcache_t *addrcache;
 
-void *scamper_do_traceb_alloc(char *str)
+void* scamper_do_traceb_alloc (char *str)
 {
   char *addr;
   scamper_option_out_t *opts_out = NULL, *opt;
   scamper_traceb_t *trace = NULL;
 
   /* try and parse the string passed in */
-  if(scamper_options_parse(str, opts, opts_cnt, &opts_out, &addr) != 0)
+  if (scamper_options_parse (str, opts, opts_cnt, &opts_out, &addr) != 0)
   {
     goto err;
   }
 
   /* if there is no IP address after the options string, then stop now */
-  if(addr == NULL)
+  if (addr == NULL)
   {
     goto err;
   }
 
-  scamper_options_free(opts_out);
+  scamper_options_free (opts_out);
   opts_out = NULL;
 
-  trace = scamper_traceb_alloc();
+  trace = scamper_traceb_alloc ();
   if (trace == NULL)
   {
-    printerror(__func__, "could not alloc traceb");
+    printerror (__func__, "could not alloc traceb");
     goto err;
   }
-  if((trace->dst= scamper_addrcache_resolve(addrcache,AF_UNSPEC,addr)) == NULL)
+  if ((trace->dst = scamper_addrcache_resolve (addrcache, AF_UNSPEC, addr))
+      == NULL)
   {
     goto err;
   }
 
   return trace;
 
-  err:
-    if (trace != NULL) scamper_traceb_free(trace);
-    return NULL;
+err:
+  if (trace != NULL)
+    scamper_traceb_free (trace);
+  return NULL;
 }
 
 /*
  * scamper_do_traceb_alloctask
  *
  */
-scamper_task_t *scamper_do_traceb_alloctask(void *data,
-                                            scamper_list_t *list,
-                                            scamper_cycle_t *cycle)
+scamper_task_t* scamper_do_traceb_alloctask (void *data, scamper_list_t *list,
+                                             scamper_cycle_t *cycle)
 {
-  scamper_traceb_t *trace = (scamper_traceb_t *)data;
+  scamper_traceb_t *trace = (scamper_traceb_t*) data;
   scamper_task_sig_t *sig = NULL;
   scamper_task_t *task = NULL;
 
   /* allocate a task structure and store the trace with it */
-  if((task = scamper_task_alloc(trace, &trace_funcs)) == NULL)
+  if ((task = scamper_task_alloc (trace, &trace_funcs)) == NULL)
     goto err;
 
   /* declare the signature of the task's probes */
-  if((sig = scamper_task_sig_alloc(SCAMPER_TASK_SIG_TYPE_TX_IP)) == NULL)
+  if ((sig = scamper_task_sig_alloc (SCAMPER_TASK_SIG_TYPE_TX_IP)) == NULL)
     goto err;
-  sig->sig_tx_ip_dst = scamper_addr_use(trace->dst);
-  if(scamper_task_sig_add(task, sig) != 0)
+  sig->sig_tx_ip_dst = scamper_addr_use (trace->dst);
+  if (scamper_task_sig_add (task, sig) != 0)
     goto err;
   sig = NULL;
 
   return task;
 
 err:
-  if(sig != NULL) scamper_task_sig_free(sig);
+  if (sig != NULL)
+    scamper_task_sig_free (sig);
   if (task != NULL)
   {
-    scamper_task_setdatanull(task);
-    scamper_task_free(task);
+    scamper_task_setdatanull (task);
+    scamper_task_free (task);
   }
   return NULL;
 }
 
-const char *scamper_do_traceb_usage(void)
+const char* scamper_do_traceb_usage (void)
 {
   return "traceb";
 }
 
-static int traceb_arg_param_validate(int optid, char *param, long long *out)
+static int traceb_arg_param_validate (int optid, char *param, long long *out)
 {
   // TODO Implement
   return 0;
@@ -169,28 +172,28 @@ static int traceb_arg_param_validate(int optid, char *param, long long *out)
  *
  *
  */
-int scamper_do_traceb_arg_validate(int argc, char *argv[], int *stop)
+int scamper_do_traceb_arg_validate (int argc, char *argv[], int *stop)
 {
-  return scamper_options_validate(opts, opts_cnt, argc, argv, stop,
-                                  traceb_arg_param_validate);
+  return scamper_options_validate (opts, opts_cnt, argc, argv, stop,
+                                   traceb_arg_param_validate);
 }
 
-void scamper_do_traceb_free(void *data)
+void scamper_do_traceb_free (void *data)
 {
-  scamper_traceb_free((scamper_traceb_t *)data);
+  scamper_traceb_free ((scamper_traceb_t*) data);
 }
 
-static scamper_traceb_t *traceb_getdata(const scamper_task_t *task)
+static scamper_traceb_t* traceb_getdata (const scamper_task_t *task)
 {
-  return scamper_task_getdata(task);
+  return scamper_task_getdata (task);
 }
 
-static void do_traceb_free(scamper_task_t *task)
+static void do_traceb_free (scamper_task_t *task)
 {
-  scamper_traceb_t *trace = traceb_getdata(task);
+  scamper_traceb_t *trace = traceb_getdata (task);
 
-  if(trace != NULL)
-    scamper_traceb_free(trace);
+  if (trace != NULL)
+    scamper_traceb_free (trace);
 
   return;
 }
@@ -200,33 +203,33 @@ static void do_traceb_free(scamper_task_t *task)
  *
  * time to probe, so send the packet.
  */
-static void do_traceb_probe(scamper_task_t *task)
+static void do_traceb_probe (scamper_task_t *task)
 {
   // TODO Implement the actual probing instead of going straight to "done"
-  scamper_task_queue_done(task, 500);
+  scamper_task_queue_done (task, 500);
 }
 
-static void do_traceb_write(scamper_file_t *sf, scamper_task_t *task)
+static void do_traceb_write (scamper_file_t *sf, scamper_task_t *task)
 {
-  scamper_file_write_traceb(sf, NULL); // TODO Pass trace data
+  scamper_file_write_traceb (sf, NULL); // TODO Pass trace data
   return;
 }
 
-int scamper_do_traceb_init(void)
+int scamper_do_traceb_init (void)
 {
   const scamper_osinfo_t *osinfo;
 
   // TODO Implement and wire up the commented out callbacks
-  trace_funcs.probe          = do_traceb_probe;
+  trace_funcs.probe = do_traceb_probe;
   // trace_funcs.handle_icmp    = do_trace_handle_icmp;
   // trace_funcs.handle_dl      = do_trace_handle_dl;
   // trace_funcs.handle_timeout = do_trace_handle_timeout;
-  trace_funcs.write          = do_traceb_write;
-  trace_funcs.task_free      = do_traceb_free;
+  trace_funcs.write = do_traceb_write;
+  trace_funcs.task_free = do_traceb_free;
   // trace_funcs.halt           = do_trace_halt;
 
-  osinfo = scamper_osinfo_get();
-  if(SCAMPER_OSINFO_IS_SUNOS(osinfo))
+  osinfo = scamper_osinfo_get ();
+  if (SCAMPER_OSINFO_IS_SUNOS(osinfo))
     sunos = 1;
 
   return 0;

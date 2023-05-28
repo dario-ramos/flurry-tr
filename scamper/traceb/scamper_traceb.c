@@ -42,17 +42,18 @@
  *
  * allocate the trace and all the possibly necessary data fields
  */
-scamper_traceb_t *scamper_traceb_alloc()
+scamper_traceb_t* scamper_traceb_alloc ()
 {
-  return (struct scamper_traceb *)malloc_zero(sizeof(struct scamper_traceb));
+  return (struct scamper_traceb*) malloc_zero (sizeof(struct scamper_traceb));
 }
 
 /*
  * scamper_traceb_free
  *
  */
-void scamper_traceb_free(scamper_traceb_t *trace)
+void scamper_traceb_free (scamper_traceb_t *trace)
 {
-  if(trace == NULL) return;
-  free(trace);
+  if (trace == NULL)
+    return;
+  free (trace);
 }
