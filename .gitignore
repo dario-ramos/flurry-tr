@@ -16,6 +16,7 @@ autom4te.cache
 /compile
 /config.guess
 /config.h.in
+/config.h.in~
 /config.log
 /config.status
 /config.sub
@@ -88,3 +89,6 @@ utils/sc_wartsfix/sc_wartsfix
 .cproject
 .project
 .settings/
+
+# Behavior tests
+tests/features/steps/__pycache__

@@ -79,6 +79,10 @@ struct scamper_trace;
 int scamper_file_write_trace(scamper_file_t *sf,
 			     const struct scamper_trace *trace);
 
+struct scamper_traceb;
+int scamper_file_write_traceb(scamper_file_t *sf,
+                 const struct scamper_traceb *trace);
+
 struct scamper_tracelb;
 int scamper_file_write_tracelb(scamper_file_t *sf,
 			       const struct scamper_tracelb *trace);

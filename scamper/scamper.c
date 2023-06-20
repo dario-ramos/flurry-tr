@@ -73,6 +73,7 @@ static const char rcsid[] =
 #include "tbit/scamper_tbit_do.h"
 #include "sniff/scamper_sniff_do.h"
 #include "host/scamper_host_do.h"
+#include "traceb/scamper_traceb_do.h"
 
 #include "utils.h"
 
@@ -469,6 +470,8 @@ static int check_options(int argc, char *argv[])
      scamper_do_sniff_arg_validate, scamper_do_sniff_usage},
     {"scamper-host", "host",
      scamper_do_host_arg_validate, scamper_do_host_usage},
+	{"scamper-traceb", "traceb",
+     scamper_do_traceb_arg_validate, scamper_do_traceb_usage},
   };
   int   i;
   long  lo_w = window, lo_p = pps;
@@ -488,13 +491,13 @@ static int check_options(int argc, char *argv[])
   uint32_t o;
 
   for(m=0; m<sizeof(multicall)/sizeof(scamper_multicall_t); m++)
+  {
+    len = strlen(multicall[m].argv0);
+    if(argv0 >= len && strcmp(argv[0]+argv0-len, multicall[m].argv0) == 0)
     {
-      len = strlen(multicall[m].argv0);
-      if(argv0 >= len && strcmp(argv[0]+argv0-len, multicall[m].argv0) == 0)
-	{
-	  return multicall_do(&multicall[m], argc, argv);
-	}
+      return multicall_do(&multicall[m], argc, argv);
     }
+  }
 
   off = 0;
   string_concat(opts, sizeof(opts), &off, "c:C:e:fF:iIl:L:M:o:O:p:P:R:vw:?");
@@ -1178,16 +1181,16 @@ static int scamper(int argc, char *argv[])
   int                      rc;
 
   if(check_options(argc, argv) == -1)
-    {
-      return -1;
-    }
+  {
+    return -1;
+  }
 
 #ifdef HAVE_DAEMON
   if((options & OPT_DAEMON) != 0 && daemon(1, 0) != 0)
-    {
-      printerror(__func__, "could not daemon");
-      return -1;
-    }
+  {
+    printerror(__func__, "could not daemon");
+    return -1;
+  }
 #endif
 
   scamper_debug_init();
@@ -1208,9 +1211,9 @@ static int scamper(int argc, char *argv[])
    * version compatibility
    */
   if(scamper_dl_init() == -1)
-    {
+  {
       return -1;
-    }
+  }
 
 #ifdef HAVE_OPENSSL
   if((flags & FLAG_NOTLS) == 0)
@@ -1218,32 +1221,32 @@ static int scamper(int argc, char *argv[])
 #endif
 
 #ifndef WITHOUT_PRIVSEP
-  /* revoke the root priviledges we started with */
+  /* revoke the root privileges we started with */
   if(scamper_privsep_init() == -1)
-    {
-      return -1;
-    }
+  {
+    return -1;
+  }
 #endif
 
   random_seed();
 
   if(firewall != NULL)
-    {
-      if(scamper_firewall_init(firewall) != 0)
-	return -1;
-      free(firewall);
-      firewall = NULL;
-    }
+  {
+    if(scamper_firewall_init(firewall) != 0)
+	  return -1;
+    free(firewall);
+    firewall = NULL;
+  }
 
 #ifndef WITHOUT_DEBUGFILE
   /*
-   * open the debug file immediately so initialisation debugging information
+   * open the debug file immediately so initialization debugging information
    * makes it to the file
    */
   if(debugfile != NULL && scamper_debug_open(debugfile) != 0)
-    {
+  {
       return -1;
-    }
+  }
 #endif
 
   /* determine a suitable default value for the source port in packets */
@@ -1251,9 +1254,9 @@ static int scamper(int argc, char *argv[])
 
   /* allocate the cache of addresses for scamper to keep track of */
   if((addrcache = scamper_addrcache_alloc()) == NULL)
-    {
+  {
       return -1;
-    }
+  }
 
   /* init the probing code */
   if(scamper_probe_init() != 0)
@@ -1265,71 +1268,69 @@ static int scamper(int argc, char *argv[])
 
   /* setup the file descriptor monitoring code */
   if(scamper_fds_init() == -1)
-    {
-      return -1;
-    }
+  {
+    return -1;
+  }
 
   if(options & (OPT_CTRL_INET|OPT_CTRL_UNIX|OPT_CTRL_REMOTE))
-    {
-      if(scamper_control_init() != 0)
-	return -1;
-      if(options & OPT_CTRL_INET &&
-	 scamper_control_add_inet(ctrl_inet_addr, ctrl_inet_port) != 0)
-	return -1;
-      if(options & OPT_CTRL_UNIX &&
-	 scamper_control_add_unix(ctrl_unix) != 0)
-	return -1;
-      if(options & OPT_CTRL_REMOTE &&
-	 scamper_control_add_remote(ctrl_rem_name, ctrl_rem_port) != 0)
-	return -1;
+  {
+    if(scamper_control_init() != 0)
+	  return -1;
+    if(options & OPT_CTRL_INET && scamper_control_add_inet(ctrl_inet_addr, ctrl_inet_port) != 0)
+	  return -1;
+    if(options & OPT_CTRL_UNIX && scamper_control_add_unix(ctrl_unix) != 0)
+	  return -1;
+    if(options & OPT_CTRL_REMOTE && scamper_control_add_remote(ctrl_rem_name, ctrl_rem_port) != 0)
+	  return -1;
 
-      /* wait for more tasks when finished with the active window */
-      exit_when_done = 0;
-    }
+    /* wait for more tasks when finished with the active window */
+    exit_when_done = 0;
+  }
 
-  /* initialise the subsystem responsible for obtaining source addresses */
+  /* initialize the subsystem responsible for obtaining source addresses */
   if(scamper_getsrc_init() == -1)
-    {
-      return -1;
-    }
+  {
+    return -1;
+  }
 
-  /* initialise the subsystem responsible for recording mac addresses */
+  /* initialize the subsystem responsible for recording MAC addresses */
   if(scamper_addr2mac_init() == -1)
-    {
-      return -1;
-    }
+  {
+    return -1;
+  }
 
   if(scamper_rtsock_init() == -1)
-    {
-      return -1;
-    }
+  {
+    return -1;
+  }
 
-  /* initialise the structures necessary to keep track of addresses to probe */
+  /* initialize the structures necessary to keep track of addresses to probe */
   if(scamper_sources_init() == -1)
-    {
-      return -1;
-    }
+  {
+    return -1;
+  }
 
   /*
-   * initialise the data structures necessary to keep track of the signatures
+   * initialize the data structures necessary to keep track of the signatures
    * of tasks currently being probed
    */
   if(scamper_task_init() == -1)
-    {
-      return -1;
-    }
+  {
+    return -1;
+  }
 
   /*
-   * initialise the data structures necessary to keep track of output files
+   * initialize the data structures necessary to keep track of output files
    * currently being written to
    */
   if(scamper_outfiles_init(outfile, outtype) == -1)
-    {
-      return -1;
-    }
+  {
+    return -1;
+  }
 
-  /* initialise scamper so it is ready to traceroute and ping */
+  /* initialize scamper so it is ready to traceroute and ping */
   if(scamper_do_trace_init() != 0 ||
+     scamper_do_traceb_init() != 0 ||
      scamper_do_ping_init() != 0 ||
      scamper_do_tracelb_init() != 0 ||
      scamper_do_dealias_init() != 0 ||
@@ -1338,9 +1339,9 @@ static int scamper(int argc, char *argv[])
      scamper_do_tbit_init() != 0 ||
      scamper_do_sniff_init() != 0 ||
      scamper_do_host_init() != 0)
-    {
-      return -1;
-    }
+  {
+    return -1;
+  }
 
   /* parameters for the default list */
   memset(&ssp, 0, sizeof(ssp));
@@ -1360,154 +1361,160 @@ static int scamper(int argc, char *argv[])
    * read the addresses now
    */
   if(options & (OPT_IP|OPT_CMDLIST))
+  {
+    if((source = scamper_source_cmdline_alloc(&ssp, command,
+                   arglist, arglist_len)) == NULL)
     {
-      if((source = scamper_source_cmdline_alloc(&ssp, command,
-						arglist, arglist_len)) == NULL)
-	{
-	  return -1;
-	}
+      return -1;
     }
+  }
   else if((options & (OPT_CTRL_INET|OPT_CTRL_UNIX|OPT_CTRL_REMOTE)) == 0)
+  {
+    if(intype == NULL)
+      source = scamper_source_file_alloc(&ssp, arglist[0], command, 1, 0);
+    else if(strcasecmp(intype, "tsps") == 0)
+     source = scamper_source_tsps_alloc(&ssp, arglist[0]);
+    else if(strcasecmp(intype, "cmdfile") == 0)
+      source = scamper_source_file_alloc(&ssp, arglist[0], NULL, 1, 0);
+    if(source == NULL)
     {
-      if(intype == NULL)
-	source = scamper_source_file_alloc(&ssp, arglist[0], command, 1, 0);
-      else if(strcasecmp(intype, "tsps") == 0)
-	source = scamper_source_tsps_alloc(&ssp, arglist[0]);
-      else if(strcasecmp(intype, "cmdfile") == 0)
-	source = scamper_source_file_alloc(&ssp, arglist[0], NULL, 1, 0);
-      if(source == NULL)
-	return -1;
+      return -1;
     }
+  }
 
   if(source != NULL)
-    {
-      scamper_sources_add(source);
-      scamper_source_free(source);
-    }
+  {
+    scamper_sources_add(source);
+    scamper_source_free(source);
+  }
 
   gettimeofday_wrap(&lastprobe);
 
   for(;;)
+  {
+    if((rc = scamper_timeout(&timeout, &nextprobe, &lastprobe)) == 0)
     {
-      if((rc = scamper_timeout(&timeout, &nextprobe, &lastprobe)) == 0)
-	{
-	  /*
-	   * we've been told to calculate a timeout value.  figure out what
-	   * it should be.
-	   */
-	  gettimeofday_wrap(&tv);
-	  if(timeval_cmp(&timeout, &tv) <= 0)
-	    memset(&tv, 0, sizeof(tv));
-	  else
-	    timeval_diff_tv(&tv, &tv, &timeout);
-	  timeout_ptr = &tv;
-	}
-      else if(rc == 1)
-	{
-	  timeout_ptr = NULL;
-	}
-      else
-	{
-	  /* exit when done */
-	  break;
-	}
-
-      /* listen until it is time to send the next probe */
-      if(scamper_fds_poll(timeout_ptr) == -1)
-	return -1;
-
-      /* get the current time */
+      /*
+       * we've been told to calculate a timeout value.  figure out what
+       * it should be.
+       */
       gettimeofday_wrap(&tv);
-
-      if(scamper_queue_event_proc(&tv) != 0)
-	return -1;
-      
-      /* take any 'done' tasks and output them now */
-      while((task = scamper_queue_getdone(&tv)) != NULL)
-	{
-	  /* write the data out */
-	  if((source = scamper_task_getsource(task)) != NULL &&
-	     (sofname = scamper_source_getoutfile(source)) != NULL &&
-	     (sof = scamper_outfiles_get(sofname)) != NULL)
-	    {
-	      file = scamper_outfile_getfile(sof);
-	      scamper_task_write(task, file);
-
-	      /*
-	       * write a copy of the data out if asked to, and it has not
-	       * already been written to this output file.
-	       */
-	      if((flags & FLAG_OUTCOPY) != 0 &&
-		 (sof2 = scamper_outfiles_get(NULL)) != NULL && sof != sof2)
-		{
-		  file = scamper_outfile_getfile(sof2);
-		  scamper_task_write(task, file);
-		}
-	    }
-
-	  /* cleanup the task */
-	  scamper_task_free(task);
+      if(timeval_cmp(&timeout, &tv) <= 0)
+        memset(&tv, 0, sizeof(tv));
+      else
+        timeval_diff_tv(&tv, &tv, &timeout);
+      timeout_ptr = &tv;
+    }
+    else if(rc == 1)
+    {
+      timeout_ptr = NULL;
+    }
+    else
+    {
+      /* exit when done */
+      break;
 	}
+
+    /* listen until it is time to send the next probe */
+    if(scamper_fds_poll(timeout_ptr) == -1)
+    {
+      return -1;
+    }
+
+    /* get the current time */
+    gettimeofday_wrap(&tv);
+
+    if(scamper_queue_event_proc(&tv) != 0)
+    {
+      return -1;
+    }
+
+    /* take any 'done' tasks and output them now */
+    while((task = scamper_queue_getdone(&tv)) != NULL)
+    {
+      /* write the data out */
+      if((source = scamper_task_getsource(task)) != NULL &&
+         (sofname = scamper_source_getoutfile(source)) != NULL &&
+         (sof = scamper_outfiles_get(sofname)) != NULL)
+      {
+        file = scamper_outfile_getfile(sof);
+        scamper_task_write(task, file);
+
+        /*
+         * write a copy of the data out if asked to, and it has not
+         * already been written to this output file.
+         */
+        if((flags & FLAG_OUTCOPY) != 0 &&
+           (sof2 = scamper_outfiles_get(NULL)) != NULL && sof != sof2)
+        {
+          file = scamper_outfile_getfile(sof2);
+          scamper_task_write(task, file);
+        }
+      }
+
+      /* cleanup the task */
+      scamper_task_free(task);
+    }
+
+    /*
+     * if there is something waiting to be probed, then find out if it is
+     * time to probe yet
+     */
+    if(scamper_queue_readycount() > 0 || scamper_sources_isready() == 1)
+    {
+      /*
+       * check for large differences between the time the last probe
+       * was sent and the current time.  don't allow the difference to
+       * be larger than a particular amount, since that could result in
+       * either a large flutter of probes to be sent, or a large time
+       * before the next probe is sent
+       */
+      if(timeval_inrange_us(&tv, &lastprobe, probe_window) == 0)
+        timeval_sub_us(&lastprobe, &tv, wait_between);
 
       /*
-       * if there is something waiting to be probed, then find out if it is
-       * time to probe yet
+       * when probing at > HZ, scamper might find that select blocks it
+       * from achieving the specified packets per second rate if it sends
+       * one probe per select.  Based on the time spent in the last call
+       * to select, send the necessary number of packets to fill that
+       * window where we sent no packets.
        */
-      if(scamper_queue_readycount() > 0 || scamper_sources_isready() == 1)
-	{
-	  /*
-	   * check for large differences between the time the last probe
-	   * was sent and the current time.  don't allow the difference to
-	   * be larger than a particular amount, since that could result in
-	   * either a large flutter of probes to be sent, or a large time
-	   * before the next probe is sent
-	   */
-	  if(timeval_inrange_us(&tv, &lastprobe, probe_window) == 0)
-	    timeval_sub_us(&lastprobe, &tv, wait_between);
+      for(;;)
+      {
+        timeval_add_us(&nextprobe, &lastprobe, wait_between);
 
-	  /*
-	   * when probing at > HZ, scamper might find that select blocks it
-	   * from achieving the specified packets per second rate if it sends
-	   * one probe per select.  Based on the time spent in the last call
-	   * to select, send the necessary number of packets to fill that
-	   * window where we sent no packets.
-	   */
-	  for(;;)
-	    {
-	      timeval_add_us(&nextprobe, &lastprobe, wait_between);
+        /* if the next probe is not due to be sent, don't send one */
+        if(timeval_cmp(&nextprobe, &tv) > 0)
+          break;
 
-	      /* if the next probe is not due to be sent, don't send one */
-	      if(timeval_cmp(&nextprobe, &tv) > 0)
-		break;
+        /*
+         * look for an address that we can send a probe to.  if
+         * scamper doesn't have a task on the probe queue waiting
+         * to be probed, then get a fresh task. if there's absolutely
+         * nothing that scamper can probe, then break.
+         */
+        if((task = scamper_queue_select()) == NULL)
+        {
+          /*
+           * if we are already probing to the window limit, don't
+           * add any new tasks
+           */
+          if(window != 0 && scamper_queue_windowcount() >= window)
+            break;
 
-	      /*
-	       * look for an address that we can send a probe to.  if
-	       * scamper doesn't have a task on the probe queue waiting
-	       * to be probed, then get a fresh task. if there's absolutely
-	       * nothing that scamper can probe, then break.
-	       */
-	      if((task = scamper_queue_select()) == NULL)
-		{
-		  /*
-		   * if we are already probing to the window limit, don't
-		   * add any new tasks
-		   */
-		  if(window != 0 && scamper_queue_windowcount() >= window)
-		    break;
+          /*
+           * if there are no more tasks ready to be added yet, there's
+           * nothing more to be done in the loop
+           */
+          if(scamper_sources_gettask(&task) != 0 || task == NULL)
+            break;
+        }
 
-		  /*
-		   * if there are no more tasks ready to be added yet, there's
-		   * nothing more to be done in the loop
-		   */
-		  if(scamper_sources_gettask(&task) != 0 || task == NULL)
-		    break;
-		}
-
-	      scamper_task_probe(task);
-	      timeval_cpy(&lastprobe, &nextprobe);
-	    }
-	}
+        scamper_task_probe(task);
+        timeval_cpy(&lastprobe, &nextprobe);
+      }
     }
+  }
 
   return 0;
 }

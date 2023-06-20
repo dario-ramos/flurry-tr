@@ -45,6 +45,7 @@ static const char rcsid[] =
 #include "trace/scamper_trace_text.h"
 #include "trace/scamper_trace_warts.h"
 #include "trace/scamper_trace_json.h"
+#include "traceb/scamper_traceb_text.h"
 #include "ping/scamper_ping.h"
 #include "ping/scamper_ping_text.h"
 #include "ping/scamper_ping_warts.h"
@@ -117,6 +118,9 @@ struct handler
   int (*write_trace)(const scamper_file_t *sf,
 		     const struct scamper_trace *trace);
 
+  int (*write_traceb) (const scamper_file_t *sf,
+		     const struct scamper_traceb *trace);
+
   int (*write_cycle_start)(const scamper_file_t *sf,
 			   scamper_cycle_t *cycle);
 
@@ -158,6 +162,7 @@ static struct handler handlers[] = {
    NULL,                                   /* init_append */
    NULL,                                   /* read */
    scamper_file_text_trace_write,          /* write_trace */
+   scamper_file_text_traceb_write,         /* write_traceb */
    NULL,                                   /* write_cycle_start */
    NULL,                                   /* write_cycle_stop */
    scamper_file_text_ping_write,           /* write_ping */
@@ -297,6 +302,18 @@ int scamper_file_write_trace(scamper_file_t *sf,
     {
       rc = handlers[sf->type].write_trace(sf, trace);
     }
+
+  return rc;
+}
+
+int scamper_file_write_traceb(scamper_file_t *sf, const struct scamper_traceb *trace)
+{
+  int rc = -1;
+
+  if(sf->type != SCAMPER_FILE_NONE && handlers[sf->type].write_traceb != NULL)
+  {
+    rc = handlers[sf->type].write_traceb(sf, trace);
+  }
 
   return rc;
 }

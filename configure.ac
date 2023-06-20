@@ -143,6 +143,7 @@ AM_CONDITIONAL([WITH_SC_UPTIME], [test x$with_sc_uptime = xyes])
 # Checks for libraries.
 AC_CHECK_LIB([iphlpapi], [GetIpNetTable])
 AC_CHECK_LIB([ws2_32], [WSAStartup])
+AC_CHECK_HEADER([check.h], [], AC_MSG_ERROR([Didn't find check library header check.h. Install the check package to fix.]))
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -422,6 +423,10 @@ AC_CONFIG_FILES([
 	utils/sc_wartscat/Makefile
 	utils/sc_wartsdump/Makefile
 	utils/sc_wartsfix/Makefile
+])
+
+AC_CONFIG_FILES([
+  tests/Makefile
 ])
 
 AC_OUTPUT
