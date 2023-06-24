@@ -137,7 +137,7 @@
 typedef struct scamper_ping_reply_v4rr
 {
   scamper_addr_t **rr;
-  uint8_t          rrc;
+  uint8_t rrc;
 } scamper_ping_reply_v4rr_t;
 
 /*
@@ -152,8 +152,8 @@ typedef struct scamper_ping_reply_v4rr
 typedef struct scamper_ping_reply_v4ts
 {
   scamper_addr_t **ips; /* IP addresses, if SCAMPER_PING_FLAG_TSANDADDR */
-  uint32_t        *tss; /* timestamps */
-  uint8_t          tsc; /* the number of timestamps (ip addresses) */
+  uint32_t *tss; /* timestamps */
+  uint8_t tsc; /* the number of timestamps (ip addresses) */
 } scamper_ping_reply_v4ts_t;
 
 /*
@@ -164,9 +164,9 @@ typedef struct scamper_ping_reply_v4ts
  */
 typedef struct scamper_ping_reply_tsreply
 {
-  uint32_t         tso;
-  uint32_t         tsr;
-  uint32_t         tst;
+  uint32_t tso;
+  uint32_t tsr;
+  uint32_t tst;
 } scamper_ping_reply_tsreply_t;
 
 /*
@@ -178,7 +178,7 @@ typedef struct scamper_ping_reply_tsreply
 typedef struct scamper_ping_v4ts
 {
   scamper_addr_t **ips;
-  uint8_t          ipc;
+  uint8_t ipc;
 } scamper_ping_v4ts_t;
 
 /*
@@ -189,30 +189,30 @@ typedef struct scamper_ping_v4ts
 typedef struct scamper_ping_reply
 {
   /* where the response came from */
-  scamper_addr_t            *addr;
+  scamper_addr_t *addr;
 
   /* the TTL / size of the packet that is returned */
-  uint16_t                   probe_id;
-  uint16_t                   probe_ipid;
-  uint8_t                    reply_proto;
-  uint8_t                    reply_ttl;
-  uint16_t                   reply_size;
-  uint16_t                   reply_ipid;
-  uint32_t                   reply_ipid32;
+  uint16_t probe_id;
+  uint16_t probe_ipid;
+  uint8_t reply_proto;
+  uint8_t reply_ttl;
+  uint16_t reply_size;
+  uint16_t reply_ipid;
+  uint32_t reply_ipid32;
 
   /* flags defined by SCAMPER_PING_REPLY_FLAG_* */
-  uint8_t                    flags;
+  uint8_t flags;
 
   /* the icmp type / code returned */
-  uint8_t                    icmp_type;
-  uint8_t                    icmp_code;
+  uint8_t icmp_type;
+  uint8_t icmp_code;
 
   /* the tcp flags returned */
-  uint8_t                    tcp_flags;
+  uint8_t tcp_flags;
 
   /* the time elapsed between sending the probe and getting this response */
-  struct timeval             tx;
-  struct timeval             rtt;
+  struct timeval tx;
+  struct timeval rtt;
 
   /* data found in IP options, if any */
   scamper_ping_reply_v4rr_t *v4rr;
@@ -234,75 +234,75 @@ typedef struct scamper_ping_reply
 typedef struct scamper_ping
 {
   /* the list / cycle that this ping is in relation to */
-  scamper_list_t        *list;
-  scamper_cycle_t       *cycle;
-  uint32_t               userid;
+  scamper_list_t *list;
+  scamper_cycle_t *cycle;
+  uint32_t userid;
 
   /* source and destination addresses of the ping */
-  scamper_addr_t        *src;          /* -S option */
-  scamper_addr_t        *dst;
+  scamper_addr_t *src; /* -S option */
+  scamper_addr_t *dst;
 
   /* when the ping started */
-  struct timeval         start;
+  struct timeval start;
 
   /* why the ping finished */
-  uint8_t                stop_reason;
-  uint8_t                stop_data;
+  uint8_t stop_reason;
+  uint8_t stop_data;
 
   /* the data to use inside of a probe.  if null then all zeros */
-  uint8_t               *probe_data;
-  uint16_t               probe_datalen;
+  uint8_t *probe_data;
+  uint16_t probe_datalen;
 
   /* ping options */
-  uint16_t               probe_count;   /* -c */
-  uint16_t               probe_size;    /* -s */
-  uint8_t                probe_method;  /* -P */
-  uint8_t                probe_ttl;     /* -m */
-  uint8_t                probe_tos;     /* -z */
-  uint8_t                probe_timeout; /* -W */
-  uint8_t                probe_wait;    /* -i */
-  uint32_t               probe_wait_us; /* -i */
-  uint16_t               probe_sport;   /* -F */
-  uint16_t               probe_dport;   /* -d */
-  uint16_t               probe_icmpsum; /* -C */
-  uint32_t               probe_tcpseq;  /* -A with tcp-syn and tcp-rst */
-  uint32_t               probe_tcpack;  /* -A with other tcp probe methods */
-  uint16_t               reply_count;   /* -o */
-  uint16_t               reply_pmtu;    /* -M */
-  scamper_ping_v4ts_t   *probe_tsps;    /* -T */
-  uint32_t               flags;
+  uint16_t probe_count; /* -c */
+  uint16_t probe_size; /* -s */
+  uint8_t probe_method; /* -P */
+  uint8_t probe_ttl; /* -m */
+  uint8_t probe_tos; /* -z */
+  uint8_t probe_timeout; /* -W */
+  uint8_t probe_wait; /* -i */
+  uint32_t probe_wait_us; /* -i */
+  uint16_t probe_sport; /* -F */
+  uint16_t probe_dport; /* -d */
+  uint16_t probe_icmpsum; /* -C */
+  uint32_t probe_tcpseq; /* -A with tcp-syn and tcp-rst */
+  uint32_t probe_tcpack; /* -A with other tcp probe methods */
+  uint16_t reply_count; /* -o */
+  uint16_t reply_pmtu; /* -M */
+  scamper_ping_v4ts_t *probe_tsps; /* -T */
+  uint32_t flags;
 
   /* actual data collected with the ping */
   scamper_ping_reply_t **ping_replies;
-  uint16_t               ping_sent;
+  uint16_t ping_sent;
 } scamper_ping_t;
 
 /* basic routines to allocate and free scamper_ping structures */
-scamper_ping_t *scamper_ping_alloc(void);
-void scamper_ping_free(scamper_ping_t *ping);
-scamper_addr_t *scamper_ping_addr(const void *va);
-int scamper_ping_setdata(scamper_ping_t *ping, uint8_t *bytes, uint16_t len);
+scamper_ping_t* scamper_ping_alloc (void);
+void scamper_ping_free (scamper_ping_t *ping);
+scamper_addr_t* scamper_ping_addr (const void *va);
+int scamper_ping_setdata (scamper_ping_t *ping, uint8_t *bytes, uint16_t len);
 
 /* utility function for allocating an array for recording replies */
-int scamper_ping_replies_alloc(scamper_ping_t *ping, int count);
+int scamper_ping_replies_alloc (scamper_ping_t *ping, int count);
 
 /* basic routines to allocate and free scamper_ping_reply structures */
-scamper_ping_reply_t *scamper_ping_reply_alloc(void);
-void scamper_ping_reply_free(scamper_ping_reply_t *reply);
-int scamper_ping_reply_append(scamper_ping_t *p, scamper_ping_reply_t *reply);
-uint32_t scamper_ping_reply_count(const scamper_ping_t *ping);
+scamper_ping_reply_t* scamper_ping_reply_alloc (void);
+void scamper_ping_reply_free (scamper_ping_reply_t *reply);
+int scamper_ping_reply_append (scamper_ping_t *p, scamper_ping_reply_t *reply);
+uint32_t scamper_ping_reply_count (const scamper_ping_t *ping);
 
-scamper_ping_reply_tsreply_t *scamper_ping_reply_tsreply_alloc(void);
-void scamper_ping_reply_tsreply_free(scamper_ping_reply_tsreply_t *tsr);
+scamper_ping_reply_tsreply_t* scamper_ping_reply_tsreply_alloc (void);
+void scamper_ping_reply_tsreply_free (scamper_ping_reply_tsreply_t *tsr);
 
-scamper_ping_reply_v4rr_t *scamper_ping_reply_v4rr_alloc(uint8_t rrc);
-void scamper_ping_reply_v4rr_free(scamper_ping_reply_v4rr_t *rr);
+scamper_ping_reply_v4rr_t* scamper_ping_reply_v4rr_alloc (uint8_t rrc);
+void scamper_ping_reply_v4rr_free (scamper_ping_reply_v4rr_t *rr);
 
-scamper_ping_reply_v4ts_t *scamper_ping_reply_v4ts_alloc(uint8_t tsc, int ip);
-void scamper_ping_reply_v4ts_free(scamper_ping_reply_v4ts_t *ts);
+scamper_ping_reply_v4ts_t* scamper_ping_reply_v4ts_alloc (uint8_t tsc, int ip);
+void scamper_ping_reply_v4ts_free (scamper_ping_reply_v4ts_t *ts);
 
-scamper_ping_v4ts_t *scamper_ping_v4ts_alloc(uint8_t ipc);
-void scamper_ping_v4ts_free(scamper_ping_v4ts_t *ts);
+scamper_ping_v4ts_t* scamper_ping_v4ts_alloc (uint8_t ipc);
+void scamper_ping_v4ts_free (scamper_ping_v4ts_t *ts);
 
 typedef struct scamper_ping_stats
 {
@@ -316,8 +316,8 @@ typedef struct scamper_ping_stats
 } scamper_ping_stats_t;
 
 /* routine to return basic stats for the measurement */
-int scamper_ping_stats(const scamper_ping_t *ping,scamper_ping_stats_t *stats);
+int scamper_ping_stats (const scamper_ping_t *ping, scamper_ping_stats_t *stats);
 
-char *scamper_ping_method2str(const scamper_ping_t *, char *, size_t);
+char* scamper_ping_method2str (const scamper_ping_t*, char*, size_t);
 
 #endif /* __SCAMPER_PING_H */
