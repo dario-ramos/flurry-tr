@@ -26,24 +26,23 @@
 
 typedef struct scamper_host_do scamper_host_do_t;
 
-void *scamper_do_host_alloc(char *str);
+void* scamper_do_host_alloc (char *str);
 
-scamper_task_t *scamper_do_host_alloctask(void *data,
-					  scamper_list_t *list,
-					  scamper_cycle_t *cycle);
+scamper_task_t* scamper_do_host_alloctask (void *data, scamper_list_t *list,
+                                           scamper_cycle_t *cycle);
 
-int scamper_do_host_arg_validate(int argc, char *argv[], int *stop);
+int scamper_do_host_arg_validate (int argc, char *argv[], int *stop);
 
-void scamper_do_host_free(void *data);
+void scamper_do_host_free (void *data);
 
-const char *scamper_do_host_usage(void);
+const char* scamper_do_host_usage (void);
 
 /* code to use the host code to do DNS for another scamper task */
-scamper_host_do_t *scamper_do_host_do_ptr(
-  scamper_addr_t *ip, void *param, void (*cb)(void *, const char *name));
-void scamper_host_do_free(scamper_host_do_t *hostdo);
+scamper_host_do_t* scamper_do_host_do_ptr (scamper_addr_t *ip, void *param,
+                                           void (*cb) (void*, const char *name));
+void scamper_host_do_free (scamper_host_do_t *hostdo);
 
-void scamper_do_host_cleanup(void);
-int scamper_do_host_init(void);
+void scamper_do_host_cleanup (void);
+int scamper_do_host_init (void);
 
 #endif /* __SCAMPER_DO_HOST_H */

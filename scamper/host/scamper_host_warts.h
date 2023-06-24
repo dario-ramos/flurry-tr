@@ -23,10 +23,10 @@
 #ifndef __SCAMPER_HOST_WARTS_H
 #define __SCAMPER_HOST_WARTS_H
 
-int scamper_file_warts_host_write(const scamper_file_t *sf,
-				  const scamper_host_t *host);
+int scamper_file_warts_host_write (const scamper_file_t *sf,
+                                   const scamper_host_t *host);
 
-int scamper_file_warts_host_read(scamper_file_t *sf, const warts_hdr_t *hdr,
-				 scamper_host_t **host_out);
+int scamper_file_warts_host_read (scamper_file_t *sf, const warts_hdr_t *hdr,
+                                  scamper_host_t **host_out);
 
 #endif
