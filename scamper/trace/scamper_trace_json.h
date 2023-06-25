@@ -23,7 +23,7 @@
 #ifndef __SCAMPER_TRACE_JSON_H
 #define __SCAMPER_TRACE_JSON_H
 
-int scamper_file_json_trace_write(const scamper_file_t *sf,
-				  const struct scamper_trace *trace);
+int scamper_file_json_trace_write (const scamper_file_t *sf,
+                                   const struct scamper_trace *trace);
 
 #endif

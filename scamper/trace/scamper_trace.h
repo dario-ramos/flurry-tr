@@ -197,10 +197,10 @@ struct scamper_addr;
 typedef struct scamper_trace_hop
 {
   /* the address of the hop that responded */
-  scamper_addr_t              *hop_addr;
+  scamper_addr_t *hop_addr;
 
   /* flags defined by SCAMPER_TRACE_HOP_FLAG_* */
-  uint8_t                      hop_flags;
+  uint8_t hop_flags;
 
   /*
    * probe_id:   the attempt # this probe is in response to [count from 0]
@@ -211,40 +211,40 @@ typedef struct scamper_trace_hop
    * reply_size: the size of the icmp response we received
    * reply_ipid: the IPID value in the response
    */
-  uint8_t                      hop_probe_id;
-  uint8_t                      hop_probe_ttl;
-  uint16_t                     hop_probe_size;
-  uint8_t                      hop_reply_ttl;
-  uint8_t                      hop_reply_tos;
-  uint16_t                     hop_reply_size;
-  uint16_t                     hop_reply_ipid;
+  uint8_t hop_probe_id;
+  uint8_t hop_probe_ttl;
+  uint16_t hop_probe_size;
+  uint8_t hop_reply_ttl;
+  uint8_t hop_reply_tos;
+  uint16_t hop_reply_size;
+  uint16_t hop_reply_ipid;
 
   /* icmp type / code returned by this hop */
   union
   {
     struct hop_icmp
     {
-      uint8_t                  hop_icmp_type;
-      uint8_t                  hop_icmp_code;
-      uint8_t                  hop_icmp_q_ttl;
-      uint8_t                  hop_icmp_q_tos;
-      uint16_t                 hop_icmp_q_ipl;
-      uint16_t                 hop_icmp_nhmtu;
+      uint8_t hop_icmp_type;
+      uint8_t hop_icmp_code;
+      uint8_t hop_icmp_q_ttl;
+      uint8_t hop_icmp_q_tos;
+      uint16_t hop_icmp_q_ipl;
+      uint16_t hop_icmp_nhmtu;
     } icmp;
     struct hop_tcp
     {
-      uint8_t                  hop_tcp_flags;
+      uint8_t hop_tcp_flags;
     } tcp;
   } hop_un;
 
   /* time elapsed between sending the probe and receiving this resp */
-  struct timeval               hop_tx;
-  struct timeval               hop_rtt;
+  struct timeval hop_tx;
+  struct timeval hop_rtt;
 
   /* ICMP extensions */
-  struct scamper_icmpext      *hop_icmpext;
+  struct scamper_icmpext *hop_icmpext;
 
-  struct scamper_trace_hop    *hop_next;
+  struct scamper_trace_hop *hop_next;
 } scamper_trace_hop_t;
 
 #define hop_icmp_type  hop_un.icmp.hop_icmp_type
@@ -265,8 +265,8 @@ typedef struct scamper_trace_hop
  */
 typedef struct scamper_trace_pmtud_n
 {
-  uint8_t              type;
-  uint16_t             nhmtu;
+  uint8_t type;
+  uint16_t nhmtu;
   scamper_trace_hop_t *hop;
 } scamper_trace_pmtud_n_t;
 
@@ -286,24 +286,24 @@ typedef struct scamper_trace_pmtud_n
  */
 typedef struct scamper_trace_pmtud
 {
-  uint8_t                   ver;    /* version of data-storing method */
-  uint16_t                  ifmtu;  /* the outgoing interface's MTU */
-  uint16_t                  outmtu; /* MTU to first hop, if diff from ifmtu */
-  uint16_t                  pmtu;   /* packet size that reached target */
-  scamper_trace_hop_t      *hops;   /* icmp messages */
-  scamper_trace_pmtud_n_t **notes;  /* annotations about pmtud */
-  uint8_t                   notec;  /* number of annotations */
+  uint8_t ver; /* version of data-storing method */
+  uint16_t ifmtu; /* the outgoing interface's MTU */
+  uint16_t outmtu; /* MTU to first hop, if diff from ifmtu */
+  uint16_t pmtu; /* packet size that reached target */
+  scamper_trace_hop_t *hops; /* icmp messages */
+  scamper_trace_pmtud_n_t **notes; /* annotations about pmtud */
+  uint8_t notec; /* number of annotations */
 } scamper_trace_pmtud_t;
 
 typedef struct scamper_trace_dtree
 {
-  char            *lss;
-  uint8_t          firsthop;
-  uint8_t          flags;
-  uint16_t         gssc;
+  char *lss;
+  uint8_t firsthop;
+  uint8_t flags;
+  uint16_t gssc;
   scamper_addr_t **gss;
-  scamper_addr_t  *gss_stop;
-  scamper_addr_t  *lss_stop;
+  scamper_addr_t *gss_stop;
+  scamper_addr_t *lss_stop;
 } scamper_trace_dtree_t;
 
 #define SCAMPER_TRACE_DTREE_FLAG_NOBACK 0x01
@@ -316,57 +316,57 @@ typedef struct scamper_trace_dtree
 typedef struct scamper_trace
 {
   /* the current list, cycle, and defaults */
-  struct scamper_list   *list;
-  struct scamper_cycle  *cycle;
-  uint32_t               userid;
+  struct scamper_list *list;
+  struct scamper_cycle *cycle;
+  uint32_t userid;
 
   /* source and destination addresses of the trace */
-  struct scamper_addr   *src;
-  struct scamper_addr   *dst;
-  struct scamper_addr   *rtr;
+  struct scamper_addr *src;
+  struct scamper_addr *dst;
+  struct scamper_addr *rtr;
 
   /* when the trace commenced */
-  struct timeval         start;
+  struct timeval start;
 
   /* hops array, number of valid hops specified by hop_count */
-  scamper_trace_hop_t  **hops;
-  uint16_t               hop_count;
+  scamper_trace_hop_t **hops;
+  uint16_t hop_count;
 
   /* number of probes sent for this traceroute */
-  uint16_t               probec;
+  uint16_t probec;
 
   /* why the trace finished */
-  uint8_t                stop_reason;
-  uint8_t                stop_data;
+  uint8_t stop_reason;
+  uint8_t stop_data;
 
   /* trace parameters */
-  uint8_t                type;
-  uint8_t                flags;
-  uint8_t                attempts;
-  uint8_t                hoplimit;
-  uint8_t                gaplimit;
-  uint8_t                gapaction;
-  uint8_t                firsthop;
-  uint8_t                tos;
-  uint8_t                wait;
-  uint8_t                wait_probe;
-  uint8_t                loops;
-  uint8_t                loopaction;
-  uint8_t                confidence;
-  uint16_t               probe_size;
-  uint16_t               sport;
-  uint16_t               dport;
-  uint16_t               offset;
+  uint8_t type;
+  uint8_t flags;
+  uint8_t attempts;
+  uint8_t hoplimit;
+  uint8_t gaplimit;
+  uint8_t gapaction;
+  uint8_t firsthop;
+  uint8_t tos;
+  uint8_t wait;
+  uint8_t wait_probe;
+  uint8_t loops;
+  uint8_t loopaction;
+  uint8_t confidence;
+  uint16_t probe_size;
+  uint16_t sport;
+  uint16_t dport;
+  uint16_t offset;
 
   /* payload */
-  uint8_t               *payload;
-  uint16_t               payload_len;
+  uint8_t *payload;
+  uint16_t payload_len;
 
   /* if we perform PMTU discovery on the trace, then record the data here */
   scamper_trace_pmtud_t *pmtud;
 
   /* if we perform last ditch probing, then record any responses here */
-  scamper_trace_hop_t   *lastditch;
+  scamper_trace_hop_t *lastditch;
 
   /* if we perform doubletree, record doubletree parameters and data here */
   scamper_trace_dtree_t *dtree;
@@ -391,17 +391,19 @@ typedef struct scamper_trace
  * scamper_trace_addr:
  *  return the address of the trace -- caller doesn't know that it is a trace.
  */
-scamper_trace_t *scamper_trace_alloc(void);
-int scamper_trace_hops_alloc(scamper_trace_t *trace, const int hops);
-void scamper_trace_free(scamper_trace_t *trace);
-uint16_t scamper_trace_pathlength(const scamper_trace_t *trace);
-int scamper_trace_probe_headerlen(const scamper_trace_t *trace);
-scamper_addr_t *scamper_trace_addr(const void *va);
-int scamper_trace_iscomplete(const scamper_trace_t *trace);
-int scamper_trace_dst_cmp(const scamper_trace_t *a, const scamper_trace_t *b);
+scamper_trace_t* scamper_trace_alloc (void);
+int scamper_trace_hops_alloc (scamper_trace_t *trace, const int hops);
+void scamper_trace_free (scamper_trace_t *trace);
+uint16_t scamper_trace_pathlength (const scamper_trace_t *trace);
+int scamper_trace_probe_headerlen (const scamper_trace_t *trace);
+scamper_addr_t* scamper_trace_addr (const void *va);
+int scamper_trace_iscomplete (const scamper_trace_t *trace);
+int scamper_trace_dst_cmp (const scamper_trace_t *a, const scamper_trace_t *b);
 
-const char *scamper_trace_type_tostr(const scamper_trace_t *t, char *b, size_t l);
-const char *scamper_trace_stop_tostr(const scamper_trace_t *t, char *b, size_t l);
+const char* scamper_trace_type_tostr (const scamper_trace_t *t, char *b,
+                                      size_t l);
+const char* scamper_trace_stop_tostr (const scamper_trace_t *t, char *b,
+                                      size_t l);
 
 /*
  * scamper_trace_loop:
@@ -411,9 +413,9 @@ const char *scamper_trace_stop_tostr(const scamper_trace_t *t, char *b, size_t l
  * entry, it specifies the hop at which to commence looking for the next
  * instance of a loop.
  */
-int scamper_trace_loop(const scamper_trace_t *trace, const int n,
-		       const scamper_trace_hop_t **a,
-		       const scamper_trace_hop_t **b);
+int scamper_trace_loop (const scamper_trace_t *trace, const int n,
+                        const scamper_trace_hop_t **a,
+                        const scamper_trace_hop_t **b);
 
 /*
  * scamper_trace_hop_alloc:
@@ -425,12 +427,12 @@ int scamper_trace_loop(const scamper_trace_t *trace, const int n,
  * scamper_trace_hop_count:
  *  return the total number of hops attached to the trace structure
  */
-scamper_trace_hop_t *scamper_trace_hop_alloc(void);
-void scamper_trace_hop_free(scamper_trace_hop_t *hop);
-int scamper_trace_hop_count(const scamper_trace_t *trace);
+scamper_trace_hop_t* scamper_trace_hop_alloc (void);
+void scamper_trace_hop_free (scamper_trace_hop_t *hop);
+int scamper_trace_hop_count (const scamper_trace_t *trace);
 
-int scamper_trace_hop_addr_cmp(const scamper_trace_hop_t *a,
-			       const scamper_trace_hop_t *b);
+int scamper_trace_hop_addr_cmp (const scamper_trace_hop_t *a,
+                                const scamper_trace_hop_t *b);
 
 /*
  * scamper_trace_pmtud_alloc:
@@ -442,27 +444,27 @@ int scamper_trace_hop_addr_cmp(const scamper_trace_hop_t *a,
  * scamper_trace_pmtud_hop_count:
  *  return the total number of hops attached to the pmtud structure
  */
-int scamper_trace_pmtud_alloc(scamper_trace_t *trace);
-void scamper_trace_pmtud_free(scamper_trace_t *trace);
-int scamper_trace_pmtud_hop_count(const scamper_trace_t *trace);
-scamper_trace_pmtud_n_t *scamper_trace_pmtud_n_alloc(void);
-void scamper_trace_pmtud_n_free(scamper_trace_pmtud_n_t *n);
-int scamper_trace_pmtud_n_alloc_c(scamper_trace_pmtud_t *pmtud, uint8_t c);
-int scamper_trace_pmtud_n_add(scamper_trace_pmtud_t *pmtud,
-			      scamper_trace_pmtud_n_t *n);
+int scamper_trace_pmtud_alloc (scamper_trace_t *trace);
+void scamper_trace_pmtud_free (scamper_trace_t *trace);
+int scamper_trace_pmtud_hop_count (const scamper_trace_t *trace);
+scamper_trace_pmtud_n_t* scamper_trace_pmtud_n_alloc (void);
+void scamper_trace_pmtud_n_free (scamper_trace_pmtud_n_t *n);
+int scamper_trace_pmtud_n_alloc_c (scamper_trace_pmtud_t *pmtud, uint8_t c);
+int scamper_trace_pmtud_n_add (scamper_trace_pmtud_t *pmtud,
+                               scamper_trace_pmtud_n_t *n);
 
-int scamper_trace_lastditch_hop_count(const scamper_trace_t *trace);
+int scamper_trace_lastditch_hop_count (const scamper_trace_t *trace);
 
 /*
  * functions for helping with doubletree
  */
-int scamper_trace_dtree_alloc(scamper_trace_t *trace);
-void scamper_trace_dtree_free(scamper_trace_t *trace);
-int scamper_trace_dtree_lss(scamper_trace_t *trace, const char *lss);
+int scamper_trace_dtree_alloc (scamper_trace_t *trace);
+void scamper_trace_dtree_free (scamper_trace_t *trace);
+int scamper_trace_dtree_lss (scamper_trace_t *trace, const char *lss);
 
-int scamper_trace_dtree_gss_alloc(scamper_trace_t *trace, uint16_t cnt);
-void scamper_trace_dtree_gss_sort(const scamper_trace_t *trace);
-scamper_addr_t *scamper_trace_dtree_gss_find(const scamper_trace_t *trace,
-                                             const scamper_addr_t *iface);
+int scamper_trace_dtree_gss_alloc (scamper_trace_t *trace, uint16_t cnt);
+void scamper_trace_dtree_gss_sort (const scamper_trace_t *trace);
+scamper_addr_t* scamper_trace_dtree_gss_find (const scamper_trace_t *trace,
+                                              const scamper_addr_t *iface);
 
 #endif /* __SCAMPER_TRACE_H */

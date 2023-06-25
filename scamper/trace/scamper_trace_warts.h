@@ -25,10 +25,10 @@
 #ifndef __SCAMPER_TRACE_WARTS_H
 #define __SCAMPER_TRACE_WARTS_H
 
-int scamper_file_warts_trace_read(scamper_file_t *sf, const warts_hdr_t *hdr,
-				  struct scamper_trace **trace_out);
+int scamper_file_warts_trace_read (scamper_file_t *sf, const warts_hdr_t *hdr,
+                                   struct scamper_trace **trace_out);
 
-int scamper_file_warts_trace_write(const scamper_file_t *sf,
-				   const struct scamper_trace *trace);
+int scamper_file_warts_trace_write (const scamper_file_t *sf,
+                                    const struct scamper_trace *trace);
 
 #endif
