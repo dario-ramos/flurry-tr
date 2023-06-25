@@ -23,7 +23,7 @@
 #ifndef __SCAMPER_STING_TEXT_H
 #define __SCAMPER_STING_TEXT_H
 
-int scamper_file_text_sting_write(const scamper_file_t *sf,
-				  const scamper_sting_t *sting);
+int scamper_file_text_sting_write (const scamper_file_t *sf,
+                                   const scamper_sting_t *sting);
 
 #endif /* __SCAMPER_STING_TEXT_H */

@@ -23,7 +23,7 @@
 
 #ifndef lint
 static const char rcsid[] =
-  "$Id: scamper_sting_text.c,v 1.2 2010/10/18 07:02:57 mjl Exp $";
+    "$Id: scamper_sting_text.c,v 1.2 2010/10/18 07:02:57 mjl Exp $";
 #endif
 
 #ifdef HAVE_CONFIG_H
@@ -38,40 +38,40 @@ static const char rcsid[] =
 #include "scamper_sting_text.h"
 #include "utils.h"
 
-int scamper_file_text_sting_write(const scamper_file_t *sf,
-				  const scamper_sting_t *sting)
+int scamper_file_text_sting_write (const scamper_file_t *sf,
+                                   const scamper_sting_t *sting)
 {
-  int      fd = scamper_file_getfd(sf);
-  char     buf[192], src[64], dst[64];
-  size_t   len;
+  int fd = scamper_file_getfd (sf);
+  char buf[192], src[64], dst[64];
+  size_t len;
   uint32_t i, txc = 0;
 
-  snprintf(buf, sizeof(buf),
-	   "sting from %s:%d to %s:%d, %d probes, %dms mean\n"
-	   " data-ack count %d, holec %d\n",
-	   scamper_addr_tostr(sting->src, src, sizeof(src)), sting->sport,
-	   scamper_addr_tostr(sting->dst, dst, sizeof(dst)), sting->dport,
-	   sting->count, sting->mean, sting->dataackc, sting->holec);
+  snprintf (buf, sizeof(buf),
+            "sting from %s:%d to %s:%d, %d probes, %dms mean\n"
+            " data-ack count %d, holec %d\n",
+            scamper_addr_tostr (sting->src, src, sizeof(src)), sting->sport,
+            scamper_addr_tostr (sting->dst, dst, sizeof(dst)), sting->dport,
+            sting->count, sting->mean, sting->dataackc, sting->holec);
 
-  len = strlen(buf);
-  write_wrap(fd, buf, NULL, len);
+  len = strlen (buf);
+  write_wrap (fd, buf, NULL, len);
 
-  if(sting->holec > 0)
+  if (sting->holec > 0)
+  {
+    for (i = 0; i < sting->pktc; i++)
     {
-      for(i=0; i<sting->pktc; i++)
-	{
-	  if((sting->pkts[i]->flags & SCAMPER_STING_PKT_FLAG_DATA) == 0)
-	    continue;
-	  txc++;
+      if ((sting->pkts[i]->flags & SCAMPER_STING_PKT_FLAG_DATA) == 0)
+        continue;
+      txc++;
 
-	  if(sting->pkts[i]->flags & SCAMPER_STING_PKT_FLAG_HOLE)
-	    {
-	      snprintf(buf, sizeof(buf), "  probe %d hole\n", txc);
-	      len = strlen(buf);
-	      write_wrap(fd, buf, NULL, len);
-	    }
-	}
+      if (sting->pkts[i]->flags & SCAMPER_STING_PKT_FLAG_HOLE)
+      {
+        snprintf (buf, sizeof(buf), "  probe %d hole\n", txc);
+        len = strlen (buf);
+        write_wrap (fd, buf, NULL, len);
+      }
     }
+  }
 
   return 0;
 }
