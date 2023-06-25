@@ -141,47 +141,47 @@
 
 typedef struct scamper_tbit_pkt
 {
-  struct timeval       tv;
-  uint8_t              dir;
-  uint16_t             len;
-  uint8_t             *data;
+  struct timeval tv;
+  uint8_t dir;
+  uint16_t len;
+  uint8_t *data;
 } scamper_tbit_pkt_t;
 
 typedef struct scamper_tbit_app_http
 {
-  uint8_t              type;
-  char                *host;
-  char                *file;
+  uint8_t type;
+  char *host;
+  char *file;
 } scamper_tbit_app_http_t;
 
 typedef struct scamper_tbit_app_bgp
 {
-  uint32_t             asn;
+  uint32_t asn;
 } scamper_tbit_app_bgp_t;
 
 typedef struct scamper_tbit_pmtud
 {
-  uint16_t             mtu;
-  uint8_t              ptb_retx;
-  uint8_t              options;
-  scamper_addr_t      *ptbsrc;
+  uint16_t mtu;
+  uint8_t ptb_retx;
+  uint8_t options;
+  scamper_addr_t *ptbsrc;
 } scamper_tbit_pmtud_t;
 
 typedef struct scamper_tbit_null
 {
-  uint16_t             options;
-  uint16_t             results;
+  uint16_t options;
+  uint16_t results;
 } scamper_tbit_null_t;
 
 typedef struct scamper_tbit_icw
 {
-  uint32_t             start_seq;
+  uint32_t start_seq;
 } scamper_tbit_icw_t;
 
 typedef struct scamper_tbit_blind
 {
-  int32_t              off;
-  uint8_t              retx;
+  int32_t off;
+  uint8_t retx;
 } scamper_tbit_blind_t;
 
 /*
@@ -191,84 +191,84 @@ typedef struct scamper_tbit_blind
  */
 typedef struct scamper_tbit
 {
-  scamper_list_t      *list;
-  scamper_cycle_t     *cycle;
-  uint32_t             userid;
+  scamper_list_t *list;
+  scamper_cycle_t *cycle;
+  uint32_t userid;
 
-  scamper_addr_t      *src;
-  scamper_addr_t      *dst;
-  uint16_t             sport;
-  uint16_t             dport;
-  struct timeval       start;
+  scamper_addr_t *src;
+  scamper_addr_t *dst;
+  uint16_t sport;
+  uint16_t dport;
+  struct timeval start;
 
   /* outcome of test */
-  uint16_t             result;
+  uint16_t result;
 
   /* type of tbit test and data specific to that test */
-  uint8_t              type;
-  void                *data;
+  uint8_t type;
+  void *data;
 
   /* details of application protocol used */
-  uint8_t              app_proto;
-  void                *app_data;
+  uint8_t app_proto;
+  void *app_data;
 
   /* client and server mss values advertised */
-  uint32_t             options;
-  uint16_t             client_mss;
-  uint16_t             server_mss;
-  uint8_t             *fo_cookie;
-  uint8_t              fo_cookielen;
-  uint8_t              wscale;
-  uint8_t              ttl;
+  uint32_t options;
+  uint16_t client_mss;
+  uint16_t server_mss;
+  uint8_t *fo_cookie;
+  uint8_t fo_cookielen;
+  uint8_t wscale;
+  uint8_t ttl;
 
   /* various generic retransmit values */
-  uint8_t              syn_retx;
-  uint8_t              dat_retx;
+  uint8_t syn_retx;
+  uint8_t dat_retx;
 
   /* packets collected as part of this test */
   scamper_tbit_pkt_t **pkts;
-  uint32_t             pktc;
+  uint32_t pktc;
 } scamper_tbit_t;
 
-scamper_tbit_t *scamper_tbit_alloc(void);
-void scamper_tbit_free(scamper_tbit_t *tbit);
+scamper_tbit_t* scamper_tbit_alloc (void);
+void scamper_tbit_free (scamper_tbit_t *tbit);
 
-char *scamper_tbit_res2str(const scamper_tbit_t *tbit, char *buf, size_t len);
-char *scamper_tbit_type2str(const scamper_tbit_t *tbit, char *buf, size_t len);
+char* scamper_tbit_res2str (const scamper_tbit_t *tbit, char *buf, size_t len);
+char* scamper_tbit_type2str (const scamper_tbit_t *tbit, char *buf, size_t len);
 
-scamper_tbit_pkt_t *scamper_tbit_pkt_alloc(uint8_t dir, uint8_t *data,
-					   uint16_t len, struct timeval *tv);
-void scamper_tbit_pkt_free(scamper_tbit_pkt_t *pkt);
-int scamper_tbit_pkt_tcpdatabytes(const scamper_tbit_pkt_t *pkt, uint16_t *bc);
-int scamper_tbit_pkt_tcpack(const scamper_tbit_pkt_t *pkt, uint32_t *ack);
+scamper_tbit_pkt_t* scamper_tbit_pkt_alloc (uint8_t dir, uint8_t *data,
+                                            uint16_t len, struct timeval *tv);
+void scamper_tbit_pkt_free (scamper_tbit_pkt_t *pkt);
+int scamper_tbit_pkt_tcpdatabytes (const scamper_tbit_pkt_t *pkt, uint16_t *bc);
+int scamper_tbit_pkt_tcpack (const scamper_tbit_pkt_t *pkt, uint32_t *ack);
 
-scamper_tbit_pmtud_t *scamper_tbit_pmtud_alloc(void);
-void scamper_tbit_pmtud_free(scamper_tbit_pmtud_t *pmtud);
+scamper_tbit_pmtud_t* scamper_tbit_pmtud_alloc (void);
+void scamper_tbit_pmtud_free (scamper_tbit_pmtud_t *pmtud);
 
-scamper_tbit_icw_t *scamper_tbit_icw_alloc(void);
-int scamper_tbit_icw_size(const scamper_tbit_t *tbit, uint32_t *size);
-void scamper_tbit_icw_free(scamper_tbit_icw_t *icw);
+scamper_tbit_icw_t* scamper_tbit_icw_alloc (void);
+int scamper_tbit_icw_size (const scamper_tbit_t *tbit, uint32_t *size);
+void scamper_tbit_icw_free (scamper_tbit_icw_t *icw);
 
-scamper_tbit_null_t *scamper_tbit_null_alloc(void);
-void scamper_tbit_null_free(scamper_tbit_null_t *null);
+scamper_tbit_null_t* scamper_tbit_null_alloc (void);
+void scamper_tbit_null_free (scamper_tbit_null_t *null);
 
-scamper_tbit_blind_t *scamper_tbit_blind_alloc(void);
-void scamper_tbit_blind_free(scamper_tbit_blind_t *blind);
+scamper_tbit_blind_t* scamper_tbit_blind_alloc (void);
+void scamper_tbit_blind_free (scamper_tbit_blind_t *blind);
 
-scamper_tbit_app_http_t *scamper_tbit_app_http_alloc(uint8_t type,
-						     char *host, char *file);
-int scamper_tbit_app_http_host(scamper_tbit_app_http_t *http, const char *h);
-int scamper_tbit_app_http_file(scamper_tbit_app_http_t *http, const char *f);
-void scamper_tbit_app_http_free(scamper_tbit_app_http_t *http);
+scamper_tbit_app_http_t* scamper_tbit_app_http_alloc (uint8_t type, char *host,
+                                                      char *file);
+int scamper_tbit_app_http_host (scamper_tbit_app_http_t *http, const char *h);
+int scamper_tbit_app_http_file (scamper_tbit_app_http_t *http, const char *f);
+void scamper_tbit_app_http_free (scamper_tbit_app_http_t *http);
 
-scamper_tbit_app_bgp_t *scamper_tbit_app_bgp_alloc(void);
-void scamper_tbit_app_bgp_free(scamper_tbit_app_bgp_t *bgp);
+scamper_tbit_app_bgp_t* scamper_tbit_app_bgp_alloc (void);
+void scamper_tbit_app_bgp_free (scamper_tbit_app_bgp_t *bgp);
 
-int scamper_tbit_pkts_alloc(scamper_tbit_t *tbit, uint32_t count);
-int scamper_tbit_record_pkt(scamper_tbit_t *tbit, scamper_tbit_pkt_t *pkt);
+int scamper_tbit_pkts_alloc (scamper_tbit_t *tbit, uint32_t count);
+int scamper_tbit_record_pkt (scamper_tbit_t *tbit, scamper_tbit_pkt_t *pkt);
 
-int scamper_tbit_fo_getcookie(scamper_tbit_t *tbit, uint8_t *c, uint8_t *l);
-int scamper_tbit_fo_setcookie(scamper_tbit_t *tbit, uint8_t *c, uint8_t l);
+int scamper_tbit_fo_getcookie (scamper_tbit_t *tbit, uint8_t *c, uint8_t *l);
+int scamper_tbit_fo_setcookie (scamper_tbit_t *tbit, uint8_t *c, uint8_t l);
 
 /*
  * scamper_tbit_tcpq functions.
@@ -315,19 +315,19 @@ typedef struct scamper_tbit_tcpqe
 {
   uint32_t seq;
   uint16_t len;
-  uint8_t  flags;
+  uint8_t flags;
   uint8_t *data;
 } scamper_tbit_tcpqe_t;
-scamper_tbit_tcpq_t *scamper_tbit_tcpq_alloc(uint32_t isn);
-void scamper_tbit_tcpq_free(scamper_tbit_tcpq_t *q, void (*ff)(void *));
-void scamper_tbit_tcpq_flush(scamper_tbit_tcpq_t *q, void (*ff)(void *));
-int scamper_tbit_tcpq_add(scamper_tbit_tcpq_t *q, uint32_t seq,
-			  uint8_t flags, uint16_t len, uint8_t *data);
-int scamper_tbit_tcpq_seg(scamper_tbit_tcpq_t *q,uint32_t *seq,uint16_t *len);
-scamper_tbit_tcpqe_t *scamper_tbit_tcpq_pop(scamper_tbit_tcpq_t *q);
-int scamper_tbit_tcpq_sack(scamper_tbit_tcpq_t *q, uint32_t *blocks, int c);
-uint32_t scamper_tbit_tcpq_tail(const scamper_tbit_tcpq_t *q);
-void scamper_tbit_tcpqe_free(scamper_tbit_tcpqe_t *qe, void (*ff)(void *));
+scamper_tbit_tcpq_t* scamper_tbit_tcpq_alloc (uint32_t isn);
+void scamper_tbit_tcpq_free (scamper_tbit_tcpq_t *q, void (*ff) (void*));
+void scamper_tbit_tcpq_flush (scamper_tbit_tcpq_t *q, void (*ff) (void*));
+int scamper_tbit_tcpq_add (scamper_tbit_tcpq_t *q, uint32_t seq, uint8_t flags,
+                           uint16_t len, uint8_t *data);
+int scamper_tbit_tcpq_seg (scamper_tbit_tcpq_t *q, uint32_t *seq, uint16_t *len);
+scamper_tbit_tcpqe_t* scamper_tbit_tcpq_pop (scamper_tbit_tcpq_t *q);
+int scamper_tbit_tcpq_sack (scamper_tbit_tcpq_t *q, uint32_t *blocks, int c);
+uint32_t scamper_tbit_tcpq_tail (const scamper_tbit_tcpq_t *q);
+void scamper_tbit_tcpqe_free (scamper_tbit_tcpqe_t *qe, void (*ff) (void*));
 
 /*
  * convenience functions.
@@ -341,8 +341,8 @@ void scamper_tbit_tcpqe_free(scamper_tbit_tcpqe_t *qe, void (*ff)(void *));
  *  the packet is in the current window.
  *
  */
-int scamper_tbit_data_inrange(uint32_t rcv_nxt, uint32_t seq, uint16_t len);
-int scamper_tbit_data_seqoff(uint32_t rcv_nxt, uint32_t seq);
+int scamper_tbit_data_inrange (uint32_t rcv_nxt, uint32_t seq, uint16_t len);
+int scamper_tbit_data_seqoff (uint32_t rcv_nxt, uint32_t seq);
 
 /*
  * scamper_tbit_stats
@@ -352,11 +352,11 @@ int scamper_tbit_data_seqoff(uint32_t rcv_nxt, uint32_t seq);
 typedef struct scamper_tbit_stats
 {
   struct timeval synack_rtt;
-  uint32_t       rx_xfersize;
-  uint32_t       rx_totalsize;
+  uint32_t rx_xfersize;
+  uint32_t rx_totalsize;
   struct timeval xfertime;
 } scamper_tbit_stats_t;
 
-int scamper_tbit_stats(const scamper_tbit_t *tbit,scamper_tbit_stats_t *stats);
+int scamper_tbit_stats (const scamper_tbit_t *tbit, scamper_tbit_stats_t *stats);
 
 #endif /* __SCAMPER_TBIT_H */
