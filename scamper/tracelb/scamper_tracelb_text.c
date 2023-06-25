@@ -24,7 +24,7 @@
 
 #ifndef lint
 static const char rcsid[] =
-  "$Id: scamper_tracelb_text.c,v 1.6 2018/05/23 08:52:39 mjl Exp $";
+    "$Id: scamper_tracelb_text.c,v 1.6 2018/05/23 08:52:39 mjl Exp $";
 #endif
 
 #ifdef HAVE_CONFIG_H
@@ -39,35 +39,35 @@ static const char rcsid[] =
 #include "scamper_tracelb_text.h"
 #include "utils.h"
 
-static void probeset_summary_tostr(scamper_tracelb_probeset_summary_t *sum,
-				   char *buf, size_t len, size_t *off)
+static void probeset_summary_tostr (scamper_tracelb_probeset_summary_t *sum,
+                                    char *buf, size_t len, size_t *off)
 {
   char dst[64];
   int k;
 
-  if(sum->nullc > 0 && sum->addrc == 0)
-    {
-      string_concat(buf, len, off, "*");
-      return;
-    }
+  if (sum->nullc > 0 && sum->addrc == 0)
+  {
+    string_concat (buf, len, off, "*");
+    return;
+  }
 
-  scamper_addr_tostr(sum->addrs[0], dst, sizeof(dst));
-  string_concat(buf, len, off, "(%s", dst);
-  for(k=1; k<sum->addrc; k++)
-    {
-      scamper_addr_tostr(sum->addrs[k], dst, sizeof(dst));
-      string_concat(buf, len, off, ", %s", dst);
-    }
-  if(sum->nullc > 0)
-    string_concat(buf, len, off, ", *)");
+  scamper_addr_tostr (sum->addrs[0], dst, sizeof(dst));
+  string_concat (buf, len, off, "(%s", dst);
+  for (k = 1; k < sum->addrc; k++)
+  {
+    scamper_addr_tostr (sum->addrs[k], dst, sizeof(dst));
+    string_concat (buf, len, off, ", %s", dst);
+  }
+  if (sum->nullc > 0)
+    string_concat (buf, len, off, ", *)");
   else
-    string_concat(buf, len, off, ")");
+    string_concat (buf, len, off, ")");
 
   return;
 }
 
-int scamper_file_text_tracelb_write(const scamper_file_t *sf,
-				    const scamper_tracelb_t *trace)
+int scamper_file_text_tracelb_write (const scamper_file_t *sf,
+                                     const scamper_tracelb_t *trace)
 {
   scamper_tracelb_probeset_summary_t *sum = NULL;
   scamper_tracelb_probeset_t *set;
@@ -76,71 +76,73 @@ int scamper_file_text_tracelb_write(const scamper_file_t *sf,
   size_t len;
   size_t off;
   char buf[1024], src[64], dst[64];
-  int fd = scamper_file_getfd(sf);
+  int fd = scamper_file_getfd (sf);
   int i, j;
 
-  snprintf(buf, sizeof(buf),
-	   "tracelb from %s to %s, %d nodes, %d links, %d probes, %d%%\n",
-	   scamper_addr_tostr(trace->src, src, sizeof(src)),
-	   scamper_addr_tostr(trace->dst, dst, sizeof(dst)),
-	   trace->nodec, trace->linkc, trace->probec, trace->confidence);
+  snprintf (buf, sizeof(buf),
+            "tracelb from %s to %s, %d nodes, %d links, %d probes, %d%%\n",
+            scamper_addr_tostr (trace->src, src, sizeof(src)),
+            scamper_addr_tostr (trace->dst, dst, sizeof(dst)), trace->nodec,
+            trace->linkc, trace->probec, trace->confidence);
 
-  len = strlen(buf);
-  write_wrap(fd, buf, NULL, len);
+  len = strlen (buf);
+  write_wrap (fd, buf, NULL, len);
 
-  for(i=0; i<trace->nodec; i++)
+  for (i = 0; i < trace->nodec; i++)
+  {
+    node = trace->nodes[i];
+
+    if (node->addr != NULL)
+      scamper_addr_tostr (node->addr, src, sizeof(src));
+    else
+      snprintf (src, sizeof(src), "*");
+
+    if (node->linkc > 1)
     {
-      node = trace->nodes[i];
-
-      if(node->addr != NULL)
-	scamper_addr_tostr(node->addr, src, sizeof(src));
-      else
-	snprintf(src, sizeof(src), "*");
-
-      if(node->linkc > 1)
-	{
-	  for(j=0; j<node->linkc; j++)
-	    {
-	      scamper_addr_tostr(node->links[j]->to->addr, dst, sizeof(dst));
-	      snprintf(buf, sizeof(buf), "%s -> %s\n", src, dst);
-	      len = strlen(buf);
-	      write_wrap(fd, buf, NULL, len);
-	    }
-	}
-      else if(node->linkc == 1)
-	{
-	  link = node->links[0];
-	  off = 0;
-
-	  string_concat(buf, sizeof(buf), &off, "%s -> ", src);
-	  for(j=0; j<link->hopc-1; j++)
-	    {
-	      set = link->sets[j];
-	      if((sum = scamper_tracelb_probeset_summary_alloc(set)) == NULL)
-		return -1;
-	      probeset_summary_tostr(sum, buf, sizeof(buf), &off);
-	      string_concat(buf, sizeof(buf), &off, " -> ");
-	      scamper_tracelb_probeset_summary_free(sum); sum = NULL;
-	    }
-
-	  if(link->to != NULL)
-	    {
-	      scamper_addr_tostr(link->to->addr, dst, sizeof(dst));
-	      string_concat(buf, sizeof(buf), &off, "%s", dst);
-	    }
-	  else
-	    {
-	      set = link->sets[link->hopc-1];
-	      if((sum = scamper_tracelb_probeset_summary_alloc(set)) == NULL)
-		return -1;
-	      probeset_summary_tostr(sum, buf, sizeof(buf), &off);
-	      scamper_tracelb_probeset_summary_free(sum); sum = NULL;
-	    }
-
-	  string_concat(buf, sizeof(buf), &off, "\n");
-	  write_wrap(fd, buf, NULL, off);
-	}
+      for (j = 0; j < node->linkc; j++)
+      {
+        scamper_addr_tostr (node->links[j]->to->addr, dst, sizeof(dst));
+        snprintf (buf, sizeof(buf), "%s -> %s\n", src, dst);
+        len = strlen (buf);
+        write_wrap (fd, buf, NULL, len);
+      }
     }
+    else if (node->linkc == 1)
+    {
+      link = node->links[0];
+      off = 0;
+
+      string_concat (buf, sizeof(buf), &off, "%s -> ", src);
+      for (j = 0; j < link->hopc - 1; j++)
+      {
+        set = link->sets[j];
+        if ((sum = scamper_tracelb_probeset_summary_alloc (set)) == NULL)
+          return -1;
+        probeset_summary_tostr (sum, buf, sizeof(buf), &off);
+        string_concat (buf, sizeof(buf), &off, " -> ");
+        scamper_tracelb_probeset_summary_free (sum);
+        sum = NULL;
+      }
+
+      if (link->to != NULL)
+      {
+        scamper_addr_tostr (link->to->addr, dst, sizeof(dst));
+        string_concat (buf, sizeof(buf), &off, "%s", dst);
+      }
+      else
+      {
+        set = link->sets[link->hopc - 1];
+        if ((sum = scamper_tracelb_probeset_summary_alloc (set)) == NULL)
+          return -1;
+        probeset_summary_tostr (sum, buf, sizeof(buf), &off);
+        scamper_tracelb_probeset_summary_free (sum);
+        sum = NULL;
+      }
+
+      string_concat (buf, sizeof(buf), &off, "\n");
+      write_wrap (fd, buf, NULL, off);
+    }
+  }
 
   return 0;
 }
