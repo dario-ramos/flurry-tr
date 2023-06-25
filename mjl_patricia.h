@@ -34,20 +34,20 @@
 typedef struct patricia_node patricia_node_t;
 typedef struct patricia patricia_t;
 
-typedef int (*patricia_bit_t)(const void *item, int bit);
-typedef int (*patricia_cmp_t)(const void *a, const void *b);
-typedef int (*patricia_fbd_t)(const void *a, const void *b);
-typedef void (*patricia_free_t)(void *item);
+typedef int (*patricia_bit_t) (const void *item, int bit);
+typedef int (*patricia_cmp_t) (const void *a, const void *b);
+typedef int (*patricia_fbd_t) (const void *a, const void *b);
+typedef void (*patricia_free_t) (void *item);
 
-void *patricia_find(const patricia_t *trie, const void *item);
-int patricia_remove_node(patricia_t *trie, patricia_node_t *node);
-int patricia_remove_item(patricia_t *trie, const void *item);
-int patricia_count(const patricia_t *trie);
+void* patricia_find (const patricia_t *trie, const void *item);
+int patricia_remove_node (patricia_t *trie, patricia_node_t *node);
+int patricia_remove_item (patricia_t *trie, const void *item);
+int patricia_count (const patricia_t *trie);
 
 #ifndef DMALLOC
-patricia_node_t *patricia_insert(patricia_t *trie, void *item);
-patricia_t *patricia_alloc(patricia_bit_t bit, patricia_cmp_t cmp,
-			   patricia_fbd_t fbd);
+patricia_node_t* patricia_insert (patricia_t *trie, void *item);
+patricia_t* patricia_alloc (patricia_bit_t bit, patricia_cmp_t cmp,
+                            patricia_fbd_t fbd);
 #else
 patricia_t *patricia_alloc_dm(patricia_bit_t bit, patricia_cmp_t cmp,
 			      patricia_fbd_t fbd,
@@ -60,15 +60,15 @@ patricia_node_t *patricia_insert_dm(patricia_t *trie, void *item,
 						      __FILE__, __LINE__)
 #endif
 
-void patricia_free_cb(patricia_t *trie, patricia_free_t free_cb);
-void patricia_free(patricia_t *trie);
+void patricia_free_cb (patricia_t *trie, patricia_free_t free_cb);
+void patricia_free (patricia_t *trie);
 
-int patricia_node_bit(const patricia_node_t *node);
-void *patricia_node_item(const patricia_node_t *node);
-void *patricia_node_left_item(const patricia_node_t *node);
-void *patricia_node_right_item(const patricia_node_t *node);
-patricia_node_t *patricia_head_node(const patricia_t *trie);
-patricia_node_t *patricia_node_left_node(const patricia_node_t *node);
-patricia_node_t *patricia_node_right_node(const patricia_node_t *node);
+int patricia_node_bit (const patricia_node_t *node);
+void* patricia_node_item (const patricia_node_t *node);
+void* patricia_node_left_item (const patricia_node_t *node);
+void* patricia_node_right_item (const patricia_node_t *node);
+patricia_node_t* patricia_head_node (const patricia_t *trie);
+patricia_node_t* patricia_node_left_node (const patricia_node_t *node);
+patricia_node_t* patricia_node_right_node (const patricia_node_t *node);
 
 #endif /* MJL_PATRICIA_H */
