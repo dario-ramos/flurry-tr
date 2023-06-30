@@ -39,12 +39,12 @@
 typedef struct splaytree splaytree_t;
 typedef struct splaytree_node splaytree_node_t;
 
-typedef int  (*splaytree_cmp_t)(const void *a, const void *b);
-typedef int  (*splaytree_diff_t)(const void *a, const void *b);
-typedef void (*splaytree_display_t)(const void *ptr, int pad);
-typedef int  (*splaytree_inorder_t)(void *ptr, void *entry);
-typedef void (*splaytree_free_t)(void *ptr);
-typedef void (*splaytree_onremove_t)(void *ptr);
+typedef int (*splaytree_cmp_t) (const void *a, const void *b);
+typedef int (*splaytree_diff_t) (const void *a, const void *b);
+typedef void (*splaytree_display_t) (const void *ptr, int pad);
+typedef int (*splaytree_inorder_t) (void *ptr, void *entry);
+typedef void (*splaytree_free_t) (void *ptr);
+typedef void (*splaytree_onremove_t) (void *ptr);
 
 #ifndef DMALLOC
 /*
@@ -52,8 +52,8 @@ typedef void (*splaytree_onremove_t)(void *ptr);
  * (1) allocating and freeing a splaytree structure
  * (2) inserting a node into the tree
  */
-splaytree_t *splaytree_alloc(splaytree_cmp_t cmp);
-splaytree_node_t *splaytree_insert(splaytree_t *tree, const void *ptr);
+splaytree_t* splaytree_alloc (splaytree_cmp_t cmp);
+splaytree_node_t* splaytree_insert (splaytree_t *tree, const void *ptr);
 #endif
 
 #ifdef DMALLOC
@@ -66,41 +66,41 @@ splaytree_node_t *splaytree_insert_dm(splaytree_t *tree, const void *ptr,
 #define splaytree_insert(t,p) splaytree_insert_dm((t), (p), __FILE__, __LINE__)
 #endif
 
-void splaytree_free(splaytree_t *tree, splaytree_free_t free_ptr);
-void splaytree_empty(splaytree_t *tree, splaytree_free_t free_ptr);
-void splaytree_onremove(splaytree_t *tree, splaytree_onremove_t onremove);
+void splaytree_free (splaytree_t *tree, splaytree_free_t free_ptr);
+void splaytree_empty (splaytree_t *tree, splaytree_free_t free_ptr);
+void splaytree_onremove (splaytree_t *tree, splaytree_onremove_t onremove);
 
 /* remove a node from the tree */
-int splaytree_remove_item(splaytree_t *tree, const void *ptr);
-int splaytree_remove_node(splaytree_t *tree, splaytree_node_t *node);
+int splaytree_remove_item (splaytree_t *tree, const void *ptr);
+int splaytree_remove_node (splaytree_t *tree, splaytree_node_t *node);
 
 /* find a node in the tree and return it */
-void *splaytree_find(splaytree_t *tree, const void *ptr);
-void *splaytree_find_ro(const splaytree_t *tree, const void *ptr);
+void* splaytree_find (splaytree_t *tree, const void *ptr);
+void* splaytree_find_ro (const splaytree_t *tree, const void *ptr);
 
 /* find a value in the tree closest to a particular value */
-void *splaytree_findclosest(splaytree_t *tree, const void *ptr,
-			    splaytree_diff_t diff);
+void* splaytree_findclosest (splaytree_t *tree, const void *ptr,
+                             splaytree_diff_t diff);
 
 /* return the right most node on the left branch of the tree */
-void *splaytree_getrmlb(splaytree_t *tree);
+void* splaytree_getrmlb (splaytree_t *tree);
 
 /* return the left most node on the right branch of the tree */
-void *splaytree_getlmrb(splaytree_t *tree);
+void* splaytree_getlmrb (splaytree_t *tree);
 
 /* return the node at the head of the tree */
-void *splaytree_gethead(splaytree_t *tree);
+void* splaytree_gethead (splaytree_t *tree);
 
 /* pop the node at the head of the tree */
-void *splaytree_pophead(splaytree_t *tree);
+void* splaytree_pophead (splaytree_t *tree);
 
 /* calculate the longest search path of the subtree passed in */
-int splaytree_depth(splaytree_t *tree);
+int splaytree_depth (splaytree_t *tree);
 
-void splaytree_display(splaytree_t *tree, splaytree_display_t disp);
+void splaytree_display (splaytree_t *tree, splaytree_display_t disp);
 
-int splaytree_count(splaytree_t *tree);
+int splaytree_count (splaytree_t *tree);
 
-void splaytree_inorder(splaytree_t *tree, splaytree_inorder_t func, void *in);
+void splaytree_inorder (splaytree_t *tree, splaytree_inorder_t func, void *in);
 
 #endif /* __MJL_SPLAYTREE_H */
