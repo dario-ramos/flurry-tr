@@ -32,11 +32,11 @@
 #define __MJL_THREADPOOL_H
 
 typedef struct threadpool threadpool_t;
-typedef void (*threadpool_func_t)(void *);
+typedef void (*threadpool_func_t) (void*);
 
 #ifndef DMALLOC
-threadpool_t *threadpool_alloc(int threadc);
-int threadpool_tail_push(threadpool_t *tp, threadpool_func_t func,void *param);
+threadpool_t* threadpool_alloc (int threadc);
+int threadpool_tail_push (threadpool_t *tp, threadpool_func_t func, void *param);
 #else
 threadpool_t *threadpool_alloc_dm(int threadc,
 				  const char *file, const int line);
@@ -49,6 +49,6 @@ int threadpool_tail_push_dm(threadpool_t *tp, threadpool_func_t func,
   threadpool_tail_push_dm((tp), (func), (param), __FILE__, __LINE__)
 #endif
 
-int threadpool_join(threadpool_t *tp);
+int threadpool_join (threadpool_t *tp);
 
 #endif /* __MJL_THREADPOOL_H */

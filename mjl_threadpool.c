@@ -58,7 +58,7 @@ struct threadpool_task
 
 struct threadpool
 {
-  long               threadc;
+  long threadc;
 #ifdef HAVE_PTHREAD
   pthread_t         *threads;
   pthread_mutex_t    mutex;
@@ -111,7 +111,7 @@ static void *threadpool_run(void *ptr)
 }
 #endif
 
-static void threadpool_free(threadpool_t *tp)
+static void threadpool_free (threadpool_t *tp)
 {
 #ifdef HAVE_PTHREAD
   threadpool_task_t *task;
@@ -132,7 +132,7 @@ static void threadpool_free(threadpool_t *tp)
     pthread_mutex_destroy(&tp->mutex);
 #endif
 
-  free(tp);
+  free (tp);
   return;
 }
 
@@ -166,7 +166,7 @@ static threadpool_task_t *threadpool_task_alloc_dm(threadpool_func_t func,
 #endif
 
 #ifndef DMALLOC
-int threadpool_tail_push(threadpool_t *tp, threadpool_func_t func, void *ptr)
+int threadpool_tail_push (threadpool_t *tp, threadpool_func_t func, void *ptr)
 #else
 int threadpool_tail_push_dm(threadpool_t *tp, threadpool_func_t func,
 			    void *ptr, const char *file, const int line)
@@ -214,7 +214,7 @@ int threadpool_tail_push_dm(threadpool_t *tp, threadpool_func_t func,
   if(pthread_mutex_unlock(&tp->mutex) != 0)
     return -1;
 #else
-  func(ptr);
+  func (ptr);
 #endif
 
   return 0;
@@ -226,7 +226,7 @@ int threadpool_tail_push_dm(threadpool_t *tp, threadpool_func_t func,
  * signal to the threads that there is nothing left to do, and wait
  * for them to complete work
  */
-int threadpool_join(threadpool_t *tp)
+int threadpool_join (threadpool_t *tp)
 {
 #ifdef HAVE_PTHREAD
   int i;
@@ -258,12 +258,12 @@ int threadpool_join(threadpool_t *tp)
     }
 #endif
 
-  threadpool_free(tp);
+  threadpool_free (tp);
   return 0;
 }
 
 #ifndef DMALLOC
-threadpool_t *threadpool_alloc(int threadc)
+threadpool_t* threadpool_alloc (int threadc)
 #else
 threadpool_t *threadpool_alloc_dm(int threadc,const char *file,const int line)
 #endif
@@ -271,21 +271,21 @@ threadpool_t *threadpool_alloc_dm(int threadc,const char *file,const int line)
   threadpool_t *tp = NULL;
   size_t len;
 
-  if(threadc < 0)
+  if (threadc < 0)
     return NULL;
 
 #ifndef HAVE_PTHREAD
-  if(threadc > 0)
+  if (threadc > 0)
     return NULL;
 #endif
 
   len = sizeof(threadpool_t);
 #ifndef DMALLOC
-  tp = (threadpool_t *)malloc(len);
+  tp = (threadpool_t*) malloc (len);
 #else
   tp = (threadpool_t *)dmalloc_malloc(file,line,len,DMALLOC_FUNC_MALLOC,0,0);
 #endif
-  if(tp == NULL)
+  if (tp == NULL)
     goto err;
 
   tp->threadc = 0;
@@ -326,7 +326,8 @@ threadpool_t *threadpool_alloc_dm(int threadc,const char *file,const int line)
 
   return tp;
 
- err:
-  if(tp != NULL) threadpool_join(tp);
+err:
+  if (tp != NULL)
+    threadpool_join (tp);
   return NULL;
 }
