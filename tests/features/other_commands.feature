@@ -19,3 +19,4 @@ Feature: Other commands
          |tracelb          |
          |ping             |
          |sting            |
+         |tbit             |
