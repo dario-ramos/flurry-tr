@@ -18,3 +18,4 @@ Feature: Other commands
          |scamper_command  |
          |tracelb          |
          |ping             |
+         |sting            |
