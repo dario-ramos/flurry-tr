@@ -182,6 +182,7 @@ static struct handler handlers[] = {
    NULL,                                   /* init_append */
    scamper_file_arts_read,                 /* read */
    NULL,                                   /* write_trace */
+   NULL,                                   /* write_traceb */
    NULL,                                   /* write_cycle_start */
    NULL,                                   /* write_cycle_stop */
    NULL,                                   /* write_ping */
@@ -201,6 +202,7 @@ static struct handler handlers[] = {
    scamper_file_warts_init_append,         /* init_append */
    scamper_file_warts_read,                /* read */
    scamper_file_warts_trace_write,         /* write_trace */
+   NULL,                                   /* write_traceb */
    scamper_file_warts_cyclestart_write,    /* write_cycle_start */
    scamper_file_warts_cyclestop_write,     /* write_cycle_stop */
    scamper_file_warts_ping_write,          /* write_ping */
@@ -220,6 +222,7 @@ static struct handler handlers[] = {
    NULL,                                   /* init_append */
    NULL,                                   /* read */
    scamper_file_json_trace_write,          /* write_trace */
+   NULL,                                   /* write_traceb */
    scamper_file_json_cyclestart_write,     /* write_cycle_start */
    scamper_file_json_cyclestop_write,      /* write_cycle_stop */
    scamper_file_json_ping_write,           /* write_ping */
