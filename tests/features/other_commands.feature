@@ -9,15 +9,15 @@ Feature: Other commands
       When I run the dealias scamper command in a basic usage scenario
       Then I should get a non-empty dealias response without errors
 
-   Scenario: host
-      Given I am running scamper host from the command line using -I
-      When I run the host scamper command requesting a warts file as the output
+   Scenario Outline: commands invoked via -I that output a warts file
+      Given I am running <scamper_command_name> from the command line using -I
+      When I invoke it with the -I flag set to: <scamper_command_i_flag>
       Then I should get a non-empty output file and exit code should be zero
 
-   Scenario: neighbourdisc
-      Given I am running scamper neighbourdisc from the command line using -I
-      When I run the neighbourdisc scamper command requesting a warts file as the output
-      Then I should get a non-empty output file and exit code should be zero
+      Examples:
+         |scamper_command_name  |scamper_command_i_flag              |
+         |host                  |host google.com                     |
+         |neighbourdisc         |neighbourdisc -i lo 192.168.20.215  |
 
    Scenario Outline: commands invoked via -c and -i
       Given I am running <scamper_command> from the command line using -c
