@@ -37,6 +37,19 @@ def step_impl(context):
 	context.stderr = result.stderr
 	context.returncode = result.returncode
 
+@given('I am running scamper neighbourdisc from the command line using -I')
+def step_impl(context):
+	context.scamper_path = '../scamper/scamper'
+	context.neighbourdisc_cmd = 'neighbourdisc -i lo 192.168.20.215'
+	context.output_file_path = 'output.warts'
+
+@when('I run the neighbourdisc scamper command requesting a warts file as the output')
+def step_impl(context):
+	result = subprocess.run(['sudo', context.scamper_path, '-O', 'warts', '-o', context.output_file_path,
+							'-I', context.neighbourdisc_cmd], check=True, capture_output=True, text=True)
+	context.stderr = result.stderr
+	context.returncode = result.returncode
+
 @then(u'I should get a non-empty output file and exit code should be zero')
 def step_impl(context):
 	assert context.stderr == '', 'expected empty stderr'
