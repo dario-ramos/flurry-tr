@@ -192,12 +192,12 @@ int scamper_options_parse (char *str, const scamper_option_in_t *opts,
   char *next;
   int i;
 
-  printf ("***> %s\n", str); // TODO <DBG>
   /* to begin with, get to the first non-whitespace character */
   while (*str != '\0' && isspace((int)*str) != 0)
   {
     str++;
   }
+
   /* if it turns out there are no options, then return now */
   if (*str == '\0')
   {
@@ -286,6 +286,7 @@ int scamper_options_parse (char *str, const scamper_option_in_t *opts,
     }
     else
     {
+
       /* advance to the first short option */
       str++;
 
@@ -296,13 +297,12 @@ int scamper_options_parse (char *str, const scamper_option_in_t *opts,
        * with long options.
        */
 
-
-
       while (*str != '\0')
       {
         /* try and find a matching short option for this character */
         for (i = 0; i < cnt; i++)
         {
+
           if (opts[i].c != '\0' && opts[i].c == *str)
           {
             /*
