@@ -21,12 +21,12 @@ Feature: Other commands
 
    Scenario Outline: commands invoked via -c and -i
       Given I am running <scamper_command> from the command line using -c
-      When I run the command with an IP address argument
+      When I run the command with an IP address obtained via <ip_selector>
       Then I should get a non-empty response without errors
 
       Examples:
-         |scamper_command  |
-         |tracelb          |
-         |ping             |
-         |sting            |
-         |tbit             |
+         |scamper_command  |ip_selector               |
+         |tracelb          |get_public_ip_restricted  |
+         |ping             |get_public_ip             |
+         |sting            |get_public_ip             |
+         |tbit             |get_public_ip             |
