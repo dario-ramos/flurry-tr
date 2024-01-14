@@ -4,7 +4,7 @@ Feature: Other commands
    I want to make sure all commands work at a basic level
    So that I can ensure they are not broken by changes
 
-   Scenario: dealias
+   Scenario: dealias command
       Given I am running scamper dealias from the command line using -I
       When I run the dealias scamper command in a basic usage scenario
       Then I should get a non-empty dealias response without errors
@@ -30,3 +30,8 @@ Feature: Other commands
          |ping             |get_public_ip             |
          |sting            |get_public_ip             |
          |tbit             |get_public_ip             |
+
+   Scenario: sniff command
+      Given I am running a background process pinging the loopbacks interface's IP
+      When I run the sniff command using the loopback interface IP as source and a warts file as output
+      Then I should get a non-empty output file and exit code should be zero

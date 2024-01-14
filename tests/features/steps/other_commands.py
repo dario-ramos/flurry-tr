@@ -3,6 +3,8 @@ import subprocess
 import os
 import re
 import public_ips
+import netifaces
+import signal
 
 @given('I am running scamper dealias from the command line using -I')
 def step_impl(context):
@@ -63,3 +65,46 @@ def step_impl(context):
 	assert context.stderr == '', f'expected empty stderr, got {context.stderr}'
 	assert context.returncode == 0, 'expected return code 0'
 	assert len(context.stdout) != 0, 'expected non-empty output'
+
+@given('I am running a background process pinging the loopbacks interface\'s IP')
+def step_impl(context):
+	context.scamper_path = '../scamper/scamper'
+	context.output_file_path = 'output.warts'
+
+	source_ip = get_loopback_interface_ip()
+
+	assert len(source_ip) > 0, 'expected non-empty source IP'
+	context.ping_subproc = subprocess.Popen( \
+		["ping", source_ip], \
+		stdin=subprocess.DEVNULL, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True, text=True)
+
+	context.sniff_cmd = f'sniff -S {source_ip} -G 5 icmp[icmpid] == 0'
+
+@when('I run the sniff command using the loopback interface IP as source and a warts file as output')
+def step_impl(context):
+	result = subprocess.run(['sudo', context.scamper_path, '-O', 'warts', '-o', context.output_file_path,
+							'-I', context.sniff_cmd], check=True, capture_output=True, text=True)
+	context.stderr = result.stderr
+	context.returncode = result.returncode
+	context.ping_subproc.send_signal(signal.SIGINT)
+	ping_out, ping_err = context.ping_subproc.communicate()
+	assert len(ping_out) > 0, 'expected ping to return non empty output'
+	assert len(ping_err) == 0, 'expected ping to return empty stderr'
+	assert context.ping_subproc.returncode == 0, 'expected ping to return 0'
+
+def get_loopback_interface_ip():
+	interface_list = netifaces.interfaces()
+	source_ip = ''
+	for interface in interface_list:
+		if interface != "lo":
+			continue
+		address_entries = netifaces.ifaddresses(interface)
+
+		print(address_entries)
+		for _, address_entry in address_entries.items():
+			if address_entry[0]['addr'] == '00:00:00:00:00:00' or address_entry[0]['addr'] == '::1':
+				continue
+			source_ip = address_entry[0]['addr']
+			break
+
+	return source_ip
