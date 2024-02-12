@@ -24,7 +24,7 @@
 
 #ifndef lint
 static const char rcsid[] =
-  "$Id: scamper_file_text.c,v 1.87 2011/09/16 03:15:44 mjl Exp $";
+    "$Id: scamper_file_text.c,v 1.87 2011/09/16 03:15:44 mjl Exp $";
 #endif
 
 #ifdef HAVE_CONFIG_H
@@ -43,26 +43,26 @@ int scamper_file_text_is(const scamper_file_t *sf)
   char buf[10];
   int fd;
 
-  fd = scamper_file_getfd(sf);
+  fd = scamper_file_getfd (sf);
 
-  if(lseek(fd, 0, SEEK_SET) == -1)
+  if (lseek (fd, 0, SEEK_SET) == -1)
+  {
+    return 0;
+  }
+
+  if (read_wrap (fd, buf, NULL, sizeof(buf)) != 0)
+  {
+    return 0;
+  }
+
+  if (strncmp (buf, "traceroute", 10) == 0)
+  {
+    if (lseek (fd, 0, SEEK_SET) == -1)
     {
       return 0;
     }
-
-  if(read_wrap(fd, buf, NULL, sizeof(buf)) != 0)
-    {
-      return 0;
-    }
-
-  if(strncmp(buf, "traceroute", 10) == 0)
-    {
-      if(lseek(fd, 0, SEEK_SET) == -1)
-	{
-	  return 0;
-	}
-      return 1;
-    }
+    return 1;
+  }
 
   return 0;
 }

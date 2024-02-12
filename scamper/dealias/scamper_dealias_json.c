@@ -41,8 +41,8 @@ static const char rcsid[] =
 
 #include "utils.h"
 
-static char* dealias_flags_encode (char *buf, size_t len, uint8_t flags,
-                                   const char **f2s, size_t f2sc)
+static char* dealias_flags_encode(char *buf, size_t len, uint8_t flags,
+                                  const char **f2s, size_t f2sc)
 {
   size_t i, off = 0;
   int f = 0;
@@ -66,7 +66,7 @@ static char* dealias_flags_encode (char *buf, size_t len, uint8_t flags,
   return buf;
 }
 
-static char* dealias_header_tostr (const scamper_dealias_t *dealias)
+static char* dealias_header_tostr(const scamper_dealias_t *dealias)
 {
   static const char *pf_flags[] =
     { "nobs", "csa" };
@@ -179,7 +179,7 @@ static char* dealias_header_tostr (const scamper_dealias_t *dealias)
   return strdup (buf);
 }
 
-static char* dealias_probedef_tostr (const scamper_dealias_probedef_t *def)
+static char* dealias_probedef_tostr(const scamper_dealias_probedef_t *def)
 {
   char buf[256], tmp[64];
   size_t off = 0;
@@ -208,8 +208,8 @@ static char* dealias_probedef_tostr (const scamper_dealias_probedef_t *def)
   return strdup (buf);
 }
 
-static int dealias_probedefs_get (const scamper_dealias_t *dealias,
-                                  scamper_dealias_probedef_t **defs, int *defc)
+static int dealias_probedefs_get(const scamper_dealias_t *dealias,
+                                 scamper_dealias_probedef_t **defs, int *defc)
 {
   scamper_dealias_mercator_t *mc;
   scamper_dealias_ally_t *ally;
@@ -256,7 +256,7 @@ static int dealias_probedefs_get (const scamper_dealias_t *dealias,
   return 0;
 }
 
-static char* dealias_reply_tostr (const scamper_dealias_reply_t *reply)
+static char* dealias_reply_tostr(const scamper_dealias_reply_t *reply)
 {
   char buf[256], tmp[64];
   size_t off = 0;
@@ -292,7 +292,7 @@ static char* dealias_reply_tostr (const scamper_dealias_reply_t *reply)
   return strdup (buf);
 }
 
-static char* dealias_probe_tostr (const scamper_dealias_probe_t *probe)
+static char* dealias_probe_tostr(const scamper_dealias_probe_t *probe)
 {
   char header[256], **replies = NULL, *rc = NULL, *str = NULL;
   size_t len, wc = 0, header_len = 0, *reply_lens = NULL;
@@ -309,8 +309,8 @@ static char* dealias_probe_tostr (const scamper_dealias_probe_t *probe)
   len = header_len;
   if (probe->replyc > 0)
   {
-    if ((replies = malloc_zero (sizeof(char*) * probe->replyc)) == NULL
-        || (reply_lens = malloc_zero (sizeof(size_t) * probe->replyc)) == NULL)
+    if ((replies = malloc_zero(sizeof(char*) * probe->replyc)) == NULL
+        || (reply_lens = malloc_zero(sizeof(size_t) * probe->replyc)) == NULL)
       goto done;
     for (i = 0; i < probe->replyc; i++)
     {
@@ -324,7 +324,7 @@ static char* dealias_probe_tostr (const scamper_dealias_probe_t *probe)
   }
   len += 3; /* ]}\0 */
 
-  if ((str = malloc_zero (len)) == NULL)
+  if ((str = malloc_zero(len)) == NULL)
     goto done;
   memcpy (str, header, header_len);
   wc += header_len;
@@ -362,8 +362,8 @@ done:
   return rc;
 }
 
-int scamper_file_json_dealias_write (const scamper_file_t *sf,
-                                     const scamper_dealias_t *dealias)
+int scamper_file_json_dealias_write(const scamper_file_t *sf,
+                                    const scamper_dealias_t *dealias)
 {
   char *str = NULL;
   size_t len = 0;
@@ -404,8 +404,8 @@ int scamper_file_json_dealias_write (const scamper_file_t *sf,
   len += 13; /* , "probes":[] */
   if (dealias->probec > 0)
   {
-    if ((prs = malloc_zero (sizeof(char*) * dealias->probec)) == NULL
-        || (pr_lens = malloc_zero (sizeof(size_t) * dealias->probec)) == NULL)
+    if ((prs = malloc_zero(sizeof(char*) * dealias->probec)) == NULL
+        || (pr_lens = malloc_zero(sizeof(size_t) * dealias->probec)) == NULL)
       goto cleanup;
 
     for (j = 0; j < dealias->probec; j++)
@@ -419,7 +419,7 @@ int scamper_file_json_dealias_write (const scamper_file_t *sf,
     }
   }
 
-  if ((str = malloc_zero (len)) == NULL)
+  if ((str = malloc_zero(len)) == NULL)
     goto cleanup;
   memcpy (str + wc, header, header_len);
   wc += header_len;

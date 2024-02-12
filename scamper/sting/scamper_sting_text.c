@@ -38,8 +38,8 @@ static const char rcsid[] =
 #include "scamper_sting_text.h"
 #include "utils.h"
 
-int scamper_file_text_sting_write (const scamper_file_t *sf,
-                                   const scamper_sting_t *sting)
+int scamper_file_text_sting_write(const scamper_file_t *sf,
+                                  const scamper_sting_t *sting)
 {
   int fd = scamper_file_getfd (sf);
   char buf[192], src[64], dst[64];

@@ -52,8 +52,8 @@ typedef struct tbit_state
 #define TBIT_STATE_FLAG_CISN 0x01
 #define TBIT_STATE_FLAG_SISN 0x02
 
-static char* tbit_bits_encode (char *buf, size_t len, uint32_t flags, int bits,
-                               const char **f2s, int f2sc)
+static char* tbit_bits_encode(char *buf, size_t len, uint32_t flags, int bits,
+                              const char **f2s, int f2sc)
 {
   size_t off = 0;
   int i, f = 0;
@@ -76,15 +76,15 @@ static char* tbit_bits_encode (char *buf, size_t len, uint32_t flags, int bits,
   return buf;
 }
 
-static uint32_t tbit_isnoff (uint32_t isn, uint32_t seq)
+static uint32_t tbit_isnoff(uint32_t isn, uint32_t seq)
 {
   if (seq >= isn)
     return seq - isn;
   return TCP_MAX_SEQNUM - isn + seq + 1;
 }
 
-static char* tbit_header_tostr (const scamper_tbit_t *tbit,
-                                const tbit_state_t *state)
+static char* tbit_header_tostr(const scamper_tbit_t *tbit,
+                               const tbit_state_t *state)
 {
   static const char *tbit_options[] =
     { "tcpts", "sack" };
@@ -223,8 +223,8 @@ static char* tbit_header_tostr (const scamper_tbit_t *tbit,
   return strdup (buf);
 }
 
-static char* tbit_pkt_tostr (const scamper_tbit_t *tbit,
-                             const scamper_tbit_pkt_t *pkt, tbit_state_t *state)
+static char* tbit_pkt_tostr(const scamper_tbit_t *tbit,
+                            const scamper_tbit_pkt_t *pkt, tbit_state_t *state)
 {
   static const char *tcpflags_str[] =
     { "fin", "syn", "rst", "psh", "ack", "urg", "ece", "cwr" };
@@ -465,8 +465,8 @@ done:
   return strdup (buf);
 }
 
-int scamper_file_json_tbit_write (const scamper_file_t *sf,
-                                  const scamper_tbit_t *tbit)
+int scamper_file_json_tbit_write(const scamper_file_t *sf,
+                                 const scamper_tbit_t *tbit)
 {
   tbit_state_t state;
   char *str = NULL, *header = NULL, **pkts = NULL;
@@ -479,8 +479,8 @@ int scamper_file_json_tbit_write (const scamper_file_t *sf,
   /* put together packet strings, done first to get state for header string */
   len += 11; /* , "pkts":[] */
   if (tbit->pktc > 0
-      && ((pkts = malloc_zero (sizeof(char*) * tbit->pktc)) == NULL
-          || ((pkt_lens = malloc_zero (sizeof(size_t) * tbit->pktc)) == NULL)))
+      && ((pkts = malloc_zero(sizeof(char*) * tbit->pktc)) == NULL
+          || ((pkt_lens = malloc_zero(sizeof(size_t) * tbit->pktc)) == NULL)))
     goto cleanup;
   for (i = 0; i < tbit->pktc; i++)
   {
@@ -498,7 +498,7 @@ int scamper_file_json_tbit_write (const scamper_file_t *sf,
   len += (header_len = strlen (header));
   len += 2; /* }\n" */
 
-  if ((str = malloc_zero (len)) == NULL)
+  if ((str = malloc_zero(len)) == NULL)
     goto cleanup;
   memcpy (str + wc, header, header_len);
   wc += header_len;

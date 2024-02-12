@@ -44,12 +44,12 @@ static const char rcsid[] =
 #include "scamper_sting.h"
 #include "utils.h"
 
-scamper_sting_pkt_t* scamper_sting_pkt_alloc (uint8_t flags, uint8_t *data,
-                                              uint16_t len, struct timeval *tv)
+scamper_sting_pkt_t* scamper_sting_pkt_alloc(uint8_t flags, uint8_t *data,
+                                             uint16_t len, struct timeval *tv)
 {
   scamper_sting_pkt_t *pkt;
 
-  if ((pkt = malloc_zero (sizeof(scamper_sting_pkt_t))) == NULL)
+  if ((pkt = malloc_zero(sizeof(scamper_sting_pkt_t))) == NULL)
     goto err;
 
   pkt->flags = flags;
@@ -68,7 +68,7 @@ err:
   return NULL;
 }
 
-void scamper_sting_pkt_free (scamper_sting_pkt_t *pkt)
+void scamper_sting_pkt_free(scamper_sting_pkt_t *pkt)
 {
   if (pkt == NULL)
     return;
@@ -78,8 +78,8 @@ void scamper_sting_pkt_free (scamper_sting_pkt_t *pkt)
   return;
 }
 
-int scamper_sting_data (scamper_sting_t *sting, const uint8_t *data,
-                        uint16_t len)
+int scamper_sting_data(scamper_sting_t *sting, const uint8_t *data,
+                       uint16_t len)
 {
   if (len == 0 || (sting->data = memdup (data, len)) == NULL)
     return -1;
@@ -87,7 +87,7 @@ int scamper_sting_data (scamper_sting_t *sting, const uint8_t *data,
   return 0;
 }
 
-int scamper_sting_pkt_record (scamper_sting_t *sting, scamper_sting_pkt_t *pkt)
+int scamper_sting_pkt_record(scamper_sting_t *sting, scamper_sting_pkt_t *pkt)
 {
   size_t len = (sting->pktc + 1) * sizeof(scamper_sting_pkt_t*);
 
@@ -99,15 +99,15 @@ int scamper_sting_pkt_record (scamper_sting_t *sting, scamper_sting_pkt_t *pkt)
   return 0;
 }
 
-int scamper_sting_pkts_alloc (scamper_sting_t *sting, uint32_t pktc)
+int scamper_sting_pkts_alloc(scamper_sting_t *sting, uint32_t pktc)
 {
   size_t size = pktc * sizeof(scamper_sting_pkt_t*);
-  if ((sting->pkts = (scamper_sting_pkt_t**) malloc_zero (size)) == NULL)
+  if ((sting->pkts = (scamper_sting_pkt_t**) malloc_zero(size)) == NULL)
     return -1;
   return 0;
 }
 
-void scamper_sting_free (scamper_sting_t *sting)
+void scamper_sting_free(scamper_sting_t *sting)
 {
   if (sting == NULL)
     return;
@@ -127,7 +127,7 @@ void scamper_sting_free (scamper_sting_t *sting)
   return;
 }
 
-scamper_sting_t* scamper_sting_alloc (void)
+scamper_sting_t* scamper_sting_alloc(void)
 {
-  return (scamper_sting_t*) malloc_zero (sizeof(scamper_sting_t));
+  return (scamper_sting_t*) malloc_zero(sizeof(scamper_sting_t));
 }

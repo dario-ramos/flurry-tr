@@ -36,18 +36,18 @@ static const char rcsid[] =
 
 #include "utils.h"
 
-scamper_addr_t* scamper_neighbourdisc_addr (const void *va)
+scamper_addr_t* scamper_neighbourdisc_addr(const void *va)
 {
   const scamper_neighbourdisc_t *nd = va;
   return nd->dst_ip;
 }
 
-scamper_neighbourdisc_reply_t* scamper_neighbourdisc_reply_alloc (void)
+scamper_neighbourdisc_reply_t* scamper_neighbourdisc_reply_alloc(void)
 {
-  return malloc_zero (sizeof(scamper_neighbourdisc_reply_t));
+  return malloc_zero(sizeof(scamper_neighbourdisc_reply_t));
 }
 
-void scamper_neighbourdisc_reply_free (scamper_neighbourdisc_reply_t *reply)
+void scamper_neighbourdisc_reply_free(scamper_neighbourdisc_reply_t *reply)
 {
   if (reply->mac != NULL)
     scamper_addr_free (reply->mac);
@@ -55,8 +55,8 @@ void scamper_neighbourdisc_reply_free (scamper_neighbourdisc_reply_t *reply)
   return;
 }
 
-int scamper_neighbourdisc_reply_add (scamper_neighbourdisc_probe_t *probe,
-                                     scamper_neighbourdisc_reply_t *reply)
+int scamper_neighbourdisc_reply_add(scamper_neighbourdisc_probe_t *probe,
+                                    scamper_neighbourdisc_reply_t *reply)
 {
   size_t len = sizeof(scamper_neighbourdisc_reply_t*) * (probe->rxc + 1);
   if (realloc_wrap ((void**) &probe->rxs, len) != 0)
@@ -65,21 +65,21 @@ int scamper_neighbourdisc_reply_add (scamper_neighbourdisc_probe_t *probe,
   return 0;
 }
 
-int scamper_neighbourdisc_replies_alloc (scamper_neighbourdisc_probe_t *probe,
-                                         uint16_t c)
+int scamper_neighbourdisc_replies_alloc(scamper_neighbourdisc_probe_t *probe,
+                                        uint16_t c)
 {
   size_t len = sizeof(scamper_neighbourdisc_reply_t*) * c;
-  if ((probe->rxs = malloc_zero (len)) == NULL)
+  if ((probe->rxs = malloc_zero(len)) == NULL)
     return -1;
   return 0;
 }
 
-scamper_neighbourdisc_probe_t* scamper_neighbourdisc_probe_alloc (void)
+scamper_neighbourdisc_probe_t* scamper_neighbourdisc_probe_alloc(void)
 {
-  return malloc_zero (sizeof(scamper_neighbourdisc_probe_t));
+  return malloc_zero(sizeof(scamper_neighbourdisc_probe_t));
 }
 
-void scamper_neighbourdisc_probe_free (scamper_neighbourdisc_probe_t *probe)
+void scamper_neighbourdisc_probe_free(scamper_neighbourdisc_probe_t *probe)
 {
   uint16_t i;
 
@@ -96,8 +96,8 @@ void scamper_neighbourdisc_probe_free (scamper_neighbourdisc_probe_t *probe)
   return;
 }
 
-int scamper_neighbourdisc_probe_add (scamper_neighbourdisc_t *nd,
-                                     scamper_neighbourdisc_probe_t *probe)
+int scamper_neighbourdisc_probe_add(scamper_neighbourdisc_t *nd,
+                                    scamper_neighbourdisc_probe_t *probe)
 {
   size_t len = sizeof(scamper_neighbourdisc_probe_t*) * (nd->probec + 1);
   if (realloc_wrap ((void**) &nd->probes, len) != 0)
@@ -106,21 +106,21 @@ int scamper_neighbourdisc_probe_add (scamper_neighbourdisc_t *nd,
   return 0;
 }
 
-int scamper_neighbourdisc_probes_alloc (scamper_neighbourdisc_t *nd, uint16_t c)
+int scamper_neighbourdisc_probes_alloc(scamper_neighbourdisc_t *nd, uint16_t c)
 {
   size_t len = sizeof(scamper_neighbourdisc_probe_t*) * c;
-  if ((nd->probes = malloc_zero (len)) == NULL)
+  if ((nd->probes = malloc_zero(len)) == NULL)
     return -1;
   return 0;
 }
 
-scamper_neighbourdisc_t* scamper_neighbourdisc_alloc ()
+scamper_neighbourdisc_t* scamper_neighbourdisc_alloc()
 {
   size_t len = sizeof(scamper_neighbourdisc_t);
-  return (scamper_neighbourdisc_t*) malloc_zero (len);
+  return (scamper_neighbourdisc_t*) malloc_zero(len);
 }
 
-int scamper_neighbourdisc_ifname_set (scamper_neighbourdisc_t *nd, char *ifname)
+int scamper_neighbourdisc_ifname_set(scamper_neighbourdisc_t *nd, char *ifname)
 {
   if (nd->ifname != NULL)
     free (nd->ifname);
@@ -131,7 +131,7 @@ int scamper_neighbourdisc_ifname_set (scamper_neighbourdisc_t *nd, char *ifname)
   return 0;
 }
 
-void scamper_neighbourdisc_free (scamper_neighbourdisc_t *nd)
+void scamper_neighbourdisc_free(scamper_neighbourdisc_t *nd)
 {
   uint16_t i;
 

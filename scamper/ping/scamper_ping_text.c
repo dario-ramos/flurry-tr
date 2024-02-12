@@ -41,7 +41,7 @@ static const char rcsid[] =
 
 #include "utils.h"
 
-static char* ping_header (const scamper_ping_t *ping)
+static char* ping_header(const scamper_ping_t *ping)
 {
   char header[192], src[64], dst[64];
 
@@ -52,7 +52,7 @@ static char* ping_header (const scamper_ping_t *ping)
   return strdup (header);
 }
 
-static char* tsreply_tostr (char *buf, size_t len, uint32_t val)
+static char* tsreply_tostr(char *buf, size_t len, uint32_t val)
 {
   uint32_t hh, mm, ss, ms;
   ms = val % 1000;
@@ -65,8 +65,8 @@ static char* tsreply_tostr (char *buf, size_t len, uint32_t val)
   return buf;
 }
 
-static char* ping_reply (const scamper_ping_t *ping,
-                         const scamper_ping_reply_t *reply)
+static char* ping_reply(const scamper_ping_t *ping,
+                        const scamper_ping_reply_t *reply)
 {
   scamper_ping_reply_v4rr_t *v4rr;
   scamper_ping_reply_v4ts_t *v4ts;
@@ -147,7 +147,7 @@ static char* ping_reply (const scamper_ping_t *ping,
   return strdup (buf);
 }
 
-static char* ping_stats (const scamper_ping_t *ping)
+static char* ping_stats(const scamper_ping_t *ping)
 {
   scamper_ping_stats_t stats;
   size_t off = 0;
@@ -185,8 +185,8 @@ static char* ping_stats (const scamper_ping_t *ping)
   return strdup (buf);
 }
 
-int scamper_file_text_ping_write (const scamper_file_t *sf,
-                                  const scamper_ping_t *ping)
+int scamper_file_text_ping_write(const scamper_file_t *sf,
+                                 const scamper_ping_t *ping)
 {
   scamper_ping_reply_t *reply;
   int fd = scamper_file_getfd (sf);
@@ -216,8 +216,8 @@ int scamper_file_text_ping_write (const scamper_file_t *sf,
   /* put together a string for each reply */
   if (reply_count > 0)
   {
-    if ((replies = malloc_zero (sizeof(char*) * reply_count)) == NULL
-        || (reply_lens = malloc_zero (sizeof(size_t) * reply_count)) == NULL)
+    if ((replies = malloc_zero(sizeof(char*) * reply_count)) == NULL
+        || (reply_lens = malloc_zero(sizeof(size_t) * reply_count)) == NULL)
       goto cleanup;
 
     for (i = 0, j = 0; i < ping->ping_sent; i++)
@@ -243,7 +243,7 @@ int scamper_file_text_ping_write (const scamper_file_t *sf,
     len += (stats_len = strlen (stats));
 
   /* allocate a string long enough to combine the above strings */
-  if ((str = malloc_zero (len)) == NULL)
+  if ((str = malloc_zero(len)) == NULL)
     goto cleanup;
 
   /* combine the strings created above */

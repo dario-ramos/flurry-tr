@@ -190,8 +190,8 @@ typedef struct warts_host_rr
   } data_un;
 } warts_host_rr_t;
 
-static void warts_host_query_params (const scamper_host_query_t *query,
-                                     warts_host_query_t *state)
+static void warts_host_query_params(const scamper_host_query_t *query,
+                                    warts_host_query_t *state)
 {
   const warts_var_t *var;
   int i, max_id = 0;
@@ -219,9 +219,9 @@ static void warts_host_query_params (const scamper_host_query_t *query,
   return;
 }
 
-static int warts_host_query_read (scamper_host_query_t *query,
-                                  const uint8_t *buf, uint32_t *off,
-                                  uint32_t len)
+static int warts_host_query_read(scamper_host_query_t *query,
+                                 const uint8_t *buf, uint32_t *off,
+                                 uint32_t len)
 {
   warts_param_reader_t handlers[] =
     {
@@ -240,9 +240,9 @@ err:
   return -1;
 }
 
-static void warts_host_query_write (const scamper_host_query_t *query,
-                                    uint8_t *buf, uint32_t *off, uint32_t len,
-                                    warts_host_query_t *state)
+static void warts_host_query_write(const scamper_host_query_t *query,
+                                   uint8_t *buf, uint32_t *off, uint32_t len,
+                                   warts_host_query_t *state)
 {
   warts_param_writer_t handlers[] =
     {
@@ -258,8 +258,8 @@ static void warts_host_query_write (const scamper_host_query_t *query,
   return;
 }
 
-static void warts_host_rr_mx_params (const scamper_host_rr_mx_t *mx,
-                                     warts_host_rr_mx_t *state)
+static void warts_host_rr_mx_params(const scamper_host_rr_mx_t *mx,
+                                    warts_host_rr_mx_t *state)
 {
   const warts_var_t *var;
   int i, max_id = 0;
@@ -291,8 +291,8 @@ static void warts_host_rr_mx_params (const scamper_host_rr_mx_t *mx,
   return;
 }
 
-static int warts_host_rr_mx_read (void **data, const uint8_t *buf,
-                                  uint32_t *off, uint32_t len)
+static int warts_host_rr_mx_read(void **data, const uint8_t *buf, uint32_t *off,
+                                 uint32_t len)
 {
   scamper_host_rr_mx_t *mx = NULL;
   uint16_t preference = 0;
@@ -317,9 +317,9 @@ err:
   return -1;
 }
 
-static void warts_host_rr_mx_write (scamper_host_rr_mx_t *mx, uint8_t *buf,
-                                    uint32_t *off, uint32_t len,
-                                    warts_host_rr_mx_t *state)
+static void warts_host_rr_mx_write(scamper_host_rr_mx_t *mx, uint8_t *buf,
+                                   uint32_t *off, uint32_t len,
+                                   warts_host_rr_mx_t *state)
 {
   warts_param_writer_t handlers[] =
     {
@@ -331,8 +331,8 @@ static void warts_host_rr_mx_write (scamper_host_rr_mx_t *mx, uint8_t *buf,
   return;
 }
 
-static void warts_host_rr_soa_params (const scamper_host_rr_soa_t *soa,
-                                      warts_host_rr_soa_t *state)
+static void warts_host_rr_soa_params(const scamper_host_rr_soa_t *soa,
+                                     warts_host_rr_soa_t *state)
 {
   const warts_var_t *var;
   int i, max_id = 0;
@@ -374,8 +374,8 @@ static void warts_host_rr_soa_params (const scamper_host_rr_soa_t *soa,
   return;
 }
 
-static int warts_host_rr_soa_read (void **data, const uint8_t *buf,
-                                   uint32_t *off, uint32_t len)
+static int warts_host_rr_soa_read(void **data, const uint8_t *buf,
+                                  uint32_t *off, uint32_t len)
 {
   scamper_host_rr_soa_t *soa = NULL;
   char *mname = NULL, *rname = NULL;
@@ -414,9 +414,9 @@ err:
   return -1;
 }
 
-static void warts_host_rr_soa_write (scamper_host_rr_soa_t *soa, uint8_t *buf,
-                                     uint32_t *off, uint32_t len,
-                                     warts_host_rr_soa_t *state)
+static void warts_host_rr_soa_write(scamper_host_rr_soa_t *soa, uint8_t *buf,
+                                    uint32_t *off, uint32_t len,
+                                    warts_host_rr_soa_t *state)
 {
   warts_param_writer_t handlers[] =
     {
@@ -433,8 +433,8 @@ static void warts_host_rr_soa_write (scamper_host_rr_soa_t *soa, uint8_t *buf,
   return;
 }
 
-static int extract_rrdata (const uint8_t *buf, uint32_t *off, uint32_t len,
-                           void **data, warts_addrtable_t *table)
+static int extract_rrdata(const uint8_t *buf, uint32_t *off, uint32_t len,
+                          void **data, warts_addrtable_t *table)
 {
   uint16_t type;
 
@@ -468,8 +468,8 @@ static int extract_rrdata (const uint8_t *buf, uint32_t *off, uint32_t len,
   return -1;
 }
 
-static void insert_rrdata (uint8_t *buf, uint32_t *off, const uint32_t len,
-                           const warts_host_rr_t *rr, warts_addrtable_t *table)
+static void insert_rrdata(uint8_t *buf, uint32_t *off, const uint32_t len,
+                          const warts_host_rr_t *rr, warts_addrtable_t *table)
 {
   insert_uint16 (buf, off, len, &rr->data_type, NULL);
 
@@ -492,9 +492,9 @@ static void insert_rrdata (uint8_t *buf, uint32_t *off, const uint32_t len,
   return;
 }
 
-static int warts_host_rr_data_len (const scamper_host_rr_t *rr,
-                                   warts_host_rr_t *state,
-                                   warts_addrtable_t *table)
+static int warts_host_rr_data_len(const scamper_host_rr_t *rr,
+                                  warts_host_rr_t *state,
+                                  warts_addrtable_t *table)
 {
   int len = 2;
   int x;
@@ -517,14 +517,14 @@ static int warts_host_rr_data_len (const scamper_host_rr_t *rr,
   }
   else if (state->data_type == SCAMPER_HOST_RR_DATA_TYPE_SOA)
   {
-    if ((state->data_un.soa = malloc_zero (sizeof(warts_host_rr_soa_t))) == NULL)
+    if ((state->data_un.soa = malloc_zero(sizeof(warts_host_rr_soa_t))) == NULL)
       return -1;
     warts_host_rr_soa_params (rr->un.soa, state->data_un.soa);
     len += state->data_un.soa->len;
   }
   else if (state->data_type == SCAMPER_HOST_RR_DATA_TYPE_MX)
   {
-    if ((state->data_un.mx = malloc_zero (sizeof(warts_host_rr_mx_t))) == NULL)
+    if ((state->data_un.mx = malloc_zero(sizeof(warts_host_rr_mx_t))) == NULL)
       return -1;
     warts_host_rr_mx_params (rr->un.mx, state->data_un.mx);
     len += state->data_un.mx->len;
@@ -534,9 +534,9 @@ static int warts_host_rr_data_len (const scamper_host_rr_t *rr,
   return len;
 }
 
-static void warts_host_rr_params (const scamper_host_rr_t *rr,
-                                  warts_host_rr_t *state,
-                                  warts_addrtable_t *table)
+static void warts_host_rr_params(const scamper_host_rr_t *rr,
+                                 warts_host_rr_t *state,
+                                 warts_addrtable_t *table)
 {
   const warts_var_t *var;
   int i, max_id = 0;
@@ -570,9 +570,9 @@ static void warts_host_rr_params (const scamper_host_rr_t *rr,
   return;
 }
 
-static int warts_host_rr_read (scamper_host_rr_t **rr, int i,
-                               const uint8_t *buf, uint32_t *off, uint32_t len,
-                               warts_addrtable_t *table)
+static int warts_host_rr_read(scamper_host_rr_t **rr, int i, const uint8_t *buf,
+                              uint32_t *off, uint32_t len,
+                              warts_addrtable_t *table)
 {
   uint16_t class, type;
   uint32_t ttl;
@@ -601,10 +601,10 @@ err:
   return -1;
 }
 
-static void warts_host_rr_write (scamper_host_rr_t *rr, uint8_t *buf,
-                                 uint32_t *off, uint32_t len,
-                                 warts_host_rr_t *state,
-                                 warts_addrtable_t *table)
+static void warts_host_rr_write(scamper_host_rr_t *rr, uint8_t *buf,
+                                uint32_t *off, uint32_t len,
+                                warts_host_rr_t *state,
+                                warts_addrtable_t *table)
 {
   warts_param_writer_t handlers[] =
     {
@@ -619,9 +619,9 @@ static void warts_host_rr_write (scamper_host_rr_t *rr, uint8_t *buf,
   return;
 }
 
-static void warts_host_params (const scamper_host_t *host,
-                               warts_addrtable_t *table, uint8_t *flags,
-                               uint16_t *flags_len, uint16_t *params_len)
+static void warts_host_params(const scamper_host_t *host,
+                              warts_addrtable_t *table, uint8_t *flags,
+                              uint16_t *flags_len, uint16_t *params_len)
 {
   const warts_var_t *var;
   int i, max_id = 0;
@@ -677,10 +677,10 @@ static void warts_host_params (const scamper_host_t *host,
   return;
 }
 
-static int warts_host_params_read (scamper_host_t *host,
-                                   warts_addrtable_t *table,
-                                   warts_state_t *state, uint8_t *buf,
-                                   uint32_t *off, uint32_t len)
+static int warts_host_params_read(scamper_host_t *host,
+                                  warts_addrtable_t *table,
+                                  warts_state_t *state, uint8_t *buf,
+                                  uint32_t *off, uint32_t len)
 {
   warts_param_reader_t handlers[] =
     {
@@ -706,13 +706,13 @@ static int warts_host_params_read (scamper_host_t *host,
   return 0;
 }
 
-static int warts_host_params_write (const scamper_host_t *host,
-                                    const scamper_file_t *sf,
-                                    warts_addrtable_t *table, uint8_t *buf,
-                                    uint32_t *off, const uint32_t len,
-                                    const uint8_t *flags,
-                                    const uint16_t flags_len,
-                                    const uint16_t params_len)
+static int warts_host_params_write(const scamper_host_t *host,
+                                   const scamper_file_t *sf,
+                                   warts_addrtable_t *table, uint8_t *buf,
+                                   uint32_t *off, const uint32_t len,
+                                   const uint8_t *flags,
+                                   const uint16_t flags_len,
+                                   const uint16_t params_len)
 {
   uint32_t list_id, cycle_id;
   warts_param_writer_t handlers[] =
@@ -744,8 +744,8 @@ static int warts_host_params_write (const scamper_host_t *host,
   return 0;
 }
 
-int scamper_file_warts_host_read (scamper_file_t *sf, const warts_hdr_t *hdr,
-                                  scamper_host_t **host_out)
+int scamper_file_warts_host_read(scamper_file_t *sf, const warts_hdr_t *hdr,
+                                 scamper_host_t **host_out)
 {
   scamper_host_t *host = NULL;
   scamper_host_query_t *query;
@@ -811,8 +811,8 @@ err:
   return -1;
 }
 
-int scamper_file_warts_host_write (const scamper_file_t *sf,
-                                   const scamper_host_t *host)
+int scamper_file_warts_host_write(const scamper_file_t *sf,
+                                  const scamper_host_t *host)
 {
   scamper_host_query_t *query;
   warts_addrtable_t *table = NULL;
@@ -840,13 +840,13 @@ int scamper_file_warts_host_write (const scamper_file_t *sf,
     }
 
     size = host->qcount * sizeof(warts_host_query_t);
-    if ((query_state = (warts_host_query_t*) malloc_zero (size)) == NULL)
+    if ((query_state = (warts_host_query_t*) malloc_zero(size)) == NULL)
       goto err;
 
     if (rrc > 0)
     {
       size = rrc * sizeof(warts_host_rr_t);
-      if ((rr_state = (warts_host_rr_t*) malloc_zero (size)) == NULL)
+      if ((rr_state = (warts_host_rr_t*) malloc_zero(size)) == NULL)
         goto err;
     }
 
@@ -878,7 +878,7 @@ int scamper_file_warts_host_write (const scamper_file_t *sf,
   }
 
   /* Allocate memory to store all of the data (including packets) */
-  if ((buf = malloc_zero (len)) == NULL)
+  if ((buf = malloc_zero(len)) == NULL)
     goto err;
   insert_wartshdr (buf, &off, len, SCAMPER_FILE_OBJ_HOST);
 

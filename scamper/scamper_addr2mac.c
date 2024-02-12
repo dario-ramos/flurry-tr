@@ -144,7 +144,7 @@ typedef struct addr2mac
 static splaytree_t *tree = NULL;
 extern scamper_addrcache_t *addrcache;
 
-static int addr2mac_cmp (const addr2mac_t *a, const addr2mac_t *b)
+static int addr2mac_cmp(const addr2mac_t *a, const addr2mac_t *b)
 {
   if (a->ifindex < b->ifindex)
     return -1;
@@ -153,7 +153,7 @@ static int addr2mac_cmp (const addr2mac_t *a, const addr2mac_t *b)
   return scamper_addr_cmp (a->ip, b->ip);
 }
 
-static void addr2mac_free (addr2mac_t *addr2mac)
+static void addr2mac_free(addr2mac_t *addr2mac)
 {
   if (addr2mac->ip != NULL)
     scamper_addr_free (addr2mac->ip);
@@ -163,8 +163,8 @@ static void addr2mac_free (addr2mac_t *addr2mac)
   return;
 }
 
-static addr2mac_t* addr2mac_alloc (const int ifindex, scamper_addr_t *ip,
-                                   scamper_addr_t *mac, time_t expire)
+static addr2mac_t* addr2mac_alloc(const int ifindex, scamper_addr_t *ip,
+                                  scamper_addr_t *mac, time_t expire)
 {
   addr2mac_t *addr2mac;
 
@@ -181,8 +181,8 @@ static addr2mac_t* addr2mac_alloc (const int ifindex, scamper_addr_t *ip,
   return addr2mac;
 }
 
-static int addr2mac_add (const int ifindex, const int type, const void *ipraw,
-                         const void *macraw, const time_t expire)
+static int addr2mac_add(const int ifindex, const int type, const void *ipraw,
+                        const void *macraw, const time_t expire)
 {
   const int mt = SCAMPER_ADDR_TYPE_ETHERNET;
   scamper_addr_t *mac = NULL;
@@ -236,7 +236,7 @@ err:
   return -1;
 }
 
-int scamper_addr2mac_add (int ifindex, scamper_addr_t *ip, scamper_addr_t *mac)
+int scamper_addr2mac_add(int ifindex, scamper_addr_t *ip, scamper_addr_t *mac)
 {
   addr2mac_t *a2m = NULL;
   char ipstr[128], macstr[128];
@@ -267,7 +267,7 @@ int scamper_addr2mac_add (int ifindex, scamper_addr_t *ip, scamper_addr_t *mac)
  *
  * return the MAC address associated with an IP address, if it is cached.
  */
-scamper_addr_t* scamper_addr2mac_whohas (const int ifindex, scamper_addr_t *dst)
+scamper_addr_t* scamper_addr2mac_whohas(const int ifindex, scamper_addr_t *dst)
 {
   addr2mac_t findme, *addr2mac;
 
@@ -284,7 +284,7 @@ scamper_addr_t* scamper_addr2mac_whohas (const int ifindex, scamper_addr_t *dst)
 }
 
 #if defined(__linux__)
-static int addr2mac_init_linux ()
+static int addr2mac_init_linux()
 {
   struct nlmsghdr *nlmsg;
   struct ndmsg *ndmsg;
@@ -620,7 +620,7 @@ static int addr2mac_init_win32()
 }
 #endif
 
-int scamper_addr2mac_init ()
+int scamper_addr2mac_init()
 {
   if ((tree = splaytree_alloc ((splaytree_cmp_t) addr2mac_cmp)) == NULL)
   {
@@ -655,7 +655,7 @@ int scamper_addr2mac_init ()
   return 0;
 }
 
-void scamper_addr2mac_cleanup ()
+void scamper_addr2mac_cleanup()
 {
   splaytree_free (tree, (splaytree_free_t) addr2mac_free);
   return;

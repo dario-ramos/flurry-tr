@@ -28,18 +28,18 @@
 
 typedef struct scamper_writebuf scamper_writebuf_t;
 
-scamper_writebuf_t *scamper_writebuf_alloc(void);
+scamper_writebuf_t* scamper_writebuf_alloc(void);
 void scamper_writebuf_free(scamper_writebuf_t *wb);
 
 /* queue data on the writebuf */
-int scamper_writebuf_send(scamper_writebuf_t *wb,const void *data,size_t len);
+int scamper_writebuf_send(scamper_writebuf_t *wb, const void *data, size_t len);
 
 /* write the data currently buffered to the socket */
 int scamper_writebuf_write(int fd, scamper_writebuf_t *wb);
 
 /* return the count of bytes buffered */
 size_t scamper_writebuf_len(const scamper_writebuf_t *wb);
-size_t scamper_writebuf_len2(const scamper_writebuf_t *, char *, size_t);
+size_t scamper_writebuf_len2(const scamper_writebuf_t*, char*, size_t);
 int scamper_writebuf_gtzero(const scamper_writebuf_t *wb);
 
 /* tell writebuf to use write() rather than socket send() */

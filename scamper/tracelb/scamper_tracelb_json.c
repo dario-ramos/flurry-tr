@@ -46,7 +46,7 @@ typedef struct strlist
   struct strlist *next;
 } strlist_t;
 
-static char* header_tostr (const scamper_tracelb_t *trace)
+static char* header_tostr(const scamper_tracelb_t *trace)
 {
   char buf[512], tmp[128];
   size_t off = 0;
@@ -86,8 +86,8 @@ static char* header_tostr (const scamper_tracelb_t *trace)
   return strdup (buf);
 }
 
-static char* reply_tostr (const scamper_tracelb_probe_t *probe,
-                          const scamper_tracelb_reply_t *reply)
+static char* reply_tostr(const scamper_tracelb_probe_t *probe,
+                         const scamper_tracelb_reply_t *reply)
 {
   char buf[2048], tmp[256];
   struct timeval rtt;
@@ -123,8 +123,8 @@ static char* reply_tostr (const scamper_tracelb_probe_t *probe,
   return strdup (buf);
 }
 
-static char* probe_tostr (const scamper_tracelb_probe_t *probe,
-                          const scamper_addr_t *addr)
+static char* probe_tostr(const scamper_tracelb_probe_t *probe,
+                         const scamper_addr_t *addr)
 {
   char buf[256];
   char **rxs = NULL, *dup = NULL;
@@ -147,7 +147,7 @@ static char* probe_tostr (const scamper_tracelb_probe_t *probe,
   {
     /* make room for the replies array */
     string_concat (buf, sizeof(buf), &off, ", \"replies\":[");
-    if ((rxs = malloc_zero (rxc * sizeof(char*))) == NULL)
+    if ((rxs = malloc_zero(rxc * sizeof(char*))) == NULL)
       goto err;
     j = 0;
     for (i = 0; i < probe->rxc; i++)
@@ -204,7 +204,7 @@ err:
   return NULL;
 }
 
-static int strlist_add (strlist_t **tail, char *str, size_t *off)
+static int strlist_add(strlist_t **tail, char *str, size_t *off)
 {
   strlist_t *sl = NULL;
 
@@ -225,8 +225,8 @@ static int strlist_add (strlist_t **tail, char *str, size_t *off)
   return 0;
 }
 
-static char* probeset_summary_tojson (scamper_tracelb_probeset_summary_t *sum,
-                                      scamper_tracelb_probeset_t *set)
+static char* probeset_summary_tojson(scamper_tracelb_probeset_summary_t *sum,
+                                     scamper_tracelb_probeset_t *set)
 {
   scamper_tracelb_probe_t *probe;
   strlist_t *head = NULL, *tail = NULL, *slp, *slpn;
@@ -304,7 +304,7 @@ err:
   return NULL;
 }
 
-static char* node_tostr (const scamper_tracelb_node_t *node)
+static char* node_tostr(const scamper_tracelb_node_t *node)
 {
   strlist_t *head = NULL, *tail = NULL, *slp, *slpn;
   scamper_tracelb_probeset_summary_t *sum = NULL;
@@ -464,8 +464,8 @@ err:
   return NULL;
 }
 
-int scamper_file_json_tracelb_write (const scamper_file_t *sf,
-                                     const scamper_tracelb_t *trace)
+int scamper_file_json_tracelb_write(const scamper_file_t *sf,
+                                    const scamper_tracelb_t *trace)
 {
   char *str = NULL, *header = NULL, **nodes = NULL;
   size_t len, off = 0;
@@ -480,7 +480,7 @@ int scamper_file_json_tracelb_write (const scamper_file_t *sf,
   if (trace->nodec > 0)
   {
     len += 12; /* , "nodes":[] */
-    if ((nodes = malloc_zero (sizeof(char*) * trace->nodec)) == NULL)
+    if ((nodes = malloc_zero(sizeof(char*) * trace->nodec)) == NULL)
       goto cleanup;
     for (i = 0; i < trace->nodec; i++)
     {
@@ -496,7 +496,7 @@ int scamper_file_json_tracelb_write (const scamper_file_t *sf,
   }
 
   len += 4; /* {}\n\0 */
-  if ((str = malloc_zero (len)) == NULL)
+  if ((str = malloc_zero(len)) == NULL)
     goto cleanup;
 
   string_concat (str, len, &off, "{%s", header);

@@ -36,24 +36,24 @@ static const char rcsid[] =
 
 #include "utils.h"
 
-int scamper_host_query_counts (scamper_host_query_t *q, uint16_t an,
-                               uint16_t ns, uint16_t ar)
+int scamper_host_query_counts(scamper_host_query_t *q, uint16_t an, uint16_t ns,
+                              uint16_t ar)
 {
   q->ancount = an;
   q->nscount = ns;
   q->arcount = ar;
 
-  if (an > 0 && (q->an = malloc_zero (sizeof(scamper_host_rr_t*) * an)) == NULL)
+  if (an > 0 && (q->an = malloc_zero(sizeof(scamper_host_rr_t*) * an)) == NULL)
     return -1;
-  if (ns > 0 && (q->ns = malloc_zero (sizeof(scamper_host_rr_t*) * ns)) == NULL)
+  if (ns > 0 && (q->ns = malloc_zero(sizeof(scamper_host_rr_t*) * ns)) == NULL)
     return -1;
-  if (ar > 0 && (q->ar = malloc_zero (sizeof(scamper_host_rr_t*) * ar)) == NULL)
+  if (ar > 0 && (q->ar = malloc_zero(sizeof(scamper_host_rr_t*) * ar)) == NULL)
     return -1;
 
   return 0;
 }
 
-void scamper_host_rr_soa_free (scamper_host_rr_soa_t *soa)
+void scamper_host_rr_soa_free(scamper_host_rr_soa_t *soa)
 {
   if (soa == NULL)
     return;
@@ -65,11 +65,10 @@ void scamper_host_rr_soa_free (scamper_host_rr_soa_t *soa)
   return;
 }
 
-scamper_host_rr_soa_t* scamper_host_rr_soa_alloc (const char *mn,
-                                                  const char *rn)
+scamper_host_rr_soa_t* scamper_host_rr_soa_alloc(const char *mn, const char *rn)
 {
   scamper_host_rr_soa_t *soa;
-  if ((soa = malloc_zero (sizeof(scamper_host_rr_soa_t))) == NULL
+  if ((soa = malloc_zero(sizeof(scamper_host_rr_soa_t))) == NULL
       || (soa->mname = strdup (mn)) == NULL
       || (soa->rname = strdup (rn)) == NULL)
   {
@@ -79,7 +78,7 @@ scamper_host_rr_soa_t* scamper_host_rr_soa_alloc (const char *mn,
   return soa;
 }
 
-void scamper_host_rr_mx_free (scamper_host_rr_mx_t *mx)
+void scamper_host_rr_mx_free(scamper_host_rr_mx_t *mx)
 {
   if (mx == NULL)
     return;
@@ -89,10 +88,10 @@ void scamper_host_rr_mx_free (scamper_host_rr_mx_t *mx)
   return;
 }
 
-scamper_host_rr_mx_t* scamper_host_rr_mx_alloc (uint16_t pref, const char *exch)
+scamper_host_rr_mx_t* scamper_host_rr_mx_alloc(uint16_t pref, const char *exch)
 {
   scamper_host_rr_mx_t *mx;
-  if ((mx = malloc_zero (sizeof(scamper_host_rr_mx_t))) == NULL
+  if ((mx = malloc_zero(sizeof(scamper_host_rr_mx_t))) == NULL
       || (mx->exchange = strdup (exch)) == NULL)
   {
     scamper_host_rr_mx_free (mx);
@@ -102,7 +101,7 @@ scamper_host_rr_mx_t* scamper_host_rr_mx_alloc (uint16_t pref, const char *exch)
   return mx;
 }
 
-int scamper_host_rr_data_type (const scamper_host_rr_t *rr)
+int scamper_host_rr_data_type(const scamper_host_rr_t *rr)
 {
   if (rr->class == SCAMPER_HOST_CLASS_IN)
   {
@@ -128,7 +127,7 @@ int scamper_host_rr_data_type (const scamper_host_rr_t *rr)
   return -1;
 }
 
-void scamper_host_rr_free (scamper_host_rr_t *rr)
+void scamper_host_rr_free(scamper_host_rr_t *rr)
 {
   if (rr == NULL)
     return;
@@ -163,12 +162,12 @@ void scamper_host_rr_free (scamper_host_rr_t *rr)
   return;
 }
 
-scamper_host_rr_t* scamper_host_rr_alloc (const char *name, uint16_t class,
-                                          uint16_t type, uint32_t ttl)
+scamper_host_rr_t* scamper_host_rr_alloc(const char *name, uint16_t class,
+                                         uint16_t type, uint32_t ttl)
 {
   scamper_host_rr_t *rr;
 
-  if ((rr = malloc_zero (sizeof(scamper_host_rr_t))) == NULL || (rr->name =
+  if ((rr = malloc_zero(sizeof(scamper_host_rr_t))) == NULL || (rr->name =
       strdup (name)) == NULL)
   {
     scamper_host_rr_free (rr);
@@ -180,7 +179,7 @@ scamper_host_rr_t* scamper_host_rr_alloc (const char *name, uint16_t class,
   return rr;
 }
 
-void scamper_host_query_free (scamper_host_query_t *query)
+void scamper_host_query_free(scamper_host_query_t *query)
 {
   int r;
 
@@ -210,44 +209,44 @@ void scamper_host_query_free (scamper_host_query_t *query)
   return;
 }
 
-int scamper_host_queries_alloc (scamper_host_t *host, int n)
+int scamper_host_queries_alloc(scamper_host_t *host, int n)
 {
   size_t len = n * sizeof(scamper_host_query_t*);
-  if ((host->queries = malloc_zero (len)) == NULL)
+  if ((host->queries = malloc_zero(len)) == NULL)
     return -1;
   return 0;
 }
 
-int scamper_host_query_rr_alloc (scamper_host_query_t *query)
+int scamper_host_query_rr_alloc(scamper_host_query_t *query)
 {
   size_t len;
   if (query->ancount > 0)
   {
     len = query->ancount * sizeof(scamper_host_rr_t*);
-    if ((query->an = malloc_zero (len)) == NULL)
+    if ((query->an = malloc_zero(len)) == NULL)
       return -1;
   }
   if (query->nscount > 0)
   {
     len = query->nscount * sizeof(scamper_host_rr_t*);
-    if ((query->ns = malloc_zero (len)) == NULL)
+    if ((query->ns = malloc_zero(len)) == NULL)
       return -1;
   }
   if (query->arcount > 0)
   {
     len = query->arcount * sizeof(scamper_host_rr_t*);
-    if ((query->ar = malloc_zero (len)) == NULL)
+    if ((query->ar = malloc_zero(len)) == NULL)
       return -1;
   }
   return 0;
 }
 
-scamper_host_query_t* scamper_host_query_alloc (void)
+scamper_host_query_t* scamper_host_query_alloc(void)
 {
-  return malloc_zero (sizeof(scamper_host_query_t));
+  return malloc_zero(sizeof(scamper_host_query_t));
 }
 
-void scamper_host_free (scamper_host_t *host)
+void scamper_host_free(scamper_host_t *host)
 {
   int q;
 
@@ -276,7 +275,7 @@ void scamper_host_free (scamper_host_t *host)
   return;
 }
 
-scamper_host_t* scamper_host_alloc (void)
+scamper_host_t* scamper_host_alloc(void)
 {
-  return (scamper_host_t*) malloc_zero (sizeof(scamper_host_t));
+  return (scamper_host_t*) malloc_zero(sizeof(scamper_host_t));
 }

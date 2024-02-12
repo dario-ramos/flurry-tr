@@ -39,8 +39,8 @@ static const char rcsid[] =
 #include "scamper_tracelb_text.h"
 #include "utils.h"
 
-static void probeset_summary_tostr (scamper_tracelb_probeset_summary_t *sum,
-                                    char *buf, size_t len, size_t *off)
+static void probeset_summary_tostr(scamper_tracelb_probeset_summary_t *sum,
+                                   char *buf, size_t len, size_t *off)
 {
   char dst[64];
   int k;
@@ -66,8 +66,8 @@ static void probeset_summary_tostr (scamper_tracelb_probeset_summary_t *sum,
   return;
 }
 
-int scamper_file_text_tracelb_write (const scamper_file_t *sf,
-                                     const scamper_tracelb_t *trace)
+int scamper_file_text_tracelb_write(const scamper_file_t *sf,
+                                    const scamper_tracelb_t *trace)
 {
   scamper_tracelb_probeset_summary_t *sum = NULL;
   scamper_tracelb_probeset_t *set;

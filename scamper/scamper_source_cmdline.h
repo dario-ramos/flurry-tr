@@ -25,8 +25,8 @@
 #ifndef __SCAMPER_SOURCE_CMDLINE_H
 #define __SCAMPER_SOURCE_CMDLINE_H
 
-scamper_source_t *scamper_source_cmdline_alloc(scamper_source_params_t *ssp,
-					       const char *command,
-					       char **arg, int arg_cnt);
+scamper_source_t* scamper_source_cmdline_alloc(scamper_source_params_t *ssp,
+                                               const char *command, char **arg,
+                                               int arg_cnt);
 
 #endif /* __SCAMPER_SOURCE_FILE_H */

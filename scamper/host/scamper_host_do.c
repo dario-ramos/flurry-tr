@@ -82,7 +82,7 @@ struct scamper_host_do
 {
   scamper_task_t *task;
   void *param;
-  void (*cb) (void*, const char *name);
+  void (*cb)(void*, const char *name);
   dlist_node_t *node;
 };
 
@@ -103,12 +103,12 @@ static const scamper_option_in_t opts[] =
     { 'W', NULL, HOST_OPT_WAIT, SCAMPER_OPTION_TYPE_NUM }, };
 static const int opts_cnt = SCAMPER_OPTION_COUNT(opts);
 
-const char* scamper_do_host_usage (void)
+const char* scamper_do_host_usage(void)
 {
   return "host [-r] [-R number] [-S server] [-t type] [-U userid] [-W wait] name\n";
 }
 
-static int host_fd_close (void *param)
+static int host_fd_close(void *param)
 {
   scamper_fd_t *fdp = param;
   int fd = scamper_fd_fd_get (fdp);
@@ -133,17 +133,17 @@ static int host_fd_close (void *param)
   return 0;
 }
 
-static scamper_host_t* host_getdata (const scamper_task_t *task)
+static scamper_host_t* host_getdata(const scamper_task_t *task)
 {
   return scamper_task_getdata (task);
 }
 
-static host_state_t* host_getstate (const scamper_task_t *task)
+static host_state_t* host_getstate(const scamper_task_t *task)
 {
   return scamper_task_getstate (task);
 }
 
-static void host_stop (scamper_task_t *task, uint8_t reason)
+static void host_stop(scamper_task_t *task, uint8_t reason)
 {
   scamper_host_t *host = host_getdata (task);
   host->stop = reason;
@@ -151,7 +151,7 @@ static void host_stop (scamper_task_t *task, uint8_t reason)
   return;
 }
 
-static void host_id_free (host_id_t *hid)
+static void host_id_free(host_id_t *hid)
 {
   if (hid == NULL)
     return;
@@ -161,7 +161,7 @@ static void host_id_free (host_id_t *hid)
   return;
 }
 
-static int host_id_cmp (const host_id_t *a, const host_id_t *b)
+static int host_id_cmp(const host_id_t *a, const host_id_t *b)
 {
   if (a->id < b->id)
     return -1;
@@ -170,20 +170,20 @@ static int host_id_cmp (const host_id_t *a, const host_id_t *b)
   return 0;
 }
 
-static host_id_t* host_id_find (uint16_t id)
+static host_id_t* host_id_find(uint16_t id)
 {
   host_id_t fm;
   fm.id = id;
   return splaytree_find (queries, &fm);
 }
 
-static host_id_t* host_id_get (uint16_t id)
+static host_id_t* host_id_get(uint16_t id)
 {
   host_id_t *hid = NULL;
 
   if ((hid = host_id_find (id)) != NULL)
     return hid;
-  if ((hid = malloc_zero (sizeof(host_id_t))) == NULL)
+  if ((hid = malloc_zero(sizeof(host_id_t))) == NULL)
   {
     printerror (__func__, "could not alloc hid");
     goto err;
@@ -211,7 +211,7 @@ err:
   return NULL;
 }
 
-static int host_query_add (uint16_t id, scamper_task_t *task)
+static int host_query_add(uint16_t id, scamper_task_t *task)
 {
   host_state_t *state = host_getstate (task);
   host_pid_t *pid = NULL;
@@ -220,7 +220,7 @@ static int host_query_add (uint16_t id, scamper_task_t *task)
   if ((hid = host_id_get (id)) == NULL)
     goto err;
 
-  if ((pid = malloc_zero (sizeof(host_pid_t))) == NULL)
+  if ((pid = malloc_zero(sizeof(host_pid_t))) == NULL)
   {
     printerror (__func__, "could not alloc pid");
     goto err;
@@ -249,7 +249,7 @@ err:
   return -1;
 }
 
-static void host_state_free (host_state_t *state)
+static void host_state_free(host_state_t *state)
 {
   host_pid_t *pid;
 
@@ -277,7 +277,7 @@ static void host_state_free (host_state_t *state)
   return;
 }
 
-static host_state_t* host_state_alloc (scamper_task_t *task)
+static host_state_t* host_state_alloc(scamper_task_t *task)
 {
   scamper_host_t *host = host_getdata (task);
   host_state_t *state = NULL;
@@ -293,7 +293,7 @@ static host_state_t* host_state_alloc (scamper_task_t *task)
   uint16_t u16;
 #endif
 
-  if ((state = malloc_zero (sizeof(host_state_t))) == NULL || (state->pids =
+  if ((state = malloc_zero(sizeof(host_state_t))) == NULL || (state->pids =
       dlist_alloc ()) == NULL)
   {
     printerror (__func__, "could not alloc state");
@@ -365,8 +365,8 @@ err:
   return NULL;
 }
 
-static int extract_name (char *name, size_t namelen, uint8_t *pktbuf,
-                         size_t pktlen, size_t off)
+static int extract_name(char *name, size_t namelen, uint8_t *pktbuf,
+                        size_t pktlen, size_t off)
 {
   int ptr_used = 0, i = 0, rc = 0;
   uint16_t u16;
@@ -422,8 +422,8 @@ static int extract_name (char *name, size_t namelen, uint8_t *pktbuf,
   return rc;
 }
 
-static int extract_soa (scamper_host_rr_t *rr, uint8_t *pktbuf, size_t pktlen,
-                        size_t off)
+static int extract_soa(scamper_host_rr_t *rr, uint8_t *pktbuf, size_t pktlen,
+                       size_t off)
 {
   scamper_host_rr_soa_t *soa = NULL;
   char mname[256], rname[256];
@@ -460,8 +460,8 @@ static int extract_soa (scamper_host_rr_t *rr, uint8_t *pktbuf, size_t pktlen,
   return 0;
 }
 
-static int extract_mx (scamper_host_rr_t *rr, uint8_t *pktbuf, size_t pktlen,
-                       size_t off)
+static int extract_mx(scamper_host_rr_t *rr, uint8_t *pktbuf, size_t pktlen,
+                      size_t off)
 {
   scamper_host_rr_mx_t *mx = NULL;
   char exchange[256];
@@ -478,7 +478,7 @@ static int extract_mx (scamper_host_rr_t *rr, uint8_t *pktbuf, size_t pktlen,
   return 0;
 }
 
-static void do_host_read (const int fd, void *param)
+static void do_host_read(const int fd, void *param)
 {
   scamper_task_t *task;
   scamper_host_t *host;
@@ -651,19 +651,19 @@ static void do_host_read (const int fd, void *param)
     x = slist_count (rr_list);
     if (i == 0)
     {
-      if ((q->an = malloc_zero (sizeof(scamper_host_rr_t*) * x)) == NULL)
+      if ((q->an = malloc_zero(sizeof(scamper_host_rr_t*) * x)) == NULL)
         goto err;
       rrs = q->an;
     }
     else if (i == 1)
     {
-      if ((q->ns = malloc_zero (sizeof(scamper_host_rr_t*) * x)) == NULL)
+      if ((q->ns = malloc_zero(sizeof(scamper_host_rr_t*) * x)) == NULL)
         goto err;
       rrs = q->ns;
     }
     else if (i == 2)
     {
-      if ((q->ar = malloc_zero (sizeof(scamper_host_rr_t*) * x)) == NULL)
+      if ((q->ar = malloc_zero(sizeof(scamper_host_rr_t*) * x)) == NULL)
         goto err;
       rrs = q->ar;
     }
@@ -688,7 +688,7 @@ err:
   return;
 }
 
-static void do_host_probe (scamper_task_t *task)
+static void do_host_probe(scamper_task_t *task)
 {
   scamper_host_t *host = host_getdata (task);
   host_state_t *state = host_getstate (task);
@@ -876,7 +876,7 @@ err:
   return;
 }
 
-static void do_host_handle_timeout (scamper_task_t *task)
+static void do_host_handle_timeout(scamper_task_t *task)
 {
   scamper_host_t *host = host_getdata (task);
   if (host->qcount >= host->retries + 1)
@@ -884,7 +884,7 @@ static void do_host_handle_timeout (scamper_task_t *task)
   return;
 }
 
-static int host_arg_param_validate (int optid, char *param, long long *out)
+static int host_arg_param_validate(int optid, char *param, long long *out)
 {
   scamper_addr_t *addr;
   long tmp = 0;
@@ -931,14 +931,14 @@ static int host_arg_param_validate (int optid, char *param, long long *out)
   return 0;
 }
 
-int scamper_do_host_arg_validate (int argc, char *argv[], int *stop)
+int scamper_do_host_arg_validate(int argc, char *argv[], int *stop)
 {
   return scamper_options_validate (opts, opts_cnt, argc, argv, stop,
                                    host_arg_param_validate);
 }
 
-scamper_task_t* scamper_do_host_alloctask (void *data, scamper_list_t *list,
-                                           scamper_cycle_t *cycle)
+scamper_task_t* scamper_do_host_alloctask(void *data, scamper_list_t *list,
+                                          scamper_cycle_t *cycle)
 {
   scamper_host_t *host = (scamper_host_t*) data;
   scamper_task_sig_t *sig = NULL;
@@ -973,7 +973,7 @@ err:
   return NULL;
 }
 
-void* scamper_do_host_alloc (char *str)
+void* scamper_do_host_alloc(char *str)
 {
   scamper_host_t *host = NULL;
   scamper_option_out_t *opts_out = NULL, *opt;
@@ -1104,7 +1104,7 @@ err:
   return NULL;
 }
 
-void scamper_host_do_free (scamper_host_do_t *hostdo)
+void scamper_host_do_free(scamper_host_do_t *hostdo)
 {
   scamper_task_t *task;
   host_state_t *state;
@@ -1127,8 +1127,8 @@ void scamper_host_do_free (scamper_host_do_t *hostdo)
  * scamper_host_do_add
  *
  */
-static scamper_host_do_t* scamper_host_do_add (
-    scamper_task_t *task, void *param, void (*cb) (void*, const char *name))
+static scamper_host_do_t* scamper_host_do_add(
+    scamper_task_t *task, void *param, void (*cb)(void*, const char *name))
 {
   scamper_host_do_t *hostdo = NULL;
   host_state_t *state = host_getstate (task);
@@ -1138,7 +1138,7 @@ static scamper_host_do_t* scamper_host_do_add (
     printerror (__func__, "could not alloc state->cbs");
     return NULL;
   }
-  if ((hostdo = malloc_zero (sizeof(scamper_host_do_t))) == NULL)
+  if ((hostdo = malloc_zero(sizeof(scamper_host_do_t))) == NULL)
   {
     printerror (__func__, "could not alloc hostdo");
     return NULL;
@@ -1163,8 +1163,8 @@ static scamper_host_do_t* scamper_host_do_add (
  * do a PTR lookup on the IP address.  the supplied callback will be called
  * when the hostname lookup has completed.
  */
-scamper_host_do_t* scamper_do_host_do_ptr (scamper_addr_t *ip, void *param,
-                                           void (*cb) (void*, const char *name))
+scamper_host_do_t* scamper_do_host_do_ptr(scamper_addr_t *ip, void *param,
+                                          void (*cb)(void*, const char *name))
 {
   scamper_task_t *task = NULL;
   scamper_host_t *host = NULL;
@@ -1224,13 +1224,13 @@ err:
   return NULL;
 }
 
-void scamper_do_host_free (void *data)
+void scamper_do_host_free(void *data)
 {
   scamper_host_free ((scamper_host_t*) data);
   return;
 }
 
-void scamper_do_host_cleanup ()
+void scamper_do_host_cleanup()
 {
   int fd;
 
@@ -1281,19 +1281,19 @@ void scamper_do_host_cleanup ()
   return;
 }
 
-static void do_host_write (scamper_file_t *sf, scamper_task_t *task)
+static void do_host_write(scamper_file_t *sf, scamper_task_t *task)
 {
   scamper_file_write_host (sf, host_getdata (task));
   return;
 }
 
-static void do_host_halt (scamper_task_t *task)
+static void do_host_halt(scamper_task_t *task)
 {
   host_stop (task, SCAMPER_HOST_STOP_HALTED);
   return;
 }
 
-static void do_host_free (scamper_task_t *task)
+static void do_host_free(scamper_task_t *task)
 {
   scamper_host_do_t *hostdo;
   scamper_host_t *host = host_getdata (task);
@@ -1336,7 +1336,7 @@ static void do_host_free (scamper_task_t *task)
   return;
 }
 
-static int etc_resolv_line (char *line, void *param)
+static int etc_resolv_line(char *line, void *param)
 {
   scamper_addr_t *sa;
   int x = 0;
@@ -1367,7 +1367,7 @@ static int etc_resolv_line (char *line, void *param)
   return 0;
 }
 
-static int etc_resolv (void)
+static int etc_resolv(void)
 {
   int fd, flags = O_RDONLY;
 
@@ -1401,7 +1401,7 @@ err:
   return -1;
 }
 
-int scamper_do_host_init ()
+int scamper_do_host_init()
 {
   host_funcs.probe = do_host_probe;
   host_funcs.handle_timeout = do_host_handle_timeout;

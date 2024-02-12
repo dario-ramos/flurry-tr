@@ -252,9 +252,9 @@ typedef struct warts_trace_pmtud
   uint32_t len;
 } warts_trace_pmtud_t;
 
-static void warts_trace_params (const scamper_trace_t *trace,
-                                warts_addrtable_t *table, uint8_t *flags,
-                                uint16_t *flags_len, uint16_t *params_len)
+static void warts_trace_params(const scamper_trace_t *trace,
+                               warts_addrtable_t *table, uint8_t *flags,
+                               uint16_t *flags_len, uint16_t *params_len)
 {
   int max_id = 0;
   const warts_var_t *var;
@@ -307,10 +307,9 @@ static void warts_trace_params (const scamper_trace_t *trace,
   return;
 }
 
-static int warts_trace_params_read (scamper_trace_t *trace,
-                                    warts_state_t *state,
-                                    warts_addrtable_t *table, uint8_t *buf,
-                                    uint32_t *off, uint32_t len)
+static int warts_trace_params_read(scamper_trace_t *trace, warts_state_t *state,
+                                   warts_addrtable_t *table, uint8_t *buf,
+                                   uint32_t *off, uint32_t len)
 {
   warts_param_reader_t handlers[] =
     {
@@ -356,13 +355,13 @@ static int warts_trace_params_read (scamper_trace_t *trace,
   return 0;
 }
 
-static int warts_trace_params_write (const scamper_trace_t *trace,
-                                     const scamper_file_t *sf,
-                                     warts_addrtable_t *table, uint8_t *buf,
-                                     uint32_t *off, const uint32_t len,
-                                     const uint8_t *flags,
-                                     const uint16_t flags_len,
-                                     const uint16_t params_len)
+static int warts_trace_params_write(const scamper_trace_t *trace,
+                                    const scamper_file_t *sf,
+                                    warts_addrtable_t *table, uint8_t *buf,
+                                    uint32_t *off, const uint32_t len,
+                                    const uint8_t *flags,
+                                    const uint16_t flags_len,
+                                    const uint16_t params_len)
 {
   uint32_t list_id, cycle_id;
   warts_param_writer_t handlers[] =
@@ -408,9 +407,9 @@ static int warts_trace_params_write (const scamper_trace_t *trace,
   return 0;
 }
 
-static int warts_trace_hop_read_icmp_tc (const uint8_t *buf, uint32_t *off,
-                                         uint32_t len, scamper_trace_hop_t *hop,
-                                         void *param)
+static int warts_trace_hop_read_icmp_tc(const uint8_t *buf, uint32_t *off,
+                                        uint32_t len, scamper_trace_hop_t *hop,
+                                        void *param)
 {
   if (len - *off < 2)
     return -1;
@@ -419,10 +418,10 @@ static int warts_trace_hop_read_icmp_tc (const uint8_t *buf, uint32_t *off,
   return 0;
 }
 
-static void warts_trace_hop_write_icmp_tc (uint8_t *buf, uint32_t *off,
-                                           const uint32_t len,
-                                           const scamper_trace_hop_t *hop,
-                                           void *param)
+static void warts_trace_hop_write_icmp_tc(uint8_t *buf, uint32_t *off,
+                                          const uint32_t len,
+                                          const scamper_trace_hop_t *hop,
+                                          void *param)
 {
   assert(len - *off >= 2);
   buf[(*off)++] = hop->hop_icmp_type;
@@ -430,9 +429,9 @@ static void warts_trace_hop_write_icmp_tc (uint8_t *buf, uint32_t *off,
   return;
 }
 
-static int warts_trace_hop_read_probe_id (const uint8_t *buf, uint32_t *off,
-                                          uint32_t len, uint8_t *out,
-                                          void *param)
+static int warts_trace_hop_read_probe_id(const uint8_t *buf, uint32_t *off,
+                                         uint32_t len, uint8_t *out,
+                                         void *param)
 {
   if (len - *off < 1)
   {
@@ -442,35 +441,35 @@ static int warts_trace_hop_read_probe_id (const uint8_t *buf, uint32_t *off,
   return 0;
 }
 
-static void warts_trace_hop_write_probe_id (uint8_t *buf, uint32_t *off,
-                                            const uint32_t len,
-                                            const uint8_t *in, void *param)
+static void warts_trace_hop_write_probe_id(uint8_t *buf, uint32_t *off,
+                                           const uint32_t len,
+                                           const uint8_t *in, void *param)
 {
   assert(len - *off >= 1);
   buf[(*off)++] = *in - 1;
   return;
 }
 
-static int warts_trace_hop_read_icmpext (const uint8_t *buf, uint32_t *off,
-                                         uint32_t len, scamper_trace_hop_t *hop,
-                                         void *param)
+static int warts_trace_hop_read_icmpext(const uint8_t *buf, uint32_t *off,
+                                        uint32_t len, scamper_trace_hop_t *hop,
+                                        void *param)
 {
   return warts_icmpext_read (buf, off, len, &hop->hop_icmpext);
 }
 
-static void warts_trace_hop_write_icmpext (uint8_t *buf, uint32_t *off,
-                                           const uint32_t len,
-                                           const scamper_trace_hop_t *hop,
-                                           void *param)
+static void warts_trace_hop_write_icmpext(uint8_t *buf, uint32_t *off,
+                                          const uint32_t len,
+                                          const scamper_trace_hop_t *hop,
+                                          void *param)
 {
   warts_icmpext_write (buf, off, len, hop->hop_icmpext);
   return;
 }
 
-static void warts_trace_hop_params (const scamper_trace_t *trace,
-                                    const scamper_trace_hop_t *hop,
-                                    warts_addrtable_t *table, uint8_t *flags,
-                                    uint16_t *flags_len, uint16_t *params_len)
+static void warts_trace_hop_params(const scamper_trace_t *trace,
+                                   const scamper_trace_hop_t *hop,
+                                   warts_addrtable_t *table, uint8_t *flags,
+                                   uint16_t *flags_len, uint16_t *params_len)
 {
   scamper_icmpext_t *ie;
   const warts_var_t *var;
@@ -568,10 +567,10 @@ static void warts_trace_hop_params (const scamper_trace_t *trace,
   return;
 }
 
-static void warts_trace_hop_state (const scamper_trace_t *trace,
-                                   scamper_trace_hop_t *hop,
-                                   warts_trace_hop_t *state,
-                                   warts_addrtable_t *table, uint32_t *len)
+static void warts_trace_hop_state(const scamper_trace_t *trace,
+                                  scamper_trace_hop_t *hop,
+                                  warts_trace_hop_t *state,
+                                  warts_addrtable_t *table, uint32_t *len)
 {
   /* for each hop, figure out how much space it will take up */
   warts_trace_hop_params (trace, hop, table, state->flags, &state->flags_len,
@@ -588,9 +587,9 @@ static void warts_trace_hop_state (const scamper_trace_t *trace,
   return;
 }
 
-static int warts_trace_hop_read (scamper_trace_hop_t *hop, warts_state_t *state,
-                                 warts_addrtable_t *table, const uint8_t *buf,
-                                 uint32_t *off, uint32_t len)
+static int warts_trace_hop_read(scamper_trace_hop_t *hop, warts_state_t *state,
+                                warts_addrtable_t *table, const uint8_t *buf,
+                                uint32_t *off, uint32_t len)
 {
   warts_param_reader_t handlers[] =
     {
@@ -636,9 +635,9 @@ static int warts_trace_hop_read (scamper_trace_hop_t *hop, warts_state_t *state,
   return 0;
 }
 
-static void warts_trace_hop_write (const warts_trace_hop_t *state,
-                                   warts_addrtable_t *table, uint8_t *buf,
-                                   uint32_t *off, uint32_t len)
+static void warts_trace_hop_write(const warts_trace_hop_t *state,
+                                  warts_addrtable_t *table, uint8_t *buf,
+                                  uint32_t *off, uint32_t len)
 {
   scamper_trace_hop_t *hop = state->hop;
   warts_param_writer_t handlers[] =
@@ -668,10 +667,10 @@ static void warts_trace_hop_write (const warts_trace_hop_t *state,
   return;
 }
 
-static int warts_trace_hops_read (scamper_trace_hop_t **hops,
-                                  warts_state_t *state,
-                                  warts_addrtable_t *table, const uint8_t *buf,
-                                  uint32_t *off, uint32_t len, uint16_t count)
+static int warts_trace_hops_read(scamper_trace_hop_t **hops,
+                                 warts_state_t *state, warts_addrtable_t *table,
+                                 const uint8_t *buf, uint32_t *off,
+                                 uint32_t len, uint16_t count)
 {
   scamper_trace_hop_t *head = NULL, *hop = NULL;
   uint16_t i;
@@ -713,9 +712,9 @@ err:
   return -1;
 }
 
-static void warts_trace_pmtud_n_params (const scamper_trace_pmtud_t *pmtud,
-                                        const scamper_trace_pmtud_n_t *n,
-                                        warts_trace_pmtud_n_t *state)
+static void warts_trace_pmtud_n_params(const scamper_trace_pmtud_t *pmtud,
+                                       const scamper_trace_pmtud_n_t *n,
+                                       warts_trace_pmtud_n_t *state)
 {
   const scamper_trace_hop_t *hop;
   const warts_var_t *var;
@@ -763,10 +762,9 @@ static void warts_trace_pmtud_n_params (const scamper_trace_pmtud_t *pmtud,
   return;
 }
 
-static void warts_trace_pmtud_n_write (const scamper_trace_pmtud_n_t *note,
-                                       uint8_t *buf, uint32_t *off,
-                                       uint32_t len,
-                                       warts_trace_pmtud_n_t *state)
+static void warts_trace_pmtud_n_write(const scamper_trace_pmtud_n_t *note,
+                                      uint8_t *buf, uint32_t *off, uint32_t len,
+                                      warts_trace_pmtud_n_t *state)
 {
   warts_param_writer_t handlers[] =
     {
@@ -779,10 +777,10 @@ static void warts_trace_pmtud_n_write (const scamper_trace_pmtud_n_t *note,
   return;
 }
 
-static int warts_trace_pmtud_n_read (const scamper_trace_pmtud_t *pmtud,
-                                     scamper_trace_pmtud_n_t *note,
-                                     const uint8_t *buf, uint32_t *off,
-                                     uint32_t len)
+static int warts_trace_pmtud_n_read(const scamper_trace_pmtud_t *pmtud,
+                                    scamper_trace_pmtud_n_t *note,
+                                    const uint8_t *buf, uint32_t *off,
+                                    uint32_t len)
 {
   scamper_trace_hop_t *hop;
   uint16_t u16 = 0;
@@ -815,8 +813,8 @@ static int warts_trace_pmtud_n_read (const scamper_trace_pmtud_t *pmtud,
   return 0;
 }
 
-static void warts_trace_pmtud_params (const scamper_trace_t *trace,
-                                      warts_trace_pmtud_t *state)
+static void warts_trace_pmtud_params(const scamper_trace_t *trace,
+                                     warts_trace_pmtud_t *state)
 {
   const scamper_trace_pmtud_t *pmtud = trace->pmtud;
   const warts_var_t *var;
@@ -859,9 +857,9 @@ static void warts_trace_pmtud_params (const scamper_trace_t *trace,
   return;
 }
 
-static int warts_trace_pmtud_state (const scamper_trace_t *trace,
-                                    warts_trace_pmtud_t *state,
-                                    warts_addrtable_t *table)
+static int warts_trace_pmtud_state(const scamper_trace_t *trace,
+                                   warts_trace_pmtud_t *state,
+                                   warts_addrtable_t *table)
 {
   warts_trace_pmtud_n_t *note;
   scamper_trace_hop_t *hop;
@@ -883,7 +881,7 @@ static int warts_trace_pmtud_state (const scamper_trace_t *trace,
   {
     /* allocate an array of address indexes for the pmtud hop addresses */
     size = state->hopc * sizeof(warts_trace_hop_t);
-    if ((state->hops = (warts_trace_hop_t*) malloc_zero (size)) == NULL)
+    if ((state->hops = (warts_trace_hop_t*) malloc_zero(size)) == NULL)
       return -1;
 
     /* record hop state for each pmtud hop */
@@ -895,7 +893,7 @@ static int warts_trace_pmtud_state (const scamper_trace_t *trace,
   if (trace->pmtud->notec > 0)
   {
     size = trace->pmtud->notec * sizeof(warts_trace_pmtud_n_t);
-    if ((state->notes = (warts_trace_pmtud_n_t*) malloc_zero (size)) == NULL)
+    if ((state->notes = (warts_trace_pmtud_n_t*) malloc_zero(size)) == NULL)
       return -1;
     for (i = 0; i < trace->pmtud->notec; i++)
     {
@@ -912,9 +910,9 @@ static int warts_trace_pmtud_state (const scamper_trace_t *trace,
   return 0;
 }
 
-static int warts_trace_pmtud_read (scamper_trace_t *trace, warts_state_t *state,
-                                   warts_addrtable_t *table, const uint8_t *buf,
-                                   uint32_t *off, uint32_t len)
+static int warts_trace_pmtud_read(scamper_trace_t *trace, warts_state_t *state,
+                                  warts_addrtable_t *table, const uint8_t *buf,
+                                  uint32_t *off, uint32_t len)
 {
   uint16_t ifmtu = 0, pmtu = 0, outmtu = 0;
   uint8_t ver = 1, notec = 0;
@@ -976,10 +974,10 @@ err:
   return -1;
 }
 
-static void warts_trace_pmtud_write (const scamper_trace_t *trace, uint8_t *buf,
-                                     uint32_t *off, uint32_t len,
-                                     warts_trace_pmtud_t *state,
-                                     warts_addrtable_t *table)
+static void warts_trace_pmtud_write(const scamper_trace_t *trace, uint8_t *buf,
+                                    uint32_t *off, uint32_t len,
+                                    warts_trace_pmtud_t *state,
+                                    warts_addrtable_t *table)
 {
   warts_param_writer_t handlers[] =
     {
@@ -1010,7 +1008,7 @@ static void warts_trace_pmtud_write (const scamper_trace_t *trace, uint8_t *buf,
   return;
 }
 
-static void warts_trace_pmtud_free (warts_trace_pmtud_t *state)
+static void warts_trace_pmtud_free(warts_trace_pmtud_t *state)
 {
   if (state == NULL)
     return;
@@ -1020,11 +1018,11 @@ static void warts_trace_pmtud_free (warts_trace_pmtud_t *state)
   return;
 }
 
-static int warts_trace_lastditch_read (scamper_trace_t *trace,
-                                       warts_state_t *state,
-                                       warts_addrtable_t *table,
-                                       const uint8_t *buf, uint32_t *off,
-                                       uint32_t len)
+static int warts_trace_lastditch_read(scamper_trace_t *trace,
+                                      warts_state_t *state,
+                                      warts_addrtable_t *table,
+                                      const uint8_t *buf, uint32_t *off,
+                                      uint32_t len)
 {
   scamper_trace_hop_t *hops;
   uint16_t count;
@@ -1048,10 +1046,10 @@ err:
   return -1;
 }
 
-static int warts_trace_dtree_params (const scamper_file_t *sf,
-                                     const scamper_trace_t *trace,
-                                     warts_addrtable_t *table,
-                                     warts_trace_dtree_t *state)
+static int warts_trace_dtree_params(const scamper_file_t *sf,
+                                    const scamper_trace_t *trace,
+                                    warts_addrtable_t *table,
+                                    warts_trace_dtree_t *state)
 {
   scamper_trace_dtree_t *dtree = trace->dtree;
   const warts_var_t *var;
@@ -1108,10 +1106,10 @@ static int warts_trace_dtree_params (const scamper_file_t *sf,
   return 0;
 }
 
-static void warts_trace_dtree_write (const scamper_trace_t *trace,
-                                     warts_addrtable_t *table, uint8_t *buf,
-                                     uint32_t *off, uint32_t len,
-                                     warts_trace_dtree_t *state)
+static void warts_trace_dtree_write(const scamper_trace_t *trace,
+                                    warts_addrtable_t *table, uint8_t *buf,
+                                    uint32_t *off, uint32_t len,
+                                    warts_trace_dtree_t *state)
 {
   warts_param_writer_t handlers[] =
     {
@@ -1129,9 +1127,9 @@ static void warts_trace_dtree_write (const scamper_trace_t *trace,
   return;
 }
 
-static int warts_trace_dtree_read (scamper_trace_t *trace, warts_state_t *state,
-                                   warts_addrtable_t *table, const uint8_t *buf,
-                                   uint32_t *off, uint32_t len)
+static int warts_trace_dtree_read(scamper_trace_t *trace, warts_state_t *state,
+                                  warts_addrtable_t *table, const uint8_t *buf,
+                                  uint32_t *off, uint32_t len)
 {
   scamper_addr_t *lss_stop = NULL, *gss_stop = NULL;
   uint8_t firsthop = 0, flags = 0;
@@ -1172,8 +1170,8 @@ static int warts_trace_dtree_read (scamper_trace_t *trace, warts_state_t *state,
  * warts_trace_read
  *
  */
-int scamper_file_warts_trace_read (scamper_file_t *sf, const warts_hdr_t *hdr,
-                                   scamper_trace_t **trace_out)
+int scamper_file_warts_trace_read(scamper_file_t *sf, const warts_hdr_t *hdr,
+                                  scamper_trace_t **trace_out)
 {
   warts_state_t *state = scamper_file_getstate (sf);
   scamper_trace_t *trace = NULL;
@@ -1333,8 +1331,8 @@ err:
   return -1;
 }
 
-int scamper_file_warts_trace_write (const scamper_file_t *sf,
-                                    const scamper_trace_t *trace)
+int scamper_file_warts_trace_write(const scamper_file_t *sf,
+                                   const scamper_trace_t *trace)
 {
   scamper_trace_hop_t *hop;
   uint8_t *buf = NULL;
@@ -1375,7 +1373,7 @@ int scamper_file_warts_trace_write (const scamper_file_t *sf,
   if ((hop_recs = scamper_trace_hop_count (trace)) > 0)
   {
     size = hop_recs * sizeof(warts_trace_hop_t);
-    if ((hop_state = (warts_trace_hop_t*) malloc_zero (size)) == NULL)
+    if ((hop_state = (warts_trace_hop_t*) malloc_zero(size)) == NULL)
     {
       goto err;
     }
@@ -1397,7 +1395,7 @@ int scamper_file_warts_trace_write (const scamper_file_t *sf,
   /* figure out how much space we need for PMTUD data, if we have it */
   if (trace->pmtud != NULL)
   {
-    if ((pmtud = malloc_zero (sizeof(warts_trace_pmtud_t))) == NULL)
+    if ((pmtud = malloc_zero(sizeof(warts_trace_pmtud_t))) == NULL)
       goto err;
 
     if (warts_trace_pmtud_state (trace, pmtud, table) != 0)
@@ -1413,7 +1411,7 @@ int scamper_file_warts_trace_write (const scamper_file_t *sf,
 
     /* allocate an array of hop state structs for the lastditch hops */
     size = ld_recs * sizeof(warts_trace_hop_t);
-    if ((ld_state = (warts_trace_hop_t*) malloc_zero (size)) == NULL)
+    if ((ld_state = (warts_trace_hop_t*) malloc_zero(size)) == NULL)
       goto err;
 
     /* need to record count of lastditch hops and a single zero flags byte */
@@ -1438,7 +1436,7 @@ int scamper_file_warts_trace_write (const scamper_file_t *sf,
 
   len += 2; /* EOF */
 
-  if ((buf = malloc_zero (len)) == NULL)
+  if ((buf = malloc_zero(len)) == NULL)
   {
     goto err;
   }

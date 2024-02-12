@@ -50,7 +50,7 @@ typedef struct tracelb_fwdpathc
   int loop;
 } tracelb_fwdpathc_t;
 
-void scamper_tracelb_probeset_summary_free (
+void scamper_tracelb_probeset_summary_free(
     scamper_tracelb_probeset_summary_t *sum)
 {
   int i;
@@ -66,7 +66,7 @@ void scamper_tracelb_probeset_summary_free (
 }
 
 scamper_tracelb_probeset_summary_t*
-scamper_tracelb_probeset_summary_alloc (scamper_tracelb_probeset_t *set)
+scamper_tracelb_probeset_summary_alloc(scamper_tracelb_probeset_t *set)
 {
   scamper_tracelb_probeset_summary_t *sum = NULL;
   scamper_tracelb_probe_t *probe;
@@ -74,7 +74,7 @@ scamper_tracelb_probeset_summary_alloc (scamper_tracelb_probeset_t *set)
   uint16_t flowid, j;
   int i, x;
 
-  if ((sum = malloc_zero (sizeof(scamper_tracelb_probeset_summary_t))) == NULL)
+  if ((sum = malloc_zero(sizeof(scamper_tracelb_probeset_summary_t))) == NULL)
     goto err;
 
   if (set->probec == 0)
@@ -136,8 +136,8 @@ err:
  * function to compare two nodes, taking into account the possibility that
  * the quoted ttl field is present and has a value.
  */
-int scamper_tracelb_node_cmp (const scamper_tracelb_node_t *a,
-                              const scamper_tracelb_node_t *b)
+int scamper_tracelb_node_cmp(const scamper_tracelb_node_t *a,
+                             const scamper_tracelb_node_t *b)
 {
   int i;
 
@@ -177,8 +177,8 @@ int scamper_tracelb_node_cmp (const scamper_tracelb_node_t *a,
  * function to compare two links.  the comparison is based on the nodes
  * present in each link.
  */
-int scamper_tracelb_link_cmp (const scamper_tracelb_link_t *a,
-                              const scamper_tracelb_link_t *b)
+int scamper_tracelb_link_cmp(const scamper_tracelb_link_t *a,
+                             const scamper_tracelb_link_t *b)
 {
   int i;
 
@@ -206,8 +206,8 @@ int scamper_tracelb_link_cmp (const scamper_tracelb_link_t *a,
  * the from node is the same; this function is used to compare a set of links
  * attached to a single node and order them accordingly.
  */
-static int tracelb_node_link_cmp (const scamper_tracelb_link_t *a,
-                                  const scamper_tracelb_link_t *b)
+static int tracelb_node_link_cmp(const scamper_tracelb_link_t *a,
+                                 const scamper_tracelb_link_t *b)
 {
   assert(a->from == b->from);
   return scamper_tracelb_node_cmp (a->to, b->to);
@@ -218,10 +218,10 @@ static int tracelb_node_link_cmp (const scamper_tracelb_link_t *a,
  *
  * function to extract a set of nodes between two points in the graph.
  */
-static void tracelb_nodes_extract (const scamper_tracelb_t *trace,
-                                   scamper_tracelb_node_t *from,
-                                   scamper_tracelb_node_t *to,
-                                   scamper_tracelb_node_t **nodes, int *nodec)
+static void tracelb_nodes_extract(const scamper_tracelb_t *trace,
+                                  scamper_tracelb_node_t *from,
+                                  scamper_tracelb_node_t *to,
+                                  scamper_tracelb_node_t **nodes, int *nodec)
 {
   uint16_t i;
 
@@ -250,10 +250,10 @@ static void tracelb_nodes_extract (const scamper_tracelb_t *trace,
  * recursive function to extract a set of nodes between two points in the
  * graph.
  */
-int scamper_tracelb_nodes_extract (const scamper_tracelb_t *trace,
-                                   scamper_tracelb_node_t *from,
-                                   scamper_tracelb_node_t *to,
-                                   scamper_tracelb_node_t **nodes)
+int scamper_tracelb_nodes_extract(const scamper_tracelb_t *trace,
+                                  scamper_tracelb_node_t *from,
+                                  scamper_tracelb_node_t *to,
+                                  scamper_tracelb_node_t **nodes)
 {
   int nodec = 0;
   tracelb_nodes_extract (trace, from, to, nodes, &nodec);
@@ -265,8 +265,8 @@ int scamper_tracelb_nodes_extract (const scamper_tracelb_t *trace,
  *
  * find the corresponding index for a node in the trace.
  */
-static int tracelb_node_index (const scamper_tracelb_t *trace,
-                               const scamper_tracelb_node_t *node)
+static int tracelb_node_index(const scamper_tracelb_t *trace,
+                              const scamper_tracelb_node_t *node)
 {
   uint16_t i;
   for (i = 0; i < trace->nodec; i++)
@@ -277,9 +277,9 @@ static int tracelb_node_index (const scamper_tracelb_t *trace,
   return -1;
 }
 
-int scamper_tracelb_node_convergencepoint (const scamper_tracelb_t *trace,
-                                           const int *fwdpathc, int from,
-                                           int *to)
+int scamper_tracelb_node_convergencepoint(const scamper_tracelb_t *trace,
+                                          const int *fwdpathc, int from,
+                                          int *to)
 {
   scamper_tracelb_node_t *node;
   int n, nn, rc = -1;
@@ -309,7 +309,7 @@ int scamper_tracelb_node_convergencepoint (const scamper_tracelb_t *trace,
    * allocate an array to keep track of which nodes have been visited so
    * far on this exploration
    */
-  if ((loop = malloc_zero (sizeof(int) * trace->nodec)) == NULL)
+  if ((loop = malloc_zero(sizeof(int) * trace->nodec)) == NULL)
     return -1;
   n = nn = from;
   loop[n] = 1;
@@ -362,8 +362,8 @@ int scamper_tracelb_node_convergencepoint (const scamper_tracelb_t *trace,
  * paths can be observed at a particular node.
  *
  */
-static int tracelb_fwdpathc (const scamper_tracelb_t *trace, int n,
-                             tracelb_fwdpathc_t *nodes)
+static int tracelb_fwdpathc(const scamper_tracelb_t *trace, int n,
+                            tracelb_fwdpathc_t *nodes)
 {
   scamper_tracelb_link_t *link;
   scamper_tracelb_node_t *node;
@@ -440,7 +440,7 @@ static int tracelb_fwdpathc (const scamper_tracelb_t *trace, int n,
  * count the number of unique paths visible from one point towards a
  * destination.
  */
-int scamper_tracelb_fwdpathc (const scamper_tracelb_t *trace, int *nodes)
+int scamper_tracelb_fwdpathc(const scamper_tracelb_t *trace, int *nodes)
 {
   tracelb_fwdpathc_t *fwdpathc;
   uint16_t i;
@@ -448,7 +448,7 @@ int scamper_tracelb_fwdpathc (const scamper_tracelb_t *trace, int *nodes)
   if (trace->nodec == 0)
     return 0;
 
-  if ((fwdpathc = malloc_zero (sizeof(tracelb_fwdpathc_t) * trace->nodec))
+  if ((fwdpathc = malloc_zero(sizeof(tracelb_fwdpathc_t) * trace->nodec))
       == NULL)
     return -1;
 
@@ -462,10 +462,10 @@ int scamper_tracelb_fwdpathc (const scamper_tracelb_t *trace, int *nodes)
   return 0;
 }
 
-scamper_tracelb_node_t* scamper_tracelb_node_alloc (scamper_addr_t *addr)
+scamper_tracelb_node_t* scamper_tracelb_node_alloc(scamper_addr_t *addr)
 {
   scamper_tracelb_node_t *node;
-  if ((node = malloc_zero (sizeof(scamper_tracelb_node_t))) != NULL)
+  if ((node = malloc_zero(sizeof(scamper_tracelb_node_t))) != NULL)
   {
     if (addr != NULL)
       node->addr = scamper_addr_use (addr);
@@ -473,7 +473,7 @@ scamper_tracelb_node_t* scamper_tracelb_node_alloc (scamper_addr_t *addr)
   return node;
 }
 
-void scamper_tracelb_node_free (scamper_tracelb_node_t *node)
+void scamper_tracelb_node_free(scamper_tracelb_node_t *node)
 {
   if (node == NULL)
     return;
@@ -491,8 +491,8 @@ void scamper_tracelb_node_free (scamper_tracelb_node_t *node)
   return;
 }
 
-int scamper_tracelb_node_add (scamper_tracelb_t *trace,
-                              scamper_tracelb_node_t *node)
+int scamper_tracelb_node_add(scamper_tracelb_t *trace,
+                             scamper_tracelb_node_t *node)
 {
   size_t len = (trace->nodec + 1) * sizeof(scamper_tracelb_node_t*);
   if (realloc_wrap ((void**) &trace->nodes, len) == 0)
@@ -504,8 +504,8 @@ int scamper_tracelb_node_add (scamper_tracelb_t *trace,
   return -1;
 }
 
-scamper_tracelb_node_t* scamper_tracelb_node_find (scamper_tracelb_t *trace,
-                                                   scamper_tracelb_node_t *node)
+scamper_tracelb_node_t* scamper_tracelb_node_find(scamper_tracelb_t *trace,
+                                                  scamper_tracelb_node_t *node)
 {
   uint16_t i;
 
@@ -520,11 +520,11 @@ scamper_tracelb_node_t* scamper_tracelb_node_find (scamper_tracelb_t *trace,
   return NULL;
 }
 
-scamper_tracelb_reply_t* scamper_tracelb_reply_alloc (scamper_addr_t *addr)
+scamper_tracelb_reply_t* scamper_tracelb_reply_alloc(scamper_addr_t *addr)
 {
   scamper_tracelb_reply_t *reply;
 
-  if ((reply = malloc_zero (sizeof(scamper_tracelb_reply_t))) == NULL)
+  if ((reply = malloc_zero(sizeof(scamper_tracelb_reply_t))) == NULL)
     return NULL;
 
   if (addr != NULL)
@@ -533,7 +533,7 @@ scamper_tracelb_reply_t* scamper_tracelb_reply_alloc (scamper_addr_t *addr)
   return reply;
 }
 
-void scamper_tracelb_reply_free (scamper_tracelb_reply_t *reply)
+void scamper_tracelb_reply_free(scamper_tracelb_reply_t *reply)
 {
   if (reply == NULL)
     return;
@@ -548,14 +548,14 @@ void scamper_tracelb_reply_free (scamper_tracelb_reply_t *reply)
   return;
 }
 
-scamper_tracelb_probe_t* scamper_tracelb_probe_alloc (void)
+scamper_tracelb_probe_t* scamper_tracelb_probe_alloc(void)
 {
   scamper_tracelb_probe_t *probe;
-  probe = malloc_zero (sizeof(scamper_tracelb_probe_t));
+  probe = malloc_zero(sizeof(scamper_tracelb_probe_t));
   return probe;
 }
 
-void scamper_tracelb_probe_free (scamper_tracelb_probe_t *probe)
+void scamper_tracelb_probe_free(scamper_tracelb_probe_t *probe)
 {
   uint16_t i;
 
@@ -573,8 +573,8 @@ void scamper_tracelb_probe_free (scamper_tracelb_probe_t *probe)
   return;
 }
 
-int scamper_tracelb_probe_reply (scamper_tracelb_probe_t *probe,
-                                 scamper_tracelb_reply_t *reply)
+int scamper_tracelb_probe_reply(scamper_tracelb_probe_t *probe,
+                                scamper_tracelb_reply_t *reply)
 {
   size_t len;
 
@@ -586,17 +586,17 @@ int scamper_tracelb_probe_reply (scamper_tracelb_probe_t *probe,
   return 0;
 }
 
-int scamper_tracelb_probeset_probes_alloc (scamper_tracelb_probeset_t *set,
-                                           uint16_t probec)
+int scamper_tracelb_probeset_probes_alloc(scamper_tracelb_probeset_t *set,
+                                          uint16_t probec)
 {
   size_t len = sizeof(scamper_tracelb_probe_t*) * probec;
-  if ((set->probes = malloc_zero (len)) == NULL)
+  if ((set->probes = malloc_zero(len)) == NULL)
     return -1;
   return 0;
 }
 
-int scamper_tracelb_probeset_add (scamper_tracelb_probeset_t *probeset,
-                                  scamper_tracelb_probe_t *probe)
+int scamper_tracelb_probeset_add(scamper_tracelb_probeset_t *probeset,
+                                 scamper_tracelb_probe_t *probe)
 {
   size_t len = (probeset->probec + 1) * sizeof(scamper_tracelb_probe_t*);
   if (realloc_wrap ((void**) &probeset->probes, len) != 0)
@@ -605,14 +605,14 @@ int scamper_tracelb_probeset_add (scamper_tracelb_probeset_t *probeset,
   return 0;
 }
 
-scamper_tracelb_probeset_t* scamper_tracelb_probeset_alloc (void)
+scamper_tracelb_probeset_t* scamper_tracelb_probeset_alloc(void)
 {
   scamper_tracelb_probeset_t *set;
-  set = malloc_zero (sizeof(scamper_tracelb_probeset_t));
+  set = malloc_zero(sizeof(scamper_tracelb_probeset_t));
   return set;
 }
 
-void scamper_tracelb_probeset_free (scamper_tracelb_probeset_t *set)
+void scamper_tracelb_probeset_free(scamper_tracelb_probeset_t *set)
 {
   uint16_t i;
 
@@ -630,19 +630,19 @@ void scamper_tracelb_probeset_free (scamper_tracelb_probeset_t *set)
   return;
 }
 
-scamper_tracelb_link_t* scamper_tracelb_link_find (const scamper_tracelb_t *tr,
-                                                   scamper_tracelb_link_t *link)
+scamper_tracelb_link_t* scamper_tracelb_link_find(const scamper_tracelb_t *tr,
+                                                  scamper_tracelb_link_t *link)
 {
   return array_find ((void**) tr->links, tr->linkc, link,
                      (array_cmp_t) scamper_tracelb_link_cmp);
 }
 
-scamper_tracelb_link_t* scamper_tracelb_link_alloc (void)
+scamper_tracelb_link_t* scamper_tracelb_link_alloc(void)
 {
-  return (scamper_tracelb_link_t*) malloc_zero (sizeof(scamper_tracelb_link_t));
+  return (scamper_tracelb_link_t*) malloc_zero(sizeof(scamper_tracelb_link_t));
 }
 
-void scamper_tracelb_link_free (scamper_tracelb_link_t *link)
+void scamper_tracelb_link_free(scamper_tracelb_link_t *link)
 {
   uint8_t i;
 
@@ -661,8 +661,8 @@ void scamper_tracelb_link_free (scamper_tracelb_link_t *link)
   return;
 }
 
-int scamper_tracelb_link_add (scamper_tracelb_t *trace,
-                              scamper_tracelb_link_t *link)
+int scamper_tracelb_link_add(scamper_tracelb_t *trace,
+                             scamper_tracelb_link_t *link)
 {
   scamper_tracelb_node_t *node = NULL;
   size_t size;
@@ -709,7 +709,7 @@ int scamper_tracelb_link_add (scamper_tracelb_t *trace,
  *
  * determine if a link is a case of zero-ttl forwarding.
  */
-int scamper_tracelb_link_zerottlfwd (const scamper_tracelb_link_t *link)
+int scamper_tracelb_link_zerottlfwd(const scamper_tracelb_link_t *link)
 {
   if (link->from->addr == NULL)
     return 0;
@@ -725,17 +725,17 @@ int scamper_tracelb_link_zerottlfwd (const scamper_tracelb_link_t *link)
   return 1;
 }
 
-int scamper_tracelb_link_probesets_alloc (scamper_tracelb_link_t *link,
-                                          uint8_t hopc)
+int scamper_tracelb_link_probesets_alloc(scamper_tracelb_link_t *link,
+                                         uint8_t hopc)
 {
   size_t len = hopc * sizeof(scamper_tracelb_probeset_t*);
-  if ((link->sets = malloc_zero (len)) == NULL)
+  if ((link->sets = malloc_zero(len)) == NULL)
     return -1;
   return 0;
 }
 
-int scamper_tracelb_link_probeset (scamper_tracelb_link_t *link,
-                                   scamper_tracelb_probeset_t *set)
+int scamper_tracelb_link_probeset(scamper_tracelb_link_t *link,
+                                  scamper_tracelb_probeset_t *set)
 {
   size_t len = (link->hopc + 1) * sizeof(scamper_tracelb_probeset_t*);
   if (realloc_wrap ((void**) &link->sets, len) == 0)
@@ -747,53 +747,53 @@ int scamper_tracelb_link_probeset (scamper_tracelb_link_t *link,
   return -1;
 }
 
-int scamper_tracelb_nodes_alloc (scamper_tracelb_t *trace, uint16_t count)
+int scamper_tracelb_nodes_alloc(scamper_tracelb_t *trace, uint16_t count)
 {
   size_t size = sizeof(scamper_tracelb_node_t*) * count;
-  if ((trace->nodes = malloc_zero (size)) != NULL)
+  if ((trace->nodes = malloc_zero(size)) != NULL)
     return 0;
   return -1;
 }
 
-int scamper_tracelb_links_alloc (scamper_tracelb_t *trace, uint16_t count)
+int scamper_tracelb_links_alloc(scamper_tracelb_t *trace, uint16_t count)
 {
   size_t size = sizeof(scamper_tracelb_link_t*) * count;
-  if ((trace->links = malloc_zero (size)) != NULL)
+  if ((trace->links = malloc_zero(size)) != NULL)
     return 0;
   return -1;
 }
 
-int scamper_tracelb_node_links_alloc (scamper_tracelb_node_t *node,
-                                      uint16_t count)
+int scamper_tracelb_node_links_alloc(scamper_tracelb_node_t *node,
+                                     uint16_t count)
 {
   size_t size = sizeof(scamper_tracelb_link_t*) * count;
-  if ((node->links = malloc_zero (size)) != NULL)
+  if ((node->links = malloc_zero(size)) != NULL)
     return 0;
   return -1;
 }
 
-int scamper_tracelb_probe_replies_alloc (scamper_tracelb_probe_t *probe,
-                                         uint16_t count)
+int scamper_tracelb_probe_replies_alloc(scamper_tracelb_probe_t *probe,
+                                        uint16_t count)
 {
   size_t size = sizeof(scamper_tracelb_reply_t*) * count;
-  if ((probe->rxs = malloc_zero (size)) != NULL)
+  if ((probe->rxs = malloc_zero(size)) != NULL)
     return 0;
   return -1;
 }
 
-void scamper_tracelb_node_links_sort (scamper_tracelb_node_t *node)
+void scamper_tracelb_node_links_sort(scamper_tracelb_node_t *node)
 {
   array_qsort ((void**) node->links, node->linkc,
                (array_cmp_t) tracelb_node_link_cmp);
   return;
 }
 
-scamper_addr_t* scamper_tracelb_addr (const void *va)
+scamper_addr_t* scamper_tracelb_addr(const void *va)
 {
   return ((scamper_tracelb_t*) va)->dst;
 }
 
-const char* scamper_tracelb_type_tostr (const scamper_tracelb_t *trace)
+const char* scamper_tracelb_type_tostr(const scamper_tracelb_t *trace)
 {
   if (trace->type == SCAMPER_TRACELB_TYPE_UDP_DPORT)
     return "udp-dport";
@@ -808,7 +808,7 @@ const char* scamper_tracelb_type_tostr (const scamper_tracelb_t *trace)
   return NULL;
 }
 
-int scamper_tracelb_sort (scamper_tracelb_t *trace)
+int scamper_tracelb_sort(scamper_tracelb_t *trace)
 {
   scamper_tracelb_node_t **nodes = NULL;
   scamper_tracelb_node_t **nq = NULL;
@@ -820,7 +820,7 @@ int scamper_tracelb_sort (scamper_tracelb_t *trace)
     return 0;
 
   size = sizeof(scamper_tracelb_node_t*) * trace->nodec;
-  if ((nodes = malloc_zero (size)) == NULL || (nq = malloc_zero (size)) == NULL)
+  if ((nodes = malloc_zero(size)) == NULL || (nq = malloc_zero(size)) == NULL)
     goto err;
 
   n = 0;
@@ -884,7 +884,7 @@ err:
  * scamper_tracelb_free
  *
  */
-void scamper_tracelb_free (scamper_tracelb_t *trace)
+void scamper_tracelb_free(scamper_tracelb_t *trace)
 {
   uint16_t i;
 
@@ -924,7 +924,7 @@ void scamper_tracelb_free (scamper_tracelb_t *trace)
  *
  * allocate the trace and all the possibly necessary data fields
  */
-scamper_tracelb_t* scamper_tracelb_alloc ()
+scamper_tracelb_t* scamper_tracelb_alloc()
 {
-  return (scamper_tracelb_t*) malloc_zero (sizeof(scamper_tracelb_t));
+  return (scamper_tracelb_t*) malloc_zero(sizeof(scamper_tracelb_t));
 }

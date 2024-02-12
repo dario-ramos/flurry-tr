@@ -37,15 +37,15 @@ static const char rcsid[] = "$Id";
 #include "scamper_tbit_text.h"
 #include "utils.h"
 
-static uint32_t tbit_isnoff (uint32_t isn, uint32_t seq)
+static uint32_t tbit_isnoff(uint32_t isn, uint32_t seq)
 {
   if (seq >= isn)
     return seq - isn;
   return TCP_MAX_SEQNUM - isn + seq + 1;
 }
 
-int scamper_file_text_tbit_write (const scamper_file_t *sf,
-                                  const scamper_tbit_t *tbit)
+int scamper_file_text_tbit_write(const scamper_file_t *sf,
+                                 const scamper_tbit_t *tbit)
 {
   scamper_tbit_pkt_t *pkt;
   scamper_tbit_app_http_t *http;

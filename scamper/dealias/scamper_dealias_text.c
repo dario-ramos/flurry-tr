@@ -39,8 +39,8 @@ static const char rcsid[] =
 #include "scamper_dealias_text.h"
 #include "utils.h"
 
-int scamper_file_text_dealias_write (const scamper_file_t *sf,
-                                     const scamper_dealias_t *dealias)
+int scamper_file_text_dealias_write(const scamper_file_t *sf,
+                                    const scamper_dealias_t *dealias)
 {
   scamper_dealias_ally_t *ally;
   char buf[256], a[64], b[64], c[32];

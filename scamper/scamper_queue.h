@@ -50,17 +50,17 @@ int scamper_queue_isprobe(scamper_queue_t *queue);
 int scamper_queue_iswait(scamper_queue_t *queue);
 int scamper_queue_isdone(scamper_queue_t *queue);
 
-scamper_queue_t *scamper_queue_alloc(scamper_task_t *task);
+scamper_queue_t* scamper_queue_alloc(scamper_task_t *task);
 void scamper_queue_free(scamper_queue_t *queue);
 
 /* if a node needs to be removed from a queue, this function will do that */
 void scamper_queue_detach(scamper_queue_t *queue);
 
 /* get the next task to do something with */
-struct scamper_task *scamper_queue_select(void);
+struct scamper_task* scamper_queue_select(void);
 
 /* get the next task that is completed and ready to be written out */
-struct scamper_task *scamper_queue_getdone(const struct timeval *tv);
+struct scamper_task* scamper_queue_getdone(const struct timeval *tv);
 
 /* return the time that the first task on the queue will time out */
 int scamper_queue_waittime(struct timeval *tv);
@@ -80,12 +80,12 @@ void scamper_queue_empty(void);
 /* put things on the event queue, which are not probe related */
 int scamper_queue_event_waittime(struct timeval *tv);
 int scamper_queue_event_proc(const struct timeval *tv);
-scamper_queue_t *scamper_queue_event(const struct timeval *tv,
-				     scamper_queue_event_cb_t cb, void *ptr);
+scamper_queue_t* scamper_queue_event(const struct timeval *tv,
+                                     scamper_queue_event_cb_t cb, void *ptr);
 int scamper_queue_event_update_time(scamper_queue_t *sq,
-				    const struct timeval *tv);
+                                    const struct timeval *tv);
 void scamper_queue_event_update_cb(scamper_queue_t *sq,
-				   scamper_queue_event_cb_t cb, void *ptr);
+                                   scamper_queue_event_cb_t cb, void *ptr);
 
 int scamper_queue_init(void);
 void scamper_queue_cleanup(void);

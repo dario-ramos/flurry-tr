@@ -25,7 +25,7 @@
 #ifndef __SCAMPER_PING_TEXT_H
 #define __SCAMPER_PING_TEXT_H
 
-int scamper_file_text_ping_write (const scamper_file_t *sf,
-                                  const scamper_ping_t *ping);
+int scamper_file_text_ping_write(const scamper_file_t *sf,
+                                 const scamper_ping_t *ping);
 
 #endif /* __SCAMPER_PING_TEXT_H */

@@ -107,9 +107,10 @@ typedef struct warts_neighbourdisc_probe
   warts_neighbourdisc_reply_t *rxs;
 } warts_neighbourdisc_probe_t;
 
-static int warts_neighbourdisc_reply_state (
-    scamper_neighbourdisc_reply_t *reply, warts_neighbourdisc_reply_t *state,
-    warts_addrtable_t *table, uint32_t *len)
+static int warts_neighbourdisc_reply_state(scamper_neighbourdisc_reply_t *reply,
+                                           warts_neighbourdisc_reply_t *state,
+                                           warts_addrtable_t *table,
+                                           uint32_t *len)
 {
   const warts_var_t *var;
   int i, max_id = 0;
@@ -138,7 +139,7 @@ static int warts_neighbourdisc_reply_state (
   return 0;
 }
 
-static int warts_neighbourdisc_reply_write (
+static int warts_neighbourdisc_reply_write(
     const scamper_neighbourdisc_reply_t *reply, const scamper_file_t *sf,
     warts_addrtable_t *table, uint8_t *buf, uint32_t *off, const uint32_t len,
     warts_neighbourdisc_reply_t *state)
@@ -154,11 +155,11 @@ static int warts_neighbourdisc_reply_write (
   return 0;
 }
 
-static int warts_neighbourdisc_reply_read (scamper_neighbourdisc_reply_t *reply,
-                                           warts_state_t *state,
-                                           warts_addrtable_t *table,
-                                           uint8_t *buf, uint32_t *off,
-                                           uint32_t len)
+static int warts_neighbourdisc_reply_read(scamper_neighbourdisc_reply_t *reply,
+                                          warts_state_t *state,
+                                          warts_addrtable_t *table,
+                                          uint8_t *buf, uint32_t *off,
+                                          uint32_t len)
 {
   warts_param_reader_t handlers[] =
     {
@@ -168,9 +169,11 @@ static int warts_neighbourdisc_reply_read (scamper_neighbourdisc_reply_t *reply,
   return warts_params_read (buf, off, len, handlers, handler_cnt);
 }
 
-static int warts_neighbourdisc_probe_state (
-    const scamper_file_t *sf, scamper_neighbourdisc_probe_t *probe,
-    warts_neighbourdisc_probe_t *state, warts_addrtable_t *table, uint32_t *len)
+static int warts_neighbourdisc_probe_state(const scamper_file_t *sf,
+                                           scamper_neighbourdisc_probe_t *probe,
+                                           warts_neighbourdisc_probe_t *state,
+                                           warts_addrtable_t *table,
+                                           uint32_t *len)
 {
   const warts_var_t *var;
   int i, max_id = 0;
@@ -196,7 +199,7 @@ static int warts_neighbourdisc_probe_state (
   if (probe->rxc > 0)
   {
     size = sizeof(warts_neighbourdisc_reply_t) * probe->rxc;
-    if ((state->rxs = malloc_zero (size)) == NULL)
+    if ((state->rxs = malloc_zero(size)) == NULL)
       return -1;
 
     for (i = 0; i < probe->rxc; i++)
@@ -219,7 +222,7 @@ static int warts_neighbourdisc_probe_state (
   return 0;
 }
 
-static int warts_neighbourdisc_probe_write (
+static int warts_neighbourdisc_probe_write(
     const scamper_neighbourdisc_probe_t *probe, const scamper_file_t *sf,
     warts_addrtable_t *table, uint8_t *buf, uint32_t *off, const uint32_t len,
     warts_neighbourdisc_probe_t *state)
@@ -243,11 +246,11 @@ static int warts_neighbourdisc_probe_write (
   return 0;
 }
 
-static int warts_neighbourdisc_probe_read (scamper_neighbourdisc_probe_t *pr,
-                                           warts_state_t *state,
-                                           warts_addrtable_t *table,
-                                           uint8_t *buf, uint32_t *off,
-                                           uint32_t len)
+static int warts_neighbourdisc_probe_read(scamper_neighbourdisc_probe_t *pr,
+                                          warts_state_t *state,
+                                          warts_addrtable_t *table,
+                                          uint8_t *buf, uint32_t *off,
+                                          uint32_t len)
 {
   scamper_neighbourdisc_reply_t *reply;
   uint16_t i;
@@ -280,10 +283,10 @@ static int warts_neighbourdisc_probe_read (scamper_neighbourdisc_probe_t *pr,
   return 0;
 }
 
-static void warts_neighbourdisc_params (const scamper_neighbourdisc_t *nd,
-                                        warts_addrtable_t *table,
-                                        uint8_t *flags, uint16_t *flags_len,
-                                        uint16_t *params_len)
+static void warts_neighbourdisc_params(const scamper_neighbourdisc_t *nd,
+                                       warts_addrtable_t *table, uint8_t *flags,
+                                       uint16_t *flags_len,
+                                       uint16_t *params_len)
 {
   int i, max_id = 0;
   const warts_var_t *var;
@@ -329,14 +332,14 @@ static void warts_neighbourdisc_params (const scamper_neighbourdisc_t *nd,
   return;
 }
 
-static int warts_neighbourdisc_params_write (const scamper_neighbourdisc_t *nd,
-                                             const scamper_file_t *sf,
-                                             warts_addrtable_t *table,
-                                             uint8_t *buf, uint32_t *off,
-                                             const uint32_t len,
-                                             const uint8_t *flags,
-                                             const uint16_t flags_len,
-                                             const uint16_t params_len)
+static int warts_neighbourdisc_params_write(const scamper_neighbourdisc_t *nd,
+                                            const scamper_file_t *sf,
+                                            warts_addrtable_t *table,
+                                            uint8_t *buf, uint32_t *off,
+                                            const uint32_t len,
+                                            const uint8_t *flags,
+                                            const uint16_t flags_len,
+                                            const uint16_t params_len)
 {
   uint32_t list_id, cycle_id;
   warts_param_writer_t handlers[] =
@@ -369,10 +372,10 @@ static int warts_neighbourdisc_params_write (const scamper_neighbourdisc_t *nd,
   return 0;
 }
 
-static int warts_neighbourdisc_params_read (scamper_neighbourdisc_t *nd,
-                                            warts_addrtable_t *table,
-                                            warts_state_t *state, uint8_t *buf,
-                                            uint32_t *off, uint32_t len)
+static int warts_neighbourdisc_params_read(scamper_neighbourdisc_t *nd,
+                                           warts_addrtable_t *table,
+                                           warts_state_t *state, uint8_t *buf,
+                                           uint32_t *off, uint32_t len)
 {
   warts_param_reader_t handlers[] =
     {
@@ -403,8 +406,8 @@ static int warts_neighbourdisc_params_read (scamper_neighbourdisc_t *nd,
   return 0;
 }
 
-static void warts_neighbourdisc_probes_free (warts_neighbourdisc_probe_t *ps,
-                                             uint32_t cnt)
+static void warts_neighbourdisc_probes_free(warts_neighbourdisc_probe_t *ps,
+                                            uint32_t cnt)
 {
   uint16_t i;
 
@@ -420,8 +423,8 @@ static void warts_neighbourdisc_probes_free (warts_neighbourdisc_probe_t *ps,
   return;
 }
 
-int scamper_file_warts_neighbourdisc_write (const scamper_file_t *sf,
-                                            const scamper_neighbourdisc_t *nd)
+int scamper_file_warts_neighbourdisc_write(const scamper_file_t *sf,
+                                           const scamper_neighbourdisc_t *nd)
 {
   warts_addrtable_t *table = NULL;
   warts_neighbourdisc_probe_t *probes = NULL;
@@ -443,7 +446,7 @@ int scamper_file_warts_neighbourdisc_write (const scamper_file_t *sf,
   if (nd->probec > 0)
   {
     size = nd->probec * sizeof(warts_neighbourdisc_probe_t);
-    if ((probes = (warts_neighbourdisc_probe_t*) malloc_zero (size)) == NULL)
+    if ((probes = (warts_neighbourdisc_probe_t*) malloc_zero(size)) == NULL)
       goto err;
 
     for (i = 0; i < nd->probec; i++)
@@ -459,7 +462,7 @@ int scamper_file_warts_neighbourdisc_write (const scamper_file_t *sf,
     }
   }
 
-  if ((buf = malloc_zero (len)) == NULL)
+  if ((buf = malloc_zero(len)) == NULL)
     goto err;
   insert_wartshdr (buf, &off, len, SCAMPER_FILE_OBJ_NEIGHBOURDISC);
 
@@ -503,9 +506,9 @@ err:
   return -1;
 }
 
-int scamper_file_warts_neighbourdisc_read (scamper_file_t *sf,
-                                           const warts_hdr_t *hdr,
-                                           scamper_neighbourdisc_t **nd_out)
+int scamper_file_warts_neighbourdisc_read(scamper_file_t *sf,
+                                          const warts_hdr_t *hdr,
+                                          scamper_neighbourdisc_t **nd_out)
 {
   scamper_neighbourdisc_t *nd = NULL;
   scamper_neighbourdisc_probe_t *probe;

@@ -25,7 +25,7 @@
 #ifndef __SCAMPER_GETSRC_H
 #define __SCAMPER_GETSRC_H
 
-scamper_addr_t *scamper_getsrc(const scamper_addr_t *dst, int ifindex);
+scamper_addr_t* scamper_getsrc(const scamper_addr_t *dst, int ifindex);
 int scamper_getsrc_init(void);
 void scamper_getsrc_cleanup(void);
 

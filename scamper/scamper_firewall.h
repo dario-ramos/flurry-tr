@@ -56,7 +56,7 @@ scamper_firewall_entry_t *scamper_firewall_entry_get(scamper_firewall_rule_t *);
 #define sfw_5tuple_sport un.fivetuple.sport
 #define sfw_5tuple_dport un.fivetuple.dport
 
-void scamper_firewall_entry_free(scamper_firewall_entry_t *);
+void scamper_firewall_entry_free(scamper_firewall_entry_t*);
 
 /* routines to handle initialising structures to manage the firewall */
 int scamper_firewall_init(const char *opt);

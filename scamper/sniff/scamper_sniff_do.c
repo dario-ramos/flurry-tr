@@ -73,22 +73,22 @@ static const scamper_option_in_t opts[] =
 
 static const int opts_cnt = SCAMPER_OPTION_COUNT(opts);
 
-const char* scamper_do_sniff_usage (void)
+const char* scamper_do_sniff_usage(void)
 {
   return "sniff [-c limit-pktc] [-G limit-time] [-S ipaddr] [-U userid] <expression>\n";
 }
 
-static scamper_sniff_t* sniff_getdata (const scamper_task_t *task)
+static scamper_sniff_t* sniff_getdata(const scamper_task_t *task)
 {
   return scamper_task_getdata (task);
 }
 
-static sniff_state_t* sniff_getstate (const scamper_task_t *task)
+static sniff_state_t* sniff_getstate(const scamper_task_t *task)
 {
   return scamper_task_getstate (task);
 }
 
-static void sniff_finish (scamper_task_t *task, int reason)
+static void sniff_finish(scamper_task_t *task, int reason)
 {
   scamper_sniff_t *sniff = sniff_getdata (task);
   sniff_state_t *state = sniff_getstate (task);
@@ -118,7 +118,7 @@ static void sniff_finish (scamper_task_t *task, int reason)
   return;
 }
 
-static void do_sniff_handle_dl (scamper_task_t *task, scamper_dl_rec_t *dl)
+static void do_sniff_handle_dl(scamper_task_t *task, scamper_dl_rec_t *dl)
 {
   scamper_sniff_t *sniff = sniff_getdata (task);
   sniff_state_t *state = sniff_getstate (task);
@@ -161,13 +161,13 @@ err:
   return;
 }
 
-static void do_sniff_handle_timeout (scamper_task_t *task)
+static void do_sniff_handle_timeout(scamper_task_t *task)
 {
   sniff_finish (task, SCAMPER_SNIFF_STOP_LIMIT_TIME);
   return;
 }
 
-static void sniff_state_free (sniff_state_t *state)
+static void sniff_state_free(sniff_state_t *state)
 {
   if (state == NULL)
     return;
@@ -181,7 +181,7 @@ static void sniff_state_free (sniff_state_t *state)
   return;
 }
 
-static int sniff_state_alloc (scamper_task_t *task)
+static int sniff_state_alloc(scamper_task_t *task)
 {
   scamper_sniff_t *sniff = sniff_getdata (task);
   sniff_state_t *state = NULL;
@@ -200,7 +200,7 @@ static int sniff_state_alloc (scamper_task_t *task)
   if (scamper_if_getifindex_byaddr ((struct sockaddr*) &sas, &ifindex) != 0)
     goto err;
 
-  if ((state = malloc_zero (sizeof(sniff_state_t))) == NULL)
+  if ((state = malloc_zero(sizeof(sniff_state_t))) == NULL)
     goto err;
 
   if ((state->list = slist_alloc ()) == NULL)
@@ -224,7 +224,7 @@ err:
   return -1;
 }
 
-static void do_sniff_probe (scamper_task_t *task)
+static void do_sniff_probe(scamper_task_t *task)
 {
   scamper_sniff_t *sniff = sniff_getdata (task);
   struct timeval tv;
@@ -243,13 +243,13 @@ static void do_sniff_probe (scamper_task_t *task)
   return;
 }
 
-static void do_sniff_write (scamper_file_t *sf, scamper_task_t *task)
+static void do_sniff_write(scamper_file_t *sf, scamper_task_t *task)
 {
   scamper_file_write_sniff (sf, sniff_getdata (task));
   return;
 }
 
-static int sniff_arg_param_validate (int optid, char *param, long long *out)
+static int sniff_arg_param_validate(int optid, char *param, long long *out)
 {
   long tmp = 0;
 
@@ -285,13 +285,13 @@ err:
   return -1;
 }
 
-int scamper_do_sniff_arg_validate (int argc, char *argv[], int *stop)
+int scamper_do_sniff_arg_validate(int argc, char *argv[], int *stop)
 {
   return scamper_options_validate (opts, opts_cnt, argc, argv, stop,
                                    sniff_arg_param_validate);
 }
 
-void* scamper_do_sniff_alloc (char *str)
+void* scamper_do_sniff_alloc(char *str)
 {
   scamper_option_out_t *opts_out = NULL, *opt;
   scamper_sniff_t *sniff = NULL;
@@ -382,13 +382,13 @@ err:
   return NULL;
 }
 
-static void do_sniff_halt (scamper_task_t *task)
+static void do_sniff_halt(scamper_task_t *task)
 {
   sniff_finish (task, SCAMPER_SNIFF_STOP_HALTED);
   return;
 }
 
-static void do_sniff_free (scamper_task_t *task)
+static void do_sniff_free(scamper_task_t *task)
 {
   scamper_sniff_t *sniff;
   sniff_state_t *state;
@@ -402,8 +402,8 @@ static void do_sniff_free (scamper_task_t *task)
   return;
 }
 
-scamper_task_t* scamper_do_sniff_alloctask (void *data, scamper_list_t *list,
-                                            scamper_cycle_t *cycle)
+scamper_task_t* scamper_do_sniff_alloctask(void *data, scamper_list_t *list,
+                                           scamper_cycle_t *cycle)
 {
   scamper_sniff_t *sniff = (scamper_sniff_t*) data;
   scamper_task_t *task = NULL;
@@ -439,18 +439,18 @@ err:
   return NULL;
 }
 
-void scamper_do_sniff_free (void *data)
+void scamper_do_sniff_free(void *data)
 {
   scamper_sniff_free ((scamper_sniff_t*) data);
   return;
 }
 
-void scamper_do_sniff_cleanup ()
+void scamper_do_sniff_cleanup()
 {
   return;
 }
 
-int scamper_do_sniff_init ()
+int scamper_do_sniff_init()
 {
   sniff_funcs.probe = do_sniff_probe;
   sniff_funcs.handle_timeout = do_sniff_handle_timeout;

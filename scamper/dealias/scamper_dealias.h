@@ -305,43 +305,43 @@ typedef struct scamper_dealias
   uint32_t probec;
 } scamper_dealias_t;
 
-scamper_dealias_t* scamper_dealias_alloc (void);
-void scamper_dealias_free (scamper_dealias_t*);
+scamper_dealias_t* scamper_dealias_alloc(void);
+void scamper_dealias_free(scamper_dealias_t*);
 
-scamper_dealias_probe_t* scamper_dealias_probe_alloc (void);
-void scamper_dealias_probe_free (scamper_dealias_probe_t*);
+scamper_dealias_probe_t* scamper_dealias_probe_alloc(void);
+void scamper_dealias_probe_free(scamper_dealias_probe_t*);
 
-scamper_dealias_probedef_t* scamper_dealias_probedef_alloc (void);
-void scamper_dealias_probedef_free (scamper_dealias_probedef_t*);
+scamper_dealias_probedef_t* scamper_dealias_probedef_alloc(void);
+void scamper_dealias_probedef_free(scamper_dealias_probedef_t*);
 
-scamper_dealias_reply_t* scamper_dealias_reply_alloc (void);
-void scamper_dealias_reply_free (scamper_dealias_reply_t*);
-uint32_t scamper_dealias_reply_count (const scamper_dealias_t*);
+scamper_dealias_reply_t* scamper_dealias_reply_alloc(void);
+void scamper_dealias_reply_free(scamper_dealias_reply_t*);
+uint32_t scamper_dealias_reply_count(const scamper_dealias_t*);
 
-const char* scamper_dealias_method_tostr (const scamper_dealias_t*, char*,
-                                          size_t);
-const char* scamper_dealias_result_tostr (const scamper_dealias_t*, char*,
-                                          size_t);
-const char* scamper_dealias_probedef_method_tostr (
+const char* scamper_dealias_method_tostr(const scamper_dealias_t*, char*,
+                                         size_t);
+const char* scamper_dealias_result_tostr(const scamper_dealias_t*, char*,
+                                         size_t);
+const char* scamper_dealias_probedef_method_tostr(
     const scamper_dealias_probedef_t*, char*, size_t);
 
-int scamper_dealias_probes_alloc (scamper_dealias_t*, uint32_t);
-int scamper_dealias_replies_alloc (scamper_dealias_probe_t*, uint16_t);
+int scamper_dealias_probes_alloc(scamper_dealias_t*, uint32_t);
+int scamper_dealias_replies_alloc(scamper_dealias_probe_t*, uint16_t);
 
 /* these functions allow the probes recorded to be ordered to suit */
-void scamper_dealias_probes_sort_tx (scamper_dealias_t*);
-void scamper_dealias_probes_sort_seq (scamper_dealias_t*);
-void scamper_dealias_probes_sort_def (scamper_dealias_t*);
+void scamper_dealias_probes_sort_tx(scamper_dealias_t*);
+void scamper_dealias_probes_sort_seq(scamper_dealias_t*);
+void scamper_dealias_probes_sort_def(scamper_dealias_t*);
 
-int scamper_dealias_probe_add (scamper_dealias_t*, scamper_dealias_probe_t*);
-int scamper_dealias_reply_add (scamper_dealias_probe_t*,
-                               scamper_dealias_reply_t*);
+int scamper_dealias_probe_add(scamper_dealias_t*, scamper_dealias_probe_t*);
+int scamper_dealias_reply_add(scamper_dealias_probe_t*,
+                              scamper_dealias_reply_t*);
 
-int scamper_dealias_ally_alloc (scamper_dealias_t*);
-int scamper_dealias_mercator_alloc (scamper_dealias_t*);
-int scamper_dealias_radargun_alloc (scamper_dealias_t*);
-int scamper_dealias_prefixscan_alloc (scamper_dealias_t*);
-int scamper_dealias_bump_alloc (scamper_dealias_t*);
+int scamper_dealias_ally_alloc(scamper_dealias_t*);
+int scamper_dealias_mercator_alloc(scamper_dealias_t*);
+int scamper_dealias_radargun_alloc(scamper_dealias_t*);
+int scamper_dealias_prefixscan_alloc(scamper_dealias_t*);
+int scamper_dealias_bump_alloc(scamper_dealias_t*);
 
 /*
  * scamper_dealias_ipid_inseq
@@ -354,25 +354,24 @@ int scamper_dealias_bump_alloc (scamper_dealias_t*);
  * the fourth parameter:     0: no byteswap, 1: byteswap, 2: don't care
  *
  */
-int scamper_dealias_ipid_inseq (scamper_dealias_probe_t**, int, uint16_t, int);
+int scamper_dealias_ipid_inseq(scamper_dealias_probe_t**, int, uint16_t, int);
 
-int scamper_dealias_prefixscan_xs_add (scamper_dealias_t*, scamper_addr_t*);
-int scamper_dealias_prefixscan_xs_in (scamper_dealias_t*, scamper_addr_t*);
-int scamper_dealias_prefixscan_xs_alloc (scamper_dealias_prefixscan_t*,
-                                         uint16_t);
+int scamper_dealias_prefixscan_xs_add(scamper_dealias_t*, scamper_addr_t*);
+int scamper_dealias_prefixscan_xs_in(scamper_dealias_t*, scamper_addr_t*);
+int scamper_dealias_prefixscan_xs_alloc(scamper_dealias_prefixscan_t*, uint16_t);
 
-int scamper_dealias_prefixscan_probedef_add (scamper_dealias_t*,
-                                             scamper_dealias_probedef_t*);
+int scamper_dealias_prefixscan_probedef_add(scamper_dealias_t*,
+                                            scamper_dealias_probedef_t*);
 
-int scamper_dealias_prefixscan_probedefs_alloc (scamper_dealias_prefixscan_t*,
-                                                uint32_t);
+int scamper_dealias_prefixscan_probedefs_alloc(scamper_dealias_prefixscan_t*,
+                                               uint32_t);
 
-int scamper_dealias_radargun_fudge (scamper_dealias_t*,
-                                    scamper_dealias_probedef_t*,
-                                    scamper_dealias_probedef_t**, int*, int);
+int scamper_dealias_radargun_fudge(scamper_dealias_t*,
+                                   scamper_dealias_probedef_t*,
+                                   scamper_dealias_probedef_t**, int*, int);
 
-int scamper_dealias_radargun_probedefs_alloc (scamper_dealias_radargun_t*,
-                                              uint32_t);
+int scamper_dealias_radargun_probedefs_alloc(scamper_dealias_radargun_t*,
+                                             uint32_t);
 
 #define SCAMPER_DEALIAS_IPID_UNKNOWN   0
 #define SCAMPER_DEALIAS_IPID_ZERO      1
@@ -387,7 +386,7 @@ typedef struct scamper_dealias_ipid
   uint32_t maxd;
 } scamper_dealias_ipid_t;
 
-int scamper_dealias_ipid (const scamper_dealias_probe_t **probes,
-                          uint32_t probec, scamper_dealias_ipid_t *ipid);
+int scamper_dealias_ipid(const scamper_dealias_probe_t **probes,
+                         uint32_t probec, scamper_dealias_ipid_t *ipid);
 
 #endif /* __SCAMPER_DEALIAS_H */

@@ -35,7 +35,7 @@
 
 #ifndef lint
 static const char rcsid[] =
-  "$Id: scamper_dl.c,v 1.186 2017/12/03 09:54:32 mjl Exp $";
+    "$Id: scamper_dl.c,v 1.186 2017/12/03 09:54:32 mjl Exp $";
 #endif
 
 #ifdef HAVE_CONFIG_H
@@ -67,26 +67,26 @@ static const char rcsid[] =
 struct scamper_dl
 {
   /* the file descriptor that scamper has on the datalink */
-  scamper_fd_t  *fdn;
+  scamper_fd_t *fdn;
 
   /* the callback used to read packets off the datalink */
-  int          (*dlt_cb)(scamper_dl_rec_t *dl, uint8_t *pkt, size_t len);
+  int (*dlt_cb)(scamper_dl_rec_t *dl, uint8_t *pkt, size_t len);
 
   /* the underlying type of the datalink (DLT_* or ARPHDR_* values) */
-  int            type;
+  int type;
 
   /* how the user should frame packet to transmit on the datalink */
-  int            tx_type;
+  int tx_type;
 
-  /* if we're using BPF, then we need to use an appropriately sized buffer */
+/* if we're using BPF, then we need to use an appropriately sized buffer */
 #if defined(HAVE_BPF)
   u_int          readbuf_len;
 #endif
 
 };
 
-static uint8_t          *readbuf = NULL;
-static size_t            readbuf_len = 0;
+static uint8_t *readbuf = NULL;
+static size_t readbuf_len = 0;
 
 #if defined(HAVE_BPF)
 static const scamper_osinfo_t *osinfo = NULL;
@@ -100,438 +100,438 @@ static const scamper_osinfo_t *osinfo = NULL;
  */
 static int dl_parse_ip(scamper_dl_rec_t *dl, uint8_t *pktbuf, size_t pktlen)
 {
-  struct ip        *ip4;
-  struct ip6_hdr   *ip6;
-  struct ip6_ext   *ip6_exthdr;
-  struct ip6_frag  *ip6_fraghdr;
-  struct icmp      *icmp4;
+  struct ip *ip4;
+  struct ip6_hdr *ip6;
+  struct ip6_ext *ip6_exthdr;
+  struct ip6_frag *ip6_fraghdr;
+  struct icmp *icmp4;
   struct icmp6_hdr *icmp6;
-  struct tcphdr    *tcp;
-  struct udphdr    *udp;
-  size_t            iplen;
-  size_t            extlen;
-  uint8_t          *pkt = pktbuf;
-  size_t            len = pktlen;
-  size_t            off;
-  uint8_t          *tmp;
-  uint16_t          u16;
-  int               i;
+  struct tcphdr *tcp;
+  struct udphdr *udp;
+  size_t iplen;
+  size_t extlen;
+  uint8_t *pkt = pktbuf;
+  size_t len = pktlen;
+  size_t off;
+  uint8_t *tmp;
+  uint16_t u16;
+  int i;
 
-  if((pkt[0] >> 4) == 4) /* IPv4 */
-    {
-      ip4 = (struct ip *)pkt;
+  if ((pkt[0] >> 4) == 4) /* IPv4 */
+  {
+    ip4 = (struct ip*) pkt;
 
 #ifndef _WIN32
-      iplen = (ip4->ip_hl << 2);
+    iplen = (ip4->ip_hl << 2);
 #else
       iplen = ((ip4->ip_vhl) & 0xf) << 2;
 #endif
 
-      /*
-       * make sure that the captured packet has enough to cover the whole
-       * of the IP header
-       */
-      if(iplen > len)
-	return 0;
-
-      /* figure out fragmentation details */
-      u16 = ntohs(ip4->ip_off);
-      dl->dl_ip_off = (u16 & IP_OFFMASK) * 8;
-      if(dl->dl_ip_off != 0 || (u16 & IP_MF) != 0)
-	dl->dl_ip_flags |= SCAMPER_DL_IP_FLAG_FRAG;
-      if((u16 & IP_DF) != 0)
-	dl->dl_ip_flags |= SCAMPER_DL_IP_FLAG_DF;
-      if((u16 & IP_MF) != 0)
-	dl->dl_ip_flags |= SCAMPER_DL_IP_FLAG_MF;
-
-      dl->dl_af       = AF_INET;
-      dl->dl_ip_hl    = iplen;
-      dl->dl_ip_proto = ip4->ip_p;
-      dl->dl_ip_size  = ntohs(ip4->ip_len);
-      dl->dl_ip_id    = ntohs(ip4->ip_id);
-      dl->dl_ip_tos   = ip4->ip_tos;
-      dl->dl_ip_ttl   = ip4->ip_ttl;
-      dl->dl_ip_src   = (uint8_t *)&ip4->ip_src;
-      dl->dl_ip_dst   = (uint8_t *)&ip4->ip_dst;
-
-      dl->dl_flags   |= SCAMPER_DL_REC_FLAG_NET;
-      dl->dl_net_type = SCAMPER_DL_REC_NET_TYPE_IP;
-
-      pkt += iplen;
-      len -= iplen;
-    }
-  else if((pkt[0] >> 4) == 6) /* IPv6 */
-    {
-      ip6 = (struct ip6_hdr *)pkt;
-
-      if((iplen = sizeof(struct ip6_hdr)) > len)
-	return 0;
-
-      dl->dl_af       = AF_INET6;
-      dl->dl_ip_hl    = iplen;
-      dl->dl_ip_flow  = ntohl(ip6->ip6_flow) & 0xfffff;
-      dl->dl_ip_proto = ip6->ip6_nxt;
-      dl->dl_ip_size  = ntohs(ip6->ip6_plen) + sizeof(struct ip6_hdr);
-      dl->dl_ip_hlim  = ip6->ip6_hlim;
-      dl->dl_ip_src   = (uint8_t *)&ip6->ip6_src;
-      dl->dl_ip_dst   = (uint8_t *)&ip6->ip6_dst;
-      dl->dl_flags   |= SCAMPER_DL_REC_FLAG_NET;
-      dl->dl_net_type = SCAMPER_DL_REC_NET_TYPE_IP;
-
-      pkt += iplen;
-      len -= iplen;
-
-      /* Process any IPv6 fragmentation headers */
-      for(;;)
-        {
-	  switch(dl->dl_ip_proto)
-            {
-	    case IPPROTO_HOPOPTS:
-	    case IPPROTO_DSTOPTS:
-	    case IPPROTO_ROUTING:
-	      if(sizeof(struct ip6_ext) > len)
-		return 0;
-	      ip6_exthdr = (struct ip6_ext *)pkt;
-	      if((extlen = (ip6_exthdr->ip6e_len * 8) + 8) > len)
-		return 0;
-	      dl->dl_ip_proto = ip6_exthdr->ip6e_nxt;
-	      break;
-
-	    case IPPROTO_FRAGMENT:
-	      if((extlen = sizeof(struct ip6_frag)) > len)
-		return 0;
-	      ip6_fraghdr = (struct ip6_frag *)pkt;
-	      dl->dl_ip6_id = ntohl(ip6_fraghdr->ip6f_ident);
-	      dl->dl_ip_off = ntohs(ip6_fraghdr->ip6f_offlg) & 0xfff8;
-	      dl->dl_ip_proto = ip6_fraghdr->ip6f_nxt;
-	      dl->dl_ip_flags |= SCAMPER_DL_IP_FLAG_FRAG;
-	      if(ntohs(ip6_fraghdr->ip6f_offlg) & 0x1)
-		dl->dl_ip_flags |= SCAMPER_DL_IP_FLAG_MF;
-	      break;
-
-	    default:
-	      extlen = 0;
-	      break;
-            }
-
-	  if(extlen == 0)
-	    break;
-
-	  dl->dl_ip_hl += extlen;
-	  pkt += extlen;
-	  len -= extlen;
-        }
-    }
-  else
-    {
+    /*
+     * make sure that the captured packet has enough to cover the whole
+     * of the IP header
+     */
+    if (iplen > len)
       return 0;
-    }
 
-  dl->dl_ip_data    = pkt;
+    /* figure out fragmentation details */
+    u16 = ntohs (ip4->ip_off);
+    dl->dl_ip_off = (u16 & IP_OFFMASK) * 8;
+    if (dl->dl_ip_off != 0 || (u16 & IP_MF) != 0)
+      dl->dl_ip_flags |= SCAMPER_DL_IP_FLAG_FRAG;
+    if ((u16 & IP_DF) != 0)
+      dl->dl_ip_flags |= SCAMPER_DL_IP_FLAG_DF;
+    if ((u16 & IP_MF) != 0)
+      dl->dl_ip_flags |= SCAMPER_DL_IP_FLAG_MF;
+
+    dl->dl_af = AF_INET;
+    dl->dl_ip_hl = iplen;
+    dl->dl_ip_proto = ip4->ip_p;
+    dl->dl_ip_size = ntohs (ip4->ip_len);
+    dl->dl_ip_id = ntohs (ip4->ip_id);
+    dl->dl_ip_tos = ip4->ip_tos;
+    dl->dl_ip_ttl = ip4->ip_ttl;
+    dl->dl_ip_src = (uint8_t*) &ip4->ip_src;
+    dl->dl_ip_dst = (uint8_t*) &ip4->ip_dst;
+
+    dl->dl_flags |= SCAMPER_DL_REC_FLAG_NET;
+    dl->dl_net_type = SCAMPER_DL_REC_NET_TYPE_IP;
+
+    pkt += iplen;
+    len -= iplen;
+  }
+  else if ((pkt[0] >> 4) == 6) /* IPv6 */
+  {
+    ip6 = (struct ip6_hdr*) pkt;
+
+    if ((iplen = sizeof(struct ip6_hdr)) > len)
+      return 0;
+
+    dl->dl_af = AF_INET6;
+    dl->dl_ip_hl = iplen;
+    dl->dl_ip_flow = ntohl (ip6->ip6_flow) & 0xfffff;
+    dl->dl_ip_proto = ip6->ip6_nxt;
+    dl->dl_ip_size = ntohs (ip6->ip6_plen) + sizeof(struct ip6_hdr);
+    dl->dl_ip_hlim = ip6->ip6_hlim;
+    dl->dl_ip_src = (uint8_t*) &ip6->ip6_src;
+    dl->dl_ip_dst = (uint8_t*) &ip6->ip6_dst;
+    dl->dl_flags |= SCAMPER_DL_REC_FLAG_NET;
+    dl->dl_net_type = SCAMPER_DL_REC_NET_TYPE_IP;
+
+    pkt += iplen;
+    len -= iplen;
+
+    /* Process any IPv6 fragmentation headers */
+    for (;;)
+    {
+      switch (dl->dl_ip_proto)
+      {
+        case IPPROTO_HOPOPTS:
+        case IPPROTO_DSTOPTS:
+        case IPPROTO_ROUTING:
+          if (sizeof(struct ip6_ext) > len)
+            return 0;
+          ip6_exthdr = (struct ip6_ext*) pkt;
+          if ((extlen = (ip6_exthdr->ip6e_len * 8) + 8) > len)
+            return 0;
+          dl->dl_ip_proto = ip6_exthdr->ip6e_nxt;
+          break;
+
+        case IPPROTO_FRAGMENT:
+          if ((extlen = sizeof(struct ip6_frag)) > len)
+            return 0;
+          ip6_fraghdr = (struct ip6_frag*) pkt;
+          dl->dl_ip6_id = ntohl (ip6_fraghdr->ip6f_ident);
+          dl->dl_ip_off = ntohs (ip6_fraghdr->ip6f_offlg) & 0xfff8;
+          dl->dl_ip_proto = ip6_fraghdr->ip6f_nxt;
+          dl->dl_ip_flags |= SCAMPER_DL_IP_FLAG_FRAG;
+          if (ntohs (ip6_fraghdr->ip6f_offlg) & 0x1)
+            dl->dl_ip_flags |= SCAMPER_DL_IP_FLAG_MF;
+          break;
+
+        default:
+          extlen = 0;
+          break;
+      }
+
+      if (extlen == 0)
+        break;
+
+      dl->dl_ip_hl += extlen;
+      pkt += extlen;
+      len -= extlen;
+    }
+  }
+  else
+  {
+    return 0;
+  }
+
+  dl->dl_ip_data = pkt;
   dl->dl_ip_datalen = len;
 
   /*
    * can't do any further processing of the packet if we're seeing
    * a later fragment
    */
-  if(dl->dl_ip_off != 0)
+  if (dl->dl_ip_off != 0)
     return 1;
 
-  if(dl->dl_ip_proto == IPPROTO_UDP)
+  if (dl->dl_ip_proto == IPPROTO_UDP)
+  {
+    if ((int) sizeof(struct udphdr) > len)
     {
-      if((int)sizeof(struct udphdr) > len)
-	{
-	  return 0;
-	}
-
-      udp = (struct udphdr *)pkt;
-      dl->dl_udp_dport = ntohs(udp->uh_dport);
-      dl->dl_udp_sport = ntohs(udp->uh_sport);
-      dl->dl_udp_sum   = udp->uh_sum;
-      dl->dl_flags    |= SCAMPER_DL_REC_FLAG_TRANS;
+      return 0;
     }
-  else if(dl->dl_ip_proto == IPPROTO_TCP)
-    {
-      if((int)sizeof(struct tcphdr) > len)
-	{
-	  return 0;
-	}
 
-      tcp = (struct tcphdr *)pkt;
-      dl->dl_tcp_dport  = ntohs(tcp->th_dport);
-      dl->dl_tcp_sport  = ntohs(tcp->th_sport);
-      dl->dl_tcp_seq    = ntohl(tcp->th_seq);
-      dl->dl_tcp_ack    = ntohl(tcp->th_ack);
+    udp = (struct udphdr*) pkt;
+    dl->dl_udp_dport = ntohs (udp->uh_dport);
+    dl->dl_udp_sport = ntohs (udp->uh_sport);
+    dl->dl_udp_sum = udp->uh_sum;
+    dl->dl_flags |= SCAMPER_DL_REC_FLAG_TRANS;
+  }
+  else if (dl->dl_ip_proto == IPPROTO_TCP)
+  {
+    if ((int) sizeof(struct tcphdr) > len)
+    {
+      return 0;
+    }
+
+    tcp = (struct tcphdr*) pkt;
+    dl->dl_tcp_dport = ntohs (tcp->th_dport);
+    dl->dl_tcp_sport = ntohs (tcp->th_sport);
+    dl->dl_tcp_seq = ntohl (tcp->th_seq);
+    dl->dl_tcp_ack = ntohl (tcp->th_ack);
 #ifndef _WIN32
-      dl->dl_tcp_hl     = tcp->th_off * 4;
+    dl->dl_tcp_hl = tcp->th_off * 4;
 #else
       dl->dl_tcp_hl     = (tcp->th_offx2 >> 4) * 4;
 #endif
-      dl->dl_tcp_flags  = tcp->th_flags;
-      dl->dl_tcp_win    = ntohs(tcp->th_win);
-      dl->dl_flags     |= SCAMPER_DL_REC_FLAG_TRANS;
+    dl->dl_tcp_flags = tcp->th_flags;
+    dl->dl_tcp_win = ntohs (tcp->th_win);
+    dl->dl_flags |= SCAMPER_DL_REC_FLAG_TRANS;
 
-      if(dl->dl_tcp_hl >= 20 && len >= dl->dl_tcp_hl)
-	{
-	  off = 20;
-	  while(off < dl->dl_tcp_hl)
-	    {
-	      tmp = pkt + off;
-
-	      if(tmp[0] == 0) /* End of option list */
-		break;
-
-	      if(tmp[0] == 1) /* no-op */
-		{
-		  off++;
-		  continue;
-		}
-
-	      if(tmp[1] == 0)
-		break;
-
-	      /* make sure the option can be extracted */
-	      if(off + tmp[1] > dl->dl_tcp_hl)
-		break;
-
-	      if(tmp[0] == 2 && tmp[1] == 4) /* mss option */
-		dl->dl_tcp_mss = bytes_ntohs(tmp+2);
-
-	      if(tmp[0] == 4 && tmp[1] == 2) /* sack permitted option */
-		dl->dl_tcp_opts |= SCAMPER_DL_TCP_OPT_SACKP;
-
-	      if(tmp[0] == 8 && tmp[1] == 10) /* timestamps */
-		{
-		  dl->dl_tcp_opts |= SCAMPER_DL_TCP_OPT_TS;
-		  dl->dl_tcp_tsval = bytes_ntohl(tmp+2);
-		  dl->dl_tcp_tsecr = bytes_ntohl(tmp+6);
-		}
-
-	      if(tmp[0] == 5)
-		{
-		  if(tmp[1]==10 || tmp[1]==18 || tmp[1]==26 || tmp[1]==34)
-		    {
-		      dl->dl_tcp_sack_edgec = (tmp[1]-2) / 4;
-		      for(i=0; i<(tmp[1]-2)/4; i++)
-			dl->dl_tcp_sack_edges[i] = bytes_ntohl(tmp+2 + (i*4));
-		    }
-		  else
-		    {
-		      dl->dl_tcp_sack_edgec = -1;
-		    }
-		}
-
-	      if(tmp[0] == 34 && tmp[1] >= 2)
-		{
-		  dl->dl_tcp_opts |= SCAMPER_DL_TCP_OPT_FO;
-		  dl->dl_tcp_fo_cookielen = tmp[1] - 2;
-		  for(i=0; i<dl->dl_tcp_fo_cookielen; i++)
-		    dl->dl_tcp_fo_cookie[i] = tmp[2+i];
-		}
-
-	      if(tmp[0] == 254 && tmp[1] >= 4 && bytes_ntohs(tmp+2) == 0xF989)
-		{
-		  dl->dl_tcp_opts |= SCAMPER_DL_TCP_OPT_FO_EXP;
-		  dl->dl_tcp_fo_cookielen = tmp[1] - 4;
-		  for(i=0; i<dl->dl_tcp_fo_cookielen; i++)
-		    dl->dl_tcp_fo_cookie[i] = tmp[4+i];
-		}
-
-	      off += tmp[1];
-	    }
-
-	  dl->dl_tcp_datalen = dl->dl_ip_size - dl->dl_ip_hl - dl->dl_tcp_hl;
-	  if(dl->dl_tcp_datalen > 0)
-	    dl->dl_tcp_data = pkt + dl->dl_tcp_hl;
-	}
-    }
-  else if(dl->dl_ip_proto == IPPROTO_ICMP)
+    if (dl->dl_tcp_hl >= 20 && len >= dl->dl_tcp_hl)
     {
-      /* the absolute minimum ICMP header size is 8 bytes */
-      if(ICMP_MINLEN > len)
-	{
-	  return 0;
-	}
+      off = 20;
+      while (off < dl->dl_tcp_hl)
+      {
+        tmp = pkt + off;
 
-      icmp4 = (struct icmp *)pkt;
-      dl->dl_icmp_type = icmp4->icmp_type;
-      dl->dl_icmp_code = icmp4->icmp_code;
+        if (tmp[0] == 0) /* End of option list */
+          break;
 
-      switch(dl->dl_icmp_type)
-	{
-	case ICMP_UNREACH:
-	case ICMP_TIMXCEED:
-	  if(ICMP_MINLEN + (int)sizeof(struct ip) > len)
-	    {
-	      return 0;
-	    }
+        if (tmp[0] == 1) /* no-op */
+        {
+          off++;
+          continue;
+        }
 
-	  if(dl->dl_icmp_type == ICMP_UNREACH &&
-	     dl->dl_icmp_code == ICMP_UNREACH_NEEDFRAG)
-	    {
-	      dl->dl_icmp_nhmtu = ntohs(icmp4->icmp_nextmtu);
-	    }
+        if (tmp[1] == 0)
+          break;
 
-	  ip4 = &icmp4->icmp_ip;
+        /* make sure the option can be extracted */
+        if (off + tmp[1] > dl->dl_tcp_hl)
+          break;
 
-	  dl->dl_icmp_ip_proto = ip4->ip_p;
-	  dl->dl_icmp_ip_size  = ntohs(ip4->ip_len);
-	  dl->dl_icmp_ip_id    = ntohs(ip4->ip_id);
-	  dl->dl_icmp_ip_tos   = ip4->ip_tos;
-	  dl->dl_icmp_ip_ttl   = ip4->ip_ttl;
-	  dl->dl_icmp_ip_src   = (uint8_t *)&ip4->ip_src;
-	  dl->dl_icmp_ip_dst   = (uint8_t *)&ip4->ip_dst;
+        if (tmp[0] == 2 && tmp[1] == 4) /* mss option */
+          dl->dl_tcp_mss = bytes_ntohs (tmp + 2);
 
-	  /*
-	   * the ICMP response should include the IP header and the first
-	   * 8 bytes of the transport header.
-	   */
+        if (tmp[0] == 4 && tmp[1] == 2) /* sack permitted option */
+          dl->dl_tcp_opts |= SCAMPER_DL_TCP_OPT_SACKP;
+
+        if (tmp[0] == 8 && tmp[1] == 10) /* timestamps */
+        {
+          dl->dl_tcp_opts |= SCAMPER_DL_TCP_OPT_TS;
+          dl->dl_tcp_tsval = bytes_ntohl (tmp + 2);
+          dl->dl_tcp_tsecr = bytes_ntohl (tmp + 6);
+        }
+
+        if (tmp[0] == 5)
+        {
+          if (tmp[1] == 10 || tmp[1] == 18 || tmp[1] == 26 || tmp[1] == 34)
+          {
+            dl->dl_tcp_sack_edgec = (tmp[1] - 2) / 4;
+            for (i = 0; i < (tmp[1] - 2) / 4; i++)
+              dl->dl_tcp_sack_edges[i] = bytes_ntohl (tmp + 2 + (i * 4));
+          }
+          else
+          {
+            dl->dl_tcp_sack_edgec = -1;
+          }
+        }
+
+        if (tmp[0] == 34 && tmp[1] >= 2)
+        {
+          dl->dl_tcp_opts |= SCAMPER_DL_TCP_OPT_FO;
+          dl->dl_tcp_fo_cookielen = tmp[1] - 2;
+          for (i = 0; i < dl->dl_tcp_fo_cookielen; i++)
+            dl->dl_tcp_fo_cookie[i] = tmp[2 + i];
+        }
+
+        if (tmp[0] == 254 && tmp[1] >= 4 && bytes_ntohs (tmp + 2) == 0xF989)
+        {
+          dl->dl_tcp_opts |= SCAMPER_DL_TCP_OPT_FO_EXP;
+          dl->dl_tcp_fo_cookielen = tmp[1] - 4;
+          for (i = 0; i < dl->dl_tcp_fo_cookielen; i++)
+            dl->dl_tcp_fo_cookie[i] = tmp[4 + i];
+        }
+
+        off += tmp[1];
+      }
+
+      dl->dl_tcp_datalen = dl->dl_ip_size - dl->dl_ip_hl - dl->dl_tcp_hl;
+      if (dl->dl_tcp_datalen > 0)
+        dl->dl_tcp_data = pkt + dl->dl_tcp_hl;
+    }
+  }
+  else if (dl->dl_ip_proto == IPPROTO_ICMP)
+  {
+    /* the absolute minimum ICMP header size is 8 bytes */
+    if (ICMP_MINLEN > len)
+    {
+      return 0;
+    }
+
+    icmp4 = (struct icmp*) pkt;
+    dl->dl_icmp_type = icmp4->icmp_type;
+    dl->dl_icmp_code = icmp4->icmp_code;
+
+    switch (dl->dl_icmp_type)
+    {
+      case ICMP_UNREACH:
+      case ICMP_TIMXCEED:
+        if (ICMP_MINLEN + (int) sizeof(struct ip) > len)
+        {
+          return 0;
+        }
+
+        if (dl->dl_icmp_type == ICMP_UNREACH
+            && dl->dl_icmp_code == ICMP_UNREACH_NEEDFRAG)
+        {
+          dl->dl_icmp_nhmtu = ntohs (icmp4->icmp_nextmtu);
+        }
+
+        ip4 = &icmp4->icmp_ip;
+
+        dl->dl_icmp_ip_proto = ip4->ip_p;
+        dl->dl_icmp_ip_size = ntohs (ip4->ip_len);
+        dl->dl_icmp_ip_id = ntohs (ip4->ip_id);
+        dl->dl_icmp_ip_tos = ip4->ip_tos;
+        dl->dl_icmp_ip_ttl = ip4->ip_ttl;
+        dl->dl_icmp_ip_src = (uint8_t*) &ip4->ip_src;
+        dl->dl_icmp_ip_dst = (uint8_t*) &ip4->ip_dst;
+
+        /*
+         * the ICMP response should include the IP header and the first
+         * 8 bytes of the transport header.
+         */
 #ifndef _WIN32
-	  if((size_t)(ICMP_MINLEN + (ip4->ip_hl << 2) + 8) > len)
+        if ((size_t) (ICMP_MINLEN + (ip4->ip_hl << 2) + 8) > len)
 #else
 	  if((size_t)(ICMP_MINLEN + ((ip4->ip_vhl & 0xf) << 2) + 8) > len)
 #endif
-	    {
-	      return 0;
-	    }
+        {
+          return 0;
+        }
 
-	  pkt = (uint8_t *)ip4;
+        pkt = (uint8_t*) ip4;
 
 #ifndef _WIN32
-	  iplen = (ip4->ip_hl << 2);
+        iplen = (ip4->ip_hl << 2);
 #else
 	  iplen = ((ip4->ip_vhl & 0xf) << 2);
 #endif
 
-	  pkt += iplen;
+        pkt += iplen;
 
-	  if(dl->dl_icmp_ip_proto == IPPROTO_UDP)
-	    {
-	      udp = (struct udphdr *)pkt;
-	      dl->dl_icmp_udp_sport = ntohs(udp->uh_sport);
-	      dl->dl_icmp_udp_dport = ntohs(udp->uh_dport);
-	      dl->dl_icmp_udp_sum   = udp->uh_sum;
-	    }
-	  else if(dl->dl_icmp_ip_proto == IPPROTO_ICMP)
-	    {
-	      icmp4 = (struct icmp *)pkt;
-	      dl->dl_icmp_icmp_type = icmp4->icmp_type;
-	      dl->dl_icmp_icmp_code = icmp4->icmp_code;
-	      dl->dl_icmp_icmp_id   = ntohs(icmp4->icmp_id);
-	      dl->dl_icmp_icmp_seq  = ntohs(icmp4->icmp_seq);
-	    }
-	  else if(dl->dl_icmp_ip_proto == IPPROTO_TCP)
-	    {
-	      tcp = (struct tcphdr *)pkt;
-	      dl->dl_icmp_tcp_sport = ntohs(tcp->th_sport);
-	      dl->dl_icmp_tcp_dport = ntohs(tcp->th_dport);
-	      dl->dl_icmp_tcp_seq   = ntohl(tcp->th_seq);
-	    }
-	  break;
+        if (dl->dl_icmp_ip_proto == IPPROTO_UDP)
+        {
+          udp = (struct udphdr*) pkt;
+          dl->dl_icmp_udp_sport = ntohs (udp->uh_sport);
+          dl->dl_icmp_udp_dport = ntohs (udp->uh_dport);
+          dl->dl_icmp_udp_sum = udp->uh_sum;
+        }
+        else if (dl->dl_icmp_ip_proto == IPPROTO_ICMP)
+        {
+          icmp4 = (struct icmp*) pkt;
+          dl->dl_icmp_icmp_type = icmp4->icmp_type;
+          dl->dl_icmp_icmp_code = icmp4->icmp_code;
+          dl->dl_icmp_icmp_id = ntohs (icmp4->icmp_id);
+          dl->dl_icmp_icmp_seq = ntohs (icmp4->icmp_seq);
+        }
+        else if (dl->dl_icmp_ip_proto == IPPROTO_TCP)
+        {
+          tcp = (struct tcphdr*) pkt;
+          dl->dl_icmp_tcp_sport = ntohs (tcp->th_sport);
+          dl->dl_icmp_tcp_dport = ntohs (tcp->th_dport);
+          dl->dl_icmp_tcp_seq = ntohl (tcp->th_seq);
+        }
+        break;
 
-	case ICMP_ECHOREPLY:
-	case ICMP_ECHO:
-	case ICMP_TSTAMPREPLY:
-	case ICMP_TSTAMP:
-	  dl->dl_icmp_id  = ntohs(icmp4->icmp_id);
-	  dl->dl_icmp_seq = ntohs(icmp4->icmp_seq);
-	  break;
+      case ICMP_ECHOREPLY:
+      case ICMP_ECHO:
+      case ICMP_TSTAMPREPLY:
+      case ICMP_TSTAMP:
+        dl->dl_icmp_id = ntohs (icmp4->icmp_id);
+        dl->dl_icmp_seq = ntohs (icmp4->icmp_seq);
+        break;
 
-	default:
-	  return 0;
-	}
-
-      dl->dl_flags |= SCAMPER_DL_REC_FLAG_TRANS;
+      default:
+        return 0;
     }
-  else if(dl->dl_ip_proto == IPPROTO_ICMPV6)
-    {
-      /* the absolute minimum ICMP header size is 8 bytes */
-      if((int)sizeof(struct icmp6_hdr) > len)
-	{
-	  return 0;
-	}
 
-      icmp6 = (struct icmp6_hdr *)pkt;
-      dl->dl_icmp_type = icmp6->icmp6_type;
-      dl->dl_icmp_code = icmp6->icmp6_code;
-      pkt += sizeof(struct icmp6_hdr);
-      len -= sizeof(struct icmp6_hdr);
-
-      switch(dl->dl_icmp_type)
-	{
-	case ICMP6_TIME_EXCEEDED:
-	case ICMP6_DST_UNREACH:
-	case ICMP6_PACKET_TOO_BIG:
-	  if((int)sizeof(struct ip6_hdr) + 8 > len)
-	    {
-	      return 0;
-	    }
-
-	  if(dl->dl_icmp_type == ICMP6_PACKET_TOO_BIG)
-	    {
-#ifndef _WIN32
-	      dl->dl_icmp_nhmtu = (ntohl(icmp6->icmp6_mtu) % 0xffff);
-#else
-	      dl->dl_icmp_nhmtu = ntohs(icmp6->icmp6_seq);
-#endif
-	    }
-
-	  ip6 = (struct ip6_hdr *)pkt;
-	  pkt += sizeof(struct ip6_hdr);
-
-	  dl->dl_icmp_ip_proto = ip6->ip6_nxt;
-	  dl->dl_icmp_ip_size  = ntohs(ip6->ip6_plen) + sizeof(struct ip6_hdr);
-	  dl->dl_icmp_ip_hlim  = ip6->ip6_hlim;
-	  dl->dl_icmp_ip_flow  = ntohl(ip6->ip6_flow) & 0xfffff;
-	  dl->dl_icmp_ip_src = (uint8_t *)&ip6->ip6_src;
-	  dl->dl_icmp_ip_dst = (uint8_t *)&ip6->ip6_dst;
-
-	  if(dl->dl_icmp_ip_proto == IPPROTO_UDP)
-	    {
-	      udp = (struct udphdr *)pkt;
-	      dl->dl_icmp_udp_sport = ntohs(udp->uh_sport);
-	      dl->dl_icmp_udp_dport = ntohs(udp->uh_dport);
-	      dl->dl_icmp_udp_sum   = udp->uh_sum;
-	    }
-	  else if(dl->dl_icmp_ip_proto == IPPROTO_ICMPV6)
-	    {
-	      icmp6 = (struct icmp6_hdr *)pkt;
-	      dl->dl_icmp_icmp_type = icmp6->icmp6_type;
-	      dl->dl_icmp_icmp_code = icmp6->icmp6_code;
-	      dl->dl_icmp_icmp_id   = ntohs(icmp6->icmp6_id);
-	      dl->dl_icmp_icmp_seq  = ntohs(icmp6->icmp6_seq);
-	    }
-	  else if(dl->dl_icmp_ip_proto == IPPROTO_TCP)
-	    {
-	      tcp = (struct tcphdr *)pkt;
-	      dl->dl_icmp_tcp_sport = ntohs(tcp->th_sport);
-	      dl->dl_icmp_tcp_dport = ntohs(tcp->th_dport);
-	      dl->dl_icmp_tcp_seq   = ntohl(tcp->th_seq);
-	    }
-	  break;
-
-	case ICMP6_ECHO_REPLY:
-	case ICMP6_ECHO_REQUEST:
-	  dl->dl_icmp_id  = ntohs(icmp6->icmp6_id);
-	  dl->dl_icmp_seq = ntohs(icmp6->icmp6_seq);
-	  break;
-
-	case ND_NEIGHBOR_ADVERT:
-	  dl->dl_icmp6_nd_target   = pkt;
-	  dl->dl_icmp6_nd_opts     = pkt + 16;
-	  dl->dl_icmp6_nd_opts_len = len - 16;
-	  break;
-
-	default:
-	  return 0;
-	}
-
-      dl->dl_flags |= SCAMPER_DL_REC_FLAG_TRANS;
-    }
-  else
+    dl->dl_flags |= SCAMPER_DL_REC_FLAG_TRANS;
+  }
+  else if (dl->dl_ip_proto == IPPROTO_ICMPV6)
+  {
+    /* the absolute minimum ICMP header size is 8 bytes */
+    if ((int) sizeof(struct icmp6_hdr) > len)
     {
       return 0;
     }
+
+    icmp6 = (struct icmp6_hdr*) pkt;
+    dl->dl_icmp_type = icmp6->icmp6_type;
+    dl->dl_icmp_code = icmp6->icmp6_code;
+    pkt += sizeof(struct icmp6_hdr);
+    len -= sizeof(struct icmp6_hdr);
+
+    switch (dl->dl_icmp_type)
+    {
+      case ICMP6_TIME_EXCEEDED:
+      case ICMP6_DST_UNREACH:
+      case ICMP6_PACKET_TOO_BIG:
+        if ((int) sizeof(struct ip6_hdr) + 8 > len)
+        {
+          return 0;
+        }
+
+        if (dl->dl_icmp_type == ICMP6_PACKET_TOO_BIG)
+        {
+#ifndef _WIN32
+          dl->dl_icmp_nhmtu = (ntohl (icmp6->icmp6_mtu) % 0xffff);
+#else
+          dl->dl_icmp_nhmtu = ntohs(icmp6->icmp6_seq);
+#endif
+        }
+
+        ip6 = (struct ip6_hdr *)pkt;
+        pkt += sizeof(struct ip6_hdr);
+
+        dl->dl_icmp_ip_proto = ip6->ip6_nxt;
+        dl->dl_icmp_ip_size = ntohs(ip6->ip6_plen) + sizeof(struct ip6_hdr);
+        dl->dl_icmp_ip_hlim = ip6->ip6_hlim;
+        dl->dl_icmp_ip_flow = ntohl(ip6->ip6_flow) & 0xfffff;
+        dl->dl_icmp_ip_src = (uint8_t *)&ip6->ip6_src;
+        dl->dl_icmp_ip_dst = (uint8_t *)&ip6->ip6_dst;
+
+        if(dl->dl_icmp_ip_proto == IPPROTO_UDP)
+        {
+          udp = (struct udphdr *)pkt;
+          dl->dl_icmp_udp_sport = ntohs(udp->uh_sport);
+          dl->dl_icmp_udp_dport = ntohs(udp->uh_dport);
+          dl->dl_icmp_udp_sum = udp->uh_sum;
+        }
+        else if(dl->dl_icmp_ip_proto == IPPROTO_ICMPV6)
+        {
+          icmp6 = (struct icmp6_hdr *)pkt;
+          dl->dl_icmp_icmp_type = icmp6->icmp6_type;
+          dl->dl_icmp_icmp_code = icmp6->icmp6_code;
+          dl->dl_icmp_icmp_id = ntohs(icmp6->icmp6_id);
+          dl->dl_icmp_icmp_seq = ntohs(icmp6->icmp6_seq);
+        }
+        else if(dl->dl_icmp_ip_proto == IPPROTO_TCP)
+        {
+          tcp = (struct tcphdr *)pkt;
+          dl->dl_icmp_tcp_sport = ntohs(tcp->th_sport);
+          dl->dl_icmp_tcp_dport = ntohs(tcp->th_dport);
+          dl->dl_icmp_tcp_seq = ntohl(tcp->th_seq);
+        }
+        break;
+
+        case ICMP6_ECHO_REPLY:
+        case ICMP6_ECHO_REQUEST:
+        dl->dl_icmp_id = ntohs(icmp6->icmp6_id);
+        dl->dl_icmp_seq = ntohs(icmp6->icmp6_seq);
+        break;
+
+        case ND_NEIGHBOR_ADVERT:
+        dl->dl_icmp6_nd_target = pkt;
+        dl->dl_icmp6_nd_opts = pkt + 16;
+        dl->dl_icmp6_nd_opts_len = len - 16;
+        break;
+
+        default:
+        return 0;
+      }
+
+    dl->dl_flags |= SCAMPER_DL_REC_FLAG_TRANS;
+  }
+  else
+  {
+    return 0;
+  }
 
   return 1;
 }
@@ -548,12 +548,12 @@ static int dlt_raw_cb(scamper_dl_rec_t *dl, uint8_t *pkt, size_t len)
 {
   int ret;
 
-  if((ret = dl_parse_ip(dl, pkt, len)) != 0)
-    {
-      dl->dl_type = SCAMPER_DL_TYPE_RAW;
-      dl->dl_net_raw = pkt;
-      dl->dl_net_rawlen = len;
-    }
+  if ((ret = dl_parse_ip (dl, pkt, len)) != 0)
+  {
+    dl->dl_type = SCAMPER_DL_TYPE_RAW;
+    dl->dl_net_raw = pkt;
+    dl->dl_net_rawlen = len;
+  }
 
   return ret;
 }
@@ -611,47 +611,54 @@ static int dlt_en10mb_cb(scamper_dl_rec_t *dl, uint8_t *pkt, size_t len)
   size_t off;
 
   /* ensure the packet holds at least the length of the ethernet header */
-  if(len <= 14)
+  if (len <= 14)
     return 0;
 
-  u16 = bytes_ntohs(pkt+12);
-  if(u16 == ETHERTYPE_IP || u16 == ETHERTYPE_IPV6)
-    {
-      if(dl_parse_ip(dl, pkt+14, len-14) == 0)
-	return 0;
-    }
-  else if(u16 == ETHERTYPE_ARP)
-    {
-      /* need to at least have a header */
-      if(14 + 8 >= len)
-	return 0;
+  u16 = bytes_ntohs (pkt + 12);
+  if (u16 == ETHERTYPE_IP || u16 == ETHERTYPE_IPV6)
+  {
+    if (dl_parse_ip (dl, pkt + 14, len - 14) == 0)
+      return 0;
+  }
+  else if (u16 == ETHERTYPE_ARP)
+  {
+    /* need to at least have a header */
+    if (14 + 8 >= len)
+      return 0;
 
-      off = 14;
-      dl->dl_arp_hrd = bytes_ntohs(pkt+off); off += 2;
-      dl->dl_arp_pro = bytes_ntohs(pkt+off); off += 2;
-      dl->dl_arp_hln = pkt[off++];
-      dl->dl_arp_pln = pkt[off++];
-      dl->dl_arp_op  = bytes_ntohs(pkt+off); off += 2;
+    off = 14;
+    dl->dl_arp_hrd = bytes_ntohs (pkt + off);
+    off += 2;
+    dl->dl_arp_pro = bytes_ntohs (pkt + off);
+    off += 2;
+    dl->dl_arp_hln = pkt[off++];
+    dl->dl_arp_pln = pkt[off++];
+    dl->dl_arp_op = bytes_ntohs (pkt + off);
+    off += 2;
 
-      /* make sure all the bits are found after the arp header */
-      if(14 + 8 + (dl->dl_arp_hln*2) + (dl->dl_arp_pln*2) > len)
-	return 0;
+    /* make sure all the bits are found after the arp header */
+    if (14 + 8 + (dl->dl_arp_hln * 2) + (dl->dl_arp_pln * 2) > len)
+      return 0;
 
-      dl->dl_arp_sha = pkt+off; off += dl->dl_arp_hln;
-      dl->dl_arp_spa = pkt+off; off += dl->dl_arp_pln;
-      dl->dl_arp_tha = pkt+off; off += dl->dl_arp_hln;
-      dl->dl_arp_tpa = pkt+off;
+    dl->dl_arp_sha = pkt + off;
+    off += dl->dl_arp_hln;
+    dl->dl_arp_spa = pkt + off;
+    off += dl->dl_arp_pln;
+    dl->dl_arp_tha = pkt + off;
+    off += dl->dl_arp_hln;
+    dl->dl_arp_tpa = pkt + off;
 
-      /* completed record is an arp frame */
-      dl->dl_net_type = SCAMPER_DL_REC_NET_TYPE_ARP;
-    }
-  else return 0;
+    /* completed record is an arp frame */
+    dl->dl_net_type = SCAMPER_DL_REC_NET_TYPE_ARP;
+  }
+  else
+    return 0;
 
-  dl->dl_type       = SCAMPER_DL_TYPE_ETHERNET;
+  dl->dl_type = SCAMPER_DL_TYPE_ETHERNET;
   dl->dl_lladdr_dst = pkt;
-  dl->dl_lladdr_src = pkt+6;
-  dl->dl_net_raw    = pkt+14;
-  dl->dl_net_rawlen = len-14;
+  dl->dl_lladdr_src = pkt + 6;
+  dl->dl_net_raw = pkt + 14;
+  dl->dl_net_rawlen = len - 14;
 
   return 1;
 }
@@ -670,25 +677,26 @@ static int dlt_firewire_cb(scamper_dl_rec_t *dl, uint8_t *pkt, size_t len)
   uint16_t type;
 
   /* ensure the packet holds at least the length of the firewire header */
-  if(len <= 18)
+  if (len <= 18)
+  {
+    return 0;
+  }
+
+  memcpy (&type, pkt + 16, 2);
+  type = ntohs (type);
+  if (type == ETHERTYPE_IP || type == ETHERTYPE_IPV6)
+  {
+    if ((ret = dl_parse_ip (dl, pkt + 18, len - 18)) != 0)
     {
-      return 0;
+      dl->dl_type = SCAMPER_DL_TYPE_FIREWIRE;
+      dl->dl_lladdr_dst = pkt;
+      dl->dl_lladdr_src = pkt + 8;
+      dl->dl_net_raw = pkt + 18;
+      dl->dl_net_rawlen = len - 18;
     }
 
-  memcpy(&type, pkt+16, 2); type = ntohs(type);
-  if(type == ETHERTYPE_IP || type == ETHERTYPE_IPV6)
-    {
-      if((ret = dl_parse_ip(dl, pkt+18, len-18)) != 0)
-	{
-	  dl->dl_type = SCAMPER_DL_TYPE_FIREWIRE;
-	  dl->dl_lladdr_dst = pkt;
-	  dl->dl_lladdr_src = pkt + 8;
-	  dl->dl_net_raw    = pkt + 18;
-	  dl->dl_net_rawlen = len - 18;
-	}
-
-      return ret;
-    }
+    return ret;
+  }
 
   return 0;
 }
@@ -1015,23 +1023,23 @@ static int dl_linux_open(const int ifindex)
   int fd;
 
   /* open the socket in non cooked mode for now */
-  if((fd = socket(PF_PACKET, SOCK_RAW, htons(ETH_P_ALL))) == -1)
-    {
-      printerror(__func__, "could not open PF_PACKET");
-      return -1;
-    }
+  if ((fd = socket (PF_PACKET, SOCK_RAW, htons (ETH_P_ALL))) == -1)
+  {
+    printerror (__func__, "could not open PF_PACKET");
+    return -1;
+  }
 
   /* scamper only wants packets on this interface */
-  memset(&sll, 0, sizeof(sll));
-  sll.sll_family   = AF_PACKET;
-  sll.sll_ifindex  = ifindex;
-  sll.sll_protocol = htons(ETH_P_ALL);
-  if(bind(fd, (struct sockaddr *)&sll, sizeof(sll)) == -1)
-    {
-      printerror(__func__, "could not bind to %d", ifindex);
-      close(fd);
-      return -1;
-    }
+  memset (&sll, 0, sizeof(sll));
+  sll.sll_family = AF_PACKET;
+  sll.sll_ifindex = ifindex;
+  sll.sll_protocol = htons (ETH_P_ALL);
+  if (bind (fd, (struct sockaddr*) &sll, sizeof(sll)) == -1)
+  {
+    printerror (__func__, "could not bind to %d", ifindex);
+    close (fd);
+    return -1;
+  }
 
   return fd;
 }
@@ -1042,35 +1050,35 @@ static int dl_linux_node_init(const scamper_fd_t *fdn, scamper_dl_t *node)
   char ifname[IFNAMSIZ];
   int fd, ifindex;
 
-  if(scamper_fd_ifindex(fdn, &ifindex) != 0)
-    {
-      goto err;
-    }
+  if (scamper_fd_ifindex (fdn, &ifindex) != 0)
+  {
+    goto err;
+  }
 
-  if((fd = scamper_fd_fd_get(fdn)) < 0)
-    {
-      goto err;
-    }
+  if ((fd = scamper_fd_fd_get (fdn)) < 0)
+  {
+    goto err;
+  }
 
-  if(if_indextoname(ifindex, ifname) == NULL)
-    {
-      printerror(__func__, "if_indextoname %d failed", ifindex);
-      goto err;
-    }
+  if (if_indextoname (ifindex, ifname) == NULL)
+  {
+    printerror (__func__, "if_indextoname %d failed", ifindex);
+    goto err;
+  }
 
   /* find out what type of datalink the interface has */
-  memcpy(ifreq.ifr_name, ifname, sizeof(ifreq.ifr_name));
-  if(ioctl(fd, SIOCGIFHWADDR, &ifreq) == -1)
-    {
-      printerror(__func__, "%s SIOCGIFHWADDR failed", ifname);
-      goto err;
-    }
+  memcpy (ifreq.ifr_name, ifname, sizeof(ifreq.ifr_name));
+  if (ioctl (fd, SIOCGIFHWADDR, &ifreq) == -1)
+  {
+    printerror (__func__, "%s SIOCGIFHWADDR failed", ifname);
+    goto err;
+  }
 
   node->type = ifreq.ifr_hwaddr.sa_family;
 
   /* scamper can only deal with ethernet datalinks at this time */
-  switch(node->type)
-    {
+  switch (node->type)
+  {
     case ARPHRD_ETHER:
       node->dlt_cb = dlt_en10mb_cb;
       node->tx_type = SCAMPER_DL_TX_ETHERNET;
@@ -1103,130 +1111,131 @@ static int dl_linux_node_init(const scamper_fd_t *fdn, scamper_dl_t *node)
 #endif
 
     default:
-      scamper_debug(__func__, "%s unhandled datalink %d", ifname, node->type);
+      scamper_debug (__func__, "%s unhandled datalink %d", ifname, node->type);
       goto err;
-    }
+  }
 
   return 0;
 
- err:
+err:
   return -1;
 }
 
 static int dl_linux_read(const int fd, scamper_dl_t *node)
 {
-  scamper_dl_rec_t   dl;
-  ssize_t            len;
+  scamper_dl_rec_t dl;
+  ssize_t len;
   struct sockaddr_ll from;
-  socklen_t          fromlen;
+  socklen_t fromlen;
 
   fromlen = sizeof(from);
-  while((len = recvfrom(fd, readbuf, readbuf_len, MSG_TRUNC,
-			(struct sockaddr *)&from, &fromlen)) == -1)
+  while ((len = recvfrom (fd, readbuf, readbuf_len, MSG_TRUNC,
+                          (struct sockaddr*) &from, &fromlen)) == -1)
+  {
+    if (errno == EINTR)
     {
-      if(errno == EINTR)
-	{
-	  fromlen = sizeof(from);
-	  continue;
-	}
-      if(errno == EAGAIN)
-	{
-	  return 0;
-	}
-      printerror(__func__, "read %d bytes from fd %d failed", readbuf_len, fd);
-      return -1;
+      fromlen = sizeof(from);
+      continue;
     }
+    if (errno == EAGAIN)
+    {
+      return 0;
+    }
+    printerror (__func__, "read %d bytes from fd %d failed", readbuf_len, fd);
+    return -1;
+  }
 
   /* sanity check the packet length */
-  if(len > readbuf_len) len = readbuf_len;
+  if (len > readbuf_len)
+    len = readbuf_len;
 
   /* reset the datalink record */
-  memset(&dl, 0, sizeof(dl));
+  memset (&dl, 0, sizeof(dl));
 
   /* record the ifindex now, as the cb routine may need it */
-  if(scamper_fd_ifindex(node->fdn, &dl.dl_ifindex) != 0)
-    {
-      return -1;
-    }
+  if (scamper_fd_ifindex (node->fdn, &dl.dl_ifindex) != 0)
+  {
+    return -1;
+  }
 
   /* if the packet passes the filter, we need to get the time it was rx'd */
-  if(node->dlt_cb(&dl, readbuf, len))
+  if (node->dlt_cb (&dl, readbuf, len))
+  {
+    /* scamper treats the failure of this ioctl as non-fatal */
+    if (ioctl (fd, SIOCGSTAMP, &dl.dl_tv) == 0)
     {
-      /* scamper treats the failure of this ioctl as non-fatal */
-      if(ioctl(fd, SIOCGSTAMP, &dl.dl_tv) == 0)
-	{
-	  dl.dl_flags |= SCAMPER_DL_REC_FLAG_TIMESTAMP;
-	}
-      else
-	{
-	  printerror(__func__, "could not SIOCGSTAMP on fd %d", fd);
-	}
-
-      scamper_task_handledl(&dl);
+      dl.dl_flags |= SCAMPER_DL_REC_FLAG_TIMESTAMP;
     }
+    else
+    {
+      printerror (__func__, "could not SIOCGSTAMP on fd %d", fd);
+    }
+
+    scamper_task_handledl (&dl);
+  }
 
   return 0;
 }
 
-static int dl_linux_tx(const scamper_dl_t *node,
-		       const uint8_t *pkt, const size_t len)
+static int dl_linux_tx(const scamper_dl_t *node, const uint8_t *pkt,
+                       const size_t len)
 {
   struct sockaddr_ll sll;
-  struct sockaddr *sa = (struct sockaddr *)&sll;
+  struct sockaddr *sa = (struct sockaddr*) &sll;
   ssize_t wb;
   int fd, ifindex;
 
-  if(scamper_fd_ifindex(node->fdn, &ifindex) != 0)
-    {
-      return -1;
-    }
+  if (scamper_fd_ifindex (node->fdn, &ifindex) != 0)
+  {
+    return -1;
+  }
 
-  memset(&sll, 0, sizeof(sll));
+  memset (&sll, 0, sizeof(sll));
   sll.sll_family = AF_PACKET;
   sll.sll_ifindex = ifindex;
 
-  if(node->type == ARPHRD_SIT)
-    sll.sll_protocol = htons(ETH_P_IPV6);
+  if (node->type == ARPHRD_SIT)
+    sll.sll_protocol = htons (ETH_P_IPV6);
   else
-    sll.sll_protocol = htons(ETH_P_ALL);
+    sll.sll_protocol = htons (ETH_P_ALL);
 
-  fd = scamper_fd_fd_get(node->fdn);
+  fd = scamper_fd_fd_get (node->fdn);
 
-  if((wb = sendto(fd, pkt, len, 0, sa, sizeof(sll))) < (ssize_t)len)
-    {
-      if(wb == -1)
-	printerror(__func__, "%d bytes failed", len);
-      else
-	scamper_debug(__func__, "%d bytes sent of %d total", wb, len);
-      return -1;
-    }
+  if ((wb = sendto (fd, pkt, len, 0, sa, sizeof(sll))) < (ssize_t) len)
+  {
+    if (wb == -1)
+      printerror (__func__, "%d bytes failed", len);
+    else
+      scamper_debug (__func__, "%d bytes sent of %d total", wb, len);
+    return -1;
+  }
 
   return 0;
 }
 
-static int dl_linux_filter(scamper_dl_t *node,
-			   struct sock_filter *insns, int len)
+static int dl_linux_filter(scamper_dl_t *node, struct sock_filter *insns,
+                           int len)
 {
   struct sock_fprog prog;
   int i;
 
-  for(i=0; i<len; i++)
+  for (i = 0; i < len; i++)
+  {
+    if (insns[i].code == (BPF_RET + BPF_K) && insns[i].k > 0)
     {
-      if(insns[i].code == (BPF_RET+BPF_K) && insns[i].k > 0)
-	{
-	  insns[i].k = 65535;
-	}
+      insns[i].k = 65535;
     }
+  }
 
-  prog.len    = len;
+  prog.len = len;
   prog.filter = insns;
 
-  if(setsockopt(scamper_fd_fd_get(node->fdn), SOL_SOCKET, SO_ATTACH_FILTER,
-		(caddr_t)&prog, sizeof(prog)) == -1)
-    {
-      printerror(__func__, "SO_ATTACH_FILTER failed");
-      return -1;
-    }
+  if (setsockopt (scamper_fd_fd_get (node->fdn), SOL_SOCKET, SO_ATTACH_FILTER,
+                  (caddr_t) &prog, sizeof(prog)) == -1)
+  {
+    printerror (__func__, "SO_ATTACH_FILTER failed");
+    return -1;
+  }
 
   return 0;
 }
@@ -1569,9 +1578,9 @@ static void bpf_stmt(struct sock_filter *insn, uint16_t code, uint32_t k)
 #endif
 {
   insn->code = code;
-  insn->jt   = 0;
-  insn->jf   = 0;
-  insn->k    = k;
+  insn->jt = 0;
+  insn->jf = 0;
+  insn->k = k;
   return;
 }
 
@@ -1583,26 +1592,26 @@ static int dl_filter(scamper_dl_t *node)
   struct sock_filter insns[1];
 #endif
 
-  bpf_stmt(&insns[0], BPF_RET+BPF_K, 65535);
+  bpf_stmt (&insns[0], BPF_RET + BPF_K, 65535);
 
 #if defined(HAVE_BPF)
   if(dl_bpf_filter(node, insns, 1) == -1)
 #elif defined(__linux__)
-  if(dl_linux_filter(node, insns, 1) == -1)
+  if (dl_linux_filter (node, insns, 1) == -1)
 #endif
-    {
-      return -1;
-    }
+  {
+    return -1;
+  }
 
-   return 0;
+  return 0;
 }
 #endif
 
 int scamper_dl_rec_src(scamper_dl_rec_t *dl, scamper_addr_t *addr)
 {
-  if(dl->dl_af == AF_INET)
+  if (dl->dl_af == AF_INET)
     addr->type = SCAMPER_ADDR_TYPE_IPV4;
-  else if(dl->dl_af == AF_INET6)
+  else if (dl->dl_af == AF_INET6)
     addr->type = SCAMPER_ADDR_TYPE_IPV6;
   else
     return -1;
@@ -1613,9 +1622,9 @@ int scamper_dl_rec_src(scamper_dl_rec_t *dl, scamper_addr_t *addr)
 
 int scamper_dl_rec_icmp_ip_dst(scamper_dl_rec_t *dl, scamper_addr_t *addr)
 {
-  if(dl->dl_af == AF_INET)
+  if (dl->dl_af == AF_INET)
     addr->type = SCAMPER_ADDR_TYPE_IPV4;
-  else if(dl->dl_af == AF_INET6)
+  else if (dl->dl_af == AF_INET6)
     addr->type = SCAMPER_ADDR_TYPE_IPV6;
   else
     return -1;
@@ -1953,7 +1962,7 @@ void scamper_dl_read_cb(const int fd, void *param)
 #if defined(HAVE_BPF)
   dl_bpf_read(fd, (scamper_dl_t *)param);
 #elif defined(__linux__)
-  dl_linux_read(fd, (scamper_dl_t *)param);
+  dl_linux_read (fd, (scamper_dl_t*) param);
 #elif defined(HAVE_DLPI)
   dl_dlpi_read(fd, (scamper_dl_t *)param);
 #endif
@@ -1964,7 +1973,7 @@ void scamper_dl_read_cb(const int fd, void *param)
 void scamper_dl_state_free(scamper_dl_t *dl)
 {
   assert(dl != NULL);
-  free(dl);
+  free (dl);
   return;
 }
 
@@ -1975,52 +1984,52 @@ void scamper_dl_state_free(scamper_dl_t *dl)
  * initial setup tasks, then compile and set a filter to pick up the packets
  * scamper is responsible for transmitting.
  */
-scamper_dl_t *scamper_dl_state_alloc(scamper_fd_t *fdn)
+scamper_dl_t* scamper_dl_state_alloc(scamper_fd_t *fdn)
 {
   scamper_dl_t *dl = NULL;
 
-  if((dl = malloc_zero(sizeof(scamper_dl_t))) == NULL)
-    {
-      printerror(__func__, "malloc node failed");
-      goto err;
-    }
+  if ((dl = malloc_zero(sizeof(scamper_dl_t))) == NULL)
+  {
+    printerror (__func__, "malloc node failed");
+    goto err;
+  }
   dl->fdn = fdn;
 
 #if defined(HAVE_BPF)
   if(dl_bpf_node_init(fdn, dl) == -1)
 #elif defined(__linux__)
-  if(dl_linux_node_init(fdn, dl) == -1)
+  if (dl_linux_node_init (fdn, dl) == -1)
 #elif defined(HAVE_DLPI)
   if(dl_dlpi_node_init(fdn, dl) == -1)
 #endif
-    {
-      goto err;
-    }
+  {
+    goto err;
+  }
 
 #if defined(HAVE_BPF_FILTER)
-  dl_filter(dl);
+  dl_filter (dl);
 #endif
 
   return dl;
 
- err:
-  scamper_dl_state_free(dl);
+err:
+  scamper_dl_state_free (dl);
   return NULL;
 }
 
-int scamper_dl_tx(const scamper_dl_t *node,
-		  const uint8_t *pkt, const size_t len)
+int scamper_dl_tx(const scamper_dl_t *node, const uint8_t *pkt,
+                  const size_t len)
 {
 #if defined(HAVE_BPF)
   if(dl_bpf_tx(node, pkt, len) == -1)
 #elif defined(__linux__)
-  if(dl_linux_tx(node, pkt, len) == -1)
+  if (dl_linux_tx (node, pkt, len) == -1)
 #elif defined(HAVE_DLPI)
   if(dl_dlpi_tx(node, pkt, len) == -1)
 #endif
-    {
-      return -1;
-    }
+  {
+    return -1;
+  }
 
   return 0;
 }
@@ -2033,7 +2042,7 @@ int scamper_dl_tx_type(scamper_dl_t *dl)
 void scamper_dl_close(int fd)
 {
 #ifndef _WIN32
-  close(fd);
+  close (fd);
 #endif
   return;
 }
@@ -2049,7 +2058,7 @@ int scamper_dl_open_fd(const int ifindex)
 #if defined(HAVE_BPF)
   return dl_bpf_open(ifindex);
 #elif defined(__linux__)
-  return dl_linux_open(ifindex);
+  return dl_linux_open (ifindex);
 #elif defined(HAVE_DLPI)
   return dl_dlpi_open(ifindex);
 #elif defined(_WIN32)
@@ -2070,23 +2079,23 @@ int scamper_dl_open(const int ifindex)
 #if defined(WITHOUT_PRIVSEP)
   if((fd = scamper_dl_open_fd(ifindex)) == -1)
 #else
-  if((fd = scamper_privsep_open_datalink(ifindex)) == -1)
+  if ((fd = scamper_privsep_open_datalink (ifindex)) == -1)
 #endif
-    {
-      scamper_debug(__func__, "could not open ifindex %d", ifindex);
-      return -1;
-    }
+  {
+    scamper_debug (__func__, "could not open ifindex %d", ifindex);
+    return -1;
+  }
 
   return fd;
 }
 
 void scamper_dl_cleanup()
 {
-  if(readbuf != NULL)
-    {
-      free(readbuf);
-      readbuf = NULL;
-    }
+  if (readbuf != NULL)
+  {
+    free (readbuf);
+    readbuf = NULL;
+  }
 
   return;
 }
@@ -2100,12 +2109,12 @@ int scamper_dl_init()
     }
 #elif defined(__linux__)
   readbuf_len = 128;
-  if((readbuf = malloc_zero(readbuf_len)) == NULL)
-    {
-      printerror(__func__, "could not malloc readbuf");
-      readbuf_len = 0;
-      return -1;
-    }
+  if ((readbuf = malloc_zero(readbuf_len)) == NULL)
+  {
+    printerror (__func__, "could not malloc readbuf");
+    readbuf_len = 0;
+    return -1;
+  }
 #elif defined(HAVE_DLPI)
   readbuf_len = 65536; /* magic obtained from pcap-dlpi.c */
   if((readbuf = malloc_zero(readbuf_len)) == NULL)

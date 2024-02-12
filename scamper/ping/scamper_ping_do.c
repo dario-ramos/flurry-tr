@@ -176,7 +176,7 @@ static const scamper_option_in_t opts[] =
 
 static const int opts_cnt = SCAMPER_OPTION_COUNT(opts);
 
-const char* scamper_do_ping_usage (void)
+const char* scamper_do_ping_usage(void)
 {
   return "ping [-R] [-A tcp-ack] [-B payload] [-c count] [-C icmp-sum]\n"
       "     [-d dport] [-F sport] [-i wait-probe] [-m ttl] [-M pmtu]\n"
@@ -185,17 +185,17 @@ const char* scamper_do_ping_usage (void)
       "     [-T timestamp-option] [-W timeout] [-z tos]";
 }
 
-static scamper_ping_t* ping_getdata (const scamper_task_t *task)
+static scamper_ping_t* ping_getdata(const scamper_task_t *task)
 {
   return scamper_task_getdata (task);
 }
 
-static ping_state_t* ping_getstate (const scamper_task_t *task)
+static ping_state_t* ping_getstate(const scamper_task_t *task)
 {
   return scamper_task_getstate (task);
 }
 
-static void ping_stop (scamper_task_t *task, uint8_t reason, uint8_t data)
+static void ping_stop(scamper_task_t *task, uint8_t reason, uint8_t data)
 {
   scamper_ping_t *ping = ping_getdata (task);
   ping->stop_reason = reason;
@@ -204,14 +204,14 @@ static void ping_stop (scamper_task_t *task, uint8_t reason, uint8_t data)
   return;
 }
 
-static void ping_handleerror (scamper_task_t *task, int error)
+static void ping_handleerror(scamper_task_t *task, int error)
 {
   ping_stop (task, SCAMPER_PING_STOP_ERROR, error);
   return;
 }
 
-static scamper_addr_t* ping_addr (scamper_ping_t *ping, ping_state_t *state,
-                                  void *addr)
+static scamper_addr_t* ping_addr(scamper_ping_t *ping, ping_state_t *state,
+                                 void *addr)
 {
   if (scamper_addr_raw_cmp (ping->dst, addr) == 0)
     return scamper_addr_use (ping->dst);
@@ -229,7 +229,7 @@ static scamper_addr_t* ping_addr (scamper_ping_t *ping, ping_state_t *state,
   return scamper_addr_use (state->last_addr);
 }
 
-static uint16_t match_ipid (scamper_task_t *task, uint16_t ipid)
+static uint16_t match_ipid(scamper_task_t *task, uint16_t ipid)
 {
   scamper_ping_t *ping = ping_getdata (task);
   ping_state_t *state = ping_getstate (task);
@@ -249,7 +249,7 @@ static uint16_t match_ipid (scamper_task_t *task, uint16_t ipid)
   return seq;
 }
 
-static void do_ping_handle_dl (scamper_task_t *task, scamper_dl_rec_t *dl)
+static void do_ping_handle_dl(scamper_task_t *task, scamper_dl_rec_t *dl)
 {
   scamper_ping_t *ping = ping_getdata (task);
   ping_state_t *state = ping_getstate (task);
@@ -446,12 +446,12 @@ static void do_ping_handle_dl (scamper_task_t *task, scamper_dl_rec_t *dl)
 
   if (SCAMPER_DL_IS_TCP(dl))
   {
-    scamper_dl_rec_tcp_print (dl);
+    scamper_dl_rec_tcp_print(dl);
     reply->tcp_flags = dl->dl_tcp_flags;
   }
   else if (SCAMPER_DL_IS_ICMP(dl))
   {
-    scamper_dl_rec_icmp_print (dl);
+    scamper_dl_rec_icmp_print(dl);
     reply->icmp_type = dl->dl_icmp_type;
     reply->icmp_code = dl->dl_icmp_code;
   }
@@ -515,7 +515,7 @@ err:
   return;
 }
 
-static void do_ping_handle_icmp (scamper_task_t *task, scamper_icmp_resp_t *ir)
+static void do_ping_handle_icmp(scamper_task_t *task, scamper_icmp_resp_t *ir)
 {
   scamper_ping_t *ping = ping_getdata (task);
   ping_state_t *state = ping_getstate (task);
@@ -795,7 +795,7 @@ err:
  * that means it is either time to send the next probe, or write the
  * task out
  */
-static void do_ping_handle_timeout (scamper_task_t *task)
+static void do_ping_handle_timeout(scamper_task_t *task)
 {
   scamper_ping_t *ping = ping_getdata (task);
   ping_state_t *state = ping_getstate (task);
@@ -806,7 +806,7 @@ static void do_ping_handle_timeout (scamper_task_t *task)
   return;
 }
 
-static int ping_state_payload (scamper_ping_t *ping, ping_state_t *state)
+static int ping_state_payload(scamper_ping_t *ping, ping_state_t *state)
 {
   scamper_addr_t *src;
   int off = 0, al, hdr;
@@ -851,7 +851,7 @@ static int ping_state_payload (scamper_ping_t *ping, ping_state_t *state)
   if (state->payload_len == 0)
     return 0;
 
-  if ((state->payload = malloc_zero (state->payload_len)) == NULL)
+  if ((state->payload = malloc_zero(state->payload_len)) == NULL)
     return -1;
 
   if (SCAMPER_PING_METHOD_IS_ICMP_TIME(ping))
@@ -909,7 +909,7 @@ static int ping_state_payload (scamper_ping_t *ping, ping_state_t *state)
   return 0;
 }
 
-static void ping_state_free (ping_state_t *state)
+static void ping_state_free(ping_state_t *state)
 {
   int i;
 
@@ -931,7 +931,7 @@ static void ping_state_free (ping_state_t *state)
   return;
 }
 
-static int ping_state_alloc (scamper_task_t *task)
+static int ping_state_alloc(scamper_task_t *task)
 {
   scamper_ping_t *ping = ping_getdata (task);
   ping_state_t *state = NULL;
@@ -944,7 +944,7 @@ static int ping_state_alloc (scamper_task_t *task)
     goto err;
   }
 
-  if ((state = malloc_zero (sizeof(ping_state_t))) == NULL)
+  if ((state = malloc_zero(sizeof(ping_state_t))) == NULL)
   {
     printerror (__func__, "could not malloc state");
     goto err;
@@ -952,7 +952,7 @@ static int ping_state_alloc (scamper_task_t *task)
   scamper_task_setstate (task, state);
 
   size = ping->probe_count * sizeof(ping_probe_t*);
-  if ((state->probes = malloc_zero (size)) == NULL)
+  if ((state->probes = malloc_zero(size)) == NULL)
   {
     printerror (__func__, "could not malloc state->probes");
     goto err;
@@ -978,7 +978,7 @@ err:
  * it is time to send a probe for this task.  figure out the form of the
  * probe to send, and then send it.
  */
-static void do_ping_probe (scamper_task_t *task)
+static void do_ping_probe(scamper_task_t *task)
 {
   scamper_probe_ipopt_t opt;
   struct timeval wait_tv;
@@ -1149,7 +1149,7 @@ static void do_ping_probe (scamper_task_t *task)
      * as there is no point sending something into the wild that we can't
      * record
      */
-    if ((pp = malloc_zero (sizeof(ping_probe_t))) == NULL)
+    if ((pp = malloc_zero(sizeof(ping_probe_t))) == NULL)
       goto err;
 
     if (scamper_probe_task (&probe, task) != 0)
@@ -1210,13 +1210,13 @@ err:
   return;
 }
 
-static void do_ping_write (scamper_file_t *sf, scamper_task_t *task)
+static void do_ping_write(scamper_file_t *sf, scamper_task_t *task)
 {
   scamper_file_write_ping (sf, ping_getdata (task));
   return;
 }
 
-static int validate_probe_wait (char *s_str, long long *out)
+static int validate_probe_wait(char *s_str, long long *out)
 {
   char *us_str = NULL;
   long long s = 0, us = 0;
@@ -1248,7 +1248,7 @@ static int validate_probe_wait (char *s_str, long long *out)
   return 0;
 }
 
-static int ping_arg_param_validate (int optid, char *param, long long *out)
+static int ping_arg_param_validate(int optid, char *param, long long *out)
 {
   long long tmp = 0;
   int i;
@@ -1435,13 +1435,13 @@ err:
  *
  *
  */
-int scamper_do_ping_arg_validate (int argc, char *argv[], int *stop)
+int scamper_do_ping_arg_validate(int argc, char *argv[], int *stop)
 {
   return scamper_options_validate (opts, opts_cnt, argc, argv, stop,
                                    ping_arg_param_validate);
 }
 
-static int ping_tsopt (scamper_ping_t *ping, uint32_t *flags, char *tsopt)
+static int ping_tsopt(scamper_ping_t *ping, uint32_t *flags, char *tsopt)
 {
   scamper_ping_v4ts_t *ts = NULL;
   char *ips[4], *ptr = tsopt;
@@ -1511,7 +1511,7 @@ static int ping_tsopt (scamper_ping_t *ping, uint32_t *flags, char *tsopt)
  * a ping.  return the ping structure so that it is all ready to go.
  *
  */
-void* scamper_do_ping_alloc (char *str)
+void* scamper_do_ping_alloc(char *str)
 {
   uint16_t probe_count = SCAMPER_DO_PING_PROBECOUNT_DEF;
   uint8_t probe_wait = SCAMPER_DO_PING_PROBEWAIT_DEF;
@@ -1576,7 +1576,7 @@ void* scamper_do_ping_alloc (char *str)
 
       case PING_OPT_PAYLOAD:
         payload_len = (uint16_t) tmp;
-        if (payload_len == 0 || (payload = malloc_zero (payload_len)) == NULL)
+        if (payload_len == 0 || (payload = malloc_zero(payload_len)) == NULL)
           goto err;
         for (i = 0; i < payload_len; i++)
           payload[i] = hex2byte (opt->str[i * 2], opt->str[(i * 2) + 1]);
@@ -1916,13 +1916,13 @@ err:
   return NULL;
 }
 
-static void do_ping_halt (scamper_task_t *task)
+static void do_ping_halt(scamper_task_t *task)
 {
   ping_stop (task, SCAMPER_PING_STOP_HALTED, 0);
   return;
 }
 
-static void do_ping_free (scamper_task_t *task)
+static void do_ping_free(scamper_task_t *task)
 {
   scamper_ping_t *ping;
   ping_state_t *state;
@@ -1936,8 +1936,8 @@ static void do_ping_free (scamper_task_t *task)
   return;
 }
 
-scamper_task_t* scamper_do_ping_alloctask (void *data, scamper_list_t *list,
-                                           scamper_cycle_t *cycle)
+scamper_task_t* scamper_do_ping_alloctask(void *data, scamper_list_t *list,
+                                          scamper_cycle_t *cycle)
 {
   scamper_ping_t *ping = (scamper_ping_t*) data;
   scamper_task_sig_t *sig = NULL;
@@ -1976,18 +1976,18 @@ err:
   return NULL;
 }
 
-void scamper_do_ping_free (void *data)
+void scamper_do_ping_free(void *data)
 {
   scamper_ping_free ((scamper_ping_t*) data);
   return;
 }
 
-void scamper_do_ping_cleanup ()
+void scamper_do_ping_cleanup()
 {
   return;
 }
 
-int scamper_do_ping_init ()
+int scamper_do_ping_init()
 {
   ping_funcs.probe = do_ping_probe;
   ping_funcs.handle_icmp = do_ping_handle_icmp;

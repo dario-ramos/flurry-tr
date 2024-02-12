@@ -96,15 +96,15 @@ typedef struct scamper_sting
 
 } scamper_sting_t;
 
-scamper_sting_t* scamper_sting_alloc (void);
-void scamper_sting_free (scamper_sting_t*);
-scamper_addr_t* scamper_sting_addr (const void*);
-int scamper_sting_data (scamper_sting_t*, const uint8_t*, uint16_t);
-int scamper_sting_pkts_alloc (scamper_sting_t*, uint32_t);
-int scamper_sting_pkt_record (scamper_sting_t*, scamper_sting_pkt_t*);
+scamper_sting_t* scamper_sting_alloc(void);
+void scamper_sting_free(scamper_sting_t*);
+scamper_addr_t* scamper_sting_addr(const void*);
+int scamper_sting_data(scamper_sting_t*, const uint8_t*, uint16_t);
+int scamper_sting_pkts_alloc(scamper_sting_t*, uint32_t);
+int scamper_sting_pkt_record(scamper_sting_t*, scamper_sting_pkt_t*);
 
-scamper_sting_pkt_t* scamper_sting_pkt_alloc (uint8_t flags, uint8_t *data,
-                                              uint16_t len, struct timeval *tv);
-void scamper_sting_pkt_free (scamper_sting_pkt_t *pkt);
+scamper_sting_pkt_t* scamper_sting_pkt_alloc(uint8_t flags, uint8_t *data,
+                                             uint16_t len, struct timeval *tv);
+void scamper_sting_pkt_free(scamper_sting_pkt_t *pkt);
 
 #endif

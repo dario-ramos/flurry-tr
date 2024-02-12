@@ -61,11 +61,11 @@ typedef struct scamper_task_sig
     struct sniff
     {
       struct scamper_addr *src;
-      uint16_t             icmpid;
+      uint16_t icmpid;
     } sniff;
     struct host
     {
-      char                *name;
+      char *name;
     } host;
   } un;
 } scamper_task_sig_t;
@@ -83,8 +83,7 @@ typedef struct scamper_task_funcs
   void (*probe)(struct scamper_task *task);
 
   /* handle some ICMP packet */
-  void (*handle_icmp)(struct scamper_task *task,
-		      struct scamper_icmp_resp *icmp);
+  void (*handle_icmp)(struct scamper_task *task, struct scamper_icmp_resp *icmp);
 
   /* handle some information from the datalink */
   void (*handle_dl)(struct scamper_task *task, struct scamper_dl_rec *dl_rec);
@@ -102,25 +101,25 @@ typedef struct scamper_task_funcs
 
 } scamper_task_funcs_t;
 
-scamper_task_t *scamper_task_alloc(void *data, scamper_task_funcs_t *funcs);
+scamper_task_t* scamper_task_alloc(void *data, scamper_task_funcs_t *funcs);
 void scamper_task_free(scamper_task_t *task);
 
 /* get various items of the task */
-void *scamper_task_getdata(const scamper_task_t *task);
-void *scamper_task_getstate(const scamper_task_t *task);
-struct scamper_source *scamper_task_getsource(scamper_task_t *task);
+void* scamper_task_getdata(const scamper_task_t *task);
+void* scamper_task_getstate(const scamper_task_t *task);
+struct scamper_source* scamper_task_getsource(scamper_task_t *task);
 
 /* set various items on the task */
 void scamper_task_setdatanull(scamper_task_t *task);
 void scamper_task_setstate(scamper_task_t *task, void *state);
 void scamper_task_setsourcetask(scamper_task_t *task,
-				struct scamper_sourcetask *st);
+                                struct scamper_sourcetask *st);
 void scamper_task_setcyclemon(scamper_task_t *t, struct scamper_cyclemon *cm);
 
 /* access the various functions registered with the task */
 void scamper_task_write(scamper_task_t *task, struct scamper_file *file);
 void scamper_task_probe(scamper_task_t *task);
-void scamper_task_handleicmp(scamper_task_t *task,struct scamper_icmp_resp *r);
+void scamper_task_handleicmp(scamper_task_t *task, struct scamper_icmp_resp *r);
 void scamper_task_handletimeout(scamper_task_t *task);
 void scamper_task_halt(scamper_task_t *task);
 
@@ -153,18 +152,18 @@ scamper_fd_t *scamper_task_fd_rtsock(scamper_task_t *task);
 #endif
 
 /* define and use the task's probe signatures */
-scamper_task_sig_t *scamper_task_sig_alloc(uint8_t type);
+scamper_task_sig_t* scamper_task_sig_alloc(uint8_t type);
 void scamper_task_sig_free(scamper_task_sig_t *sig);
 int scamper_task_sig_add(scamper_task_t *task, scamper_task_sig_t *sig);
-scamper_task_t *scamper_task_sig_block(scamper_task_t *task);
+scamper_task_t* scamper_task_sig_block(scamper_task_t *task);
 int scamper_task_sig_install(scamper_task_t *task);
 void scamper_task_sig_deinstall(scamper_task_t *task);
-scamper_task_t *scamper_task_find(scamper_task_sig_t *sig);
-char *scamper_task_sig_tostr(scamper_task_sig_t *sig, char *buf, size_t len);
+scamper_task_t* scamper_task_find(scamper_task_sig_t *sig);
+char* scamper_task_sig_tostr(scamper_task_sig_t *sig, char *buf, size_t len);
 
 /* manage ancillary data attached to the task */
-scamper_task_anc_t *scamper_task_anc_add(scamper_task_t *task, void *data,
-					 void (*freedata)(void *));
+scamper_task_anc_t* scamper_task_anc_add(scamper_task_t *task, void *data,
+                                         void (*freedata)(void*));
 void scamper_task_anc_del(scamper_task_t *task, scamper_task_anc_t *anc);
 
 /*
@@ -176,8 +175,8 @@ void scamper_task_anc_del(scamper_task_t *task, scamper_task_anc_t *anc);
  * returns a cookie, so the dehold function can cancel the task
  * from  being on hold at a later point.
  */
-void *scamper_task_onhold(scamper_task_t *task, void *param,
-			  void (*unhold)(void *param));
+void* scamper_task_onhold(scamper_task_t *task, void *param,
+                          void (*unhold)(void *param));
 
 /*
  * scamper_task_dehold

@@ -117,20 +117,20 @@ typedef struct scamper_host
   uint8_t qcount; /* number of queries sent */
 } scamper_host_t;
 
-scamper_host_rr_mx_t* scamper_host_rr_mx_alloc (uint16_t, const char*);
-scamper_host_rr_soa_t* scamper_host_rr_soa_alloc (const char*, const char*);
+scamper_host_rr_mx_t* scamper_host_rr_mx_alloc(uint16_t, const char*);
+scamper_host_rr_soa_t* scamper_host_rr_soa_alloc(const char*, const char*);
 
-scamper_host_rr_t* scamper_host_rr_alloc (const char*, uint16_t, uint16_t,
-                                          uint32_t);
-void scamper_host_rr_free (scamper_host_rr_t*);
+scamper_host_rr_t* scamper_host_rr_alloc(const char*, uint16_t, uint16_t,
+                                         uint32_t);
+void scamper_host_rr_free(scamper_host_rr_t*);
 
-int scamper_host_rr_data_type (const scamper_host_rr_t *rr);
+int scamper_host_rr_data_type(const scamper_host_rr_t *rr);
 
-int scamper_host_queries_alloc (scamper_host_t *host, int n);
-scamper_host_query_t* scamper_host_query_alloc (void);
-int scamper_host_query_rr_alloc (scamper_host_query_t *query);
+int scamper_host_queries_alloc(scamper_host_t *host, int n);
+scamper_host_query_t* scamper_host_query_alloc(void);
+int scamper_host_query_rr_alloc(scamper_host_query_t *query);
 
-scamper_host_t* scamper_host_alloc (void);
-void scamper_host_free (scamper_host_t*);
+scamper_host_t* scamper_host_alloc(void);
+void scamper_host_free(scamper_host_t*);
 
 #endif /* __SCAMPER_HOST_H */

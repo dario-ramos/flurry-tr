@@ -41,8 +41,8 @@ static const char rcsid[] =
  * routine to place the logic for putting together a list holding parsed
  * options.
  */
-static int opt_add (scamper_option_out_t **head, scamper_option_out_t **tail,
-                    const scamper_option_in_t *opt, char *str)
+static int opt_add(scamper_option_out_t **head, scamper_option_out_t **tail,
+                   const scamper_option_in_t *opt, char *str)
 {
   assert(head != NULL);
   assert(tail != NULL);
@@ -75,7 +75,7 @@ static int opt_add (scamper_option_out_t **head, scamper_option_out_t **tail,
  * the supplied parameter type.  the next word in the string is returned
  * in 'next'
  */
-static int opt_parse_param (int type, char **str, char **next)
+static int opt_parse_param(int type, char **str, char **next)
 {
   char *tmp = *str;
   char delim;
@@ -163,8 +163,7 @@ err:
   return -1;
 }
 
-int scamper_options_c2id (const scamper_option_in_t *opts, const int cnt,
-                          char c)
+int scamper_options_c2id(const scamper_option_in_t *opts, const int cnt, char c)
 {
   int i;
   for (i = 0; i < cnt; i++)
@@ -183,9 +182,9 @@ int scamper_options_c2id (const scamper_option_in_t *opts, const int cnt,
  *
  * this code is a horrible mess of goto statements.
  */
-int scamper_options_parse (char *str, const scamper_option_in_t *opts,
-                           const int cnt, scamper_option_out_t **opts_out,
-                           char **stop)
+int scamper_options_parse(char *str, const scamper_option_in_t *opts,
+                          const int cnt, scamper_option_out_t **opts_out,
+                          char **stop)
 {
   scamper_option_out_t *head = NULL;
   scamper_option_out_t *tail = NULL;
@@ -377,9 +376,9 @@ err:
   return -1;
 }
 
-int scamper_options_validate (
+int scamper_options_validate(
     const scamper_option_in_t *opts, const int cnt, int argc, char *argv[],
-    int *stop, int validate (int optid, char *param, long long *out))
+    int *stop, int validate(int optid, char *param, long long *out))
 {
   int i, j, k, needp;
   int optid = -1;
@@ -440,7 +439,7 @@ err:
  *
  * simple function to return how many options were parsed
  */
-int scamper_options_count (scamper_option_out_t *opts)
+int scamper_options_count(scamper_option_out_t *opts)
 {
   int i = 0;
 
@@ -459,7 +458,7 @@ int scamper_options_count (scamper_option_out_t *opts)
  * simple function to free up the option_out linked list passed in, which
  * was allocated by scamper_options_parse.
  */
-void scamper_options_free (scamper_option_out_t *opts)
+void scamper_options_free(scamper_option_out_t *opts)
 {
   scamper_option_out_t *tmp;
 

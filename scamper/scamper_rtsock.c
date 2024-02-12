@@ -42,7 +42,7 @@
 
 #ifndef lint
 static const char rcsid[] =
-  "$Id: scamper_rtsock.c,v 1.82 2017/12/03 09:38:27 mjl Exp $";
+    "$Id: scamper_rtsock.c,v 1.82 2017/12/03 09:38:27 mjl Exp $";
 #endif
 
 #ifdef HAVE_CONFIG_H
@@ -59,36 +59,36 @@ static int broken = -1;
 
 struct nlmsghdr
 {
-  uint32_t        nlmsg_len;
-  uint16_t        nlmsg_type;
-  uint16_t        nlmsg_flags;
-  uint32_t        nlmsg_seq;
-  uint32_t        nlmsg_pid;
+  uint32_t nlmsg_len;
+  uint16_t nlmsg_type;
+  uint16_t nlmsg_flags;
+  uint32_t nlmsg_seq;
+  uint32_t nlmsg_pid;
 };
 
 struct nlmsgerr
 {
-  int             error;
+  int error;
   struct nlmsghdr msg;
 };
 
 struct rtattr
 {
-  unsigned short  rta_len;
-  unsigned short  rta_type;
+  unsigned short rta_len;
+  unsigned short rta_type;
 };
 
 struct rtmsg
 {
-  unsigned char   rtm_family;
-  unsigned char   rtm_dst_len;
-  unsigned char   rtm_src_len;
-  unsigned char   rtm_tos;
-  unsigned char   rtm_table;
-  unsigned char   rtm_protocol;
-  unsigned char   rtm_scope;
-  unsigned char   rtm_type;
-  unsigned        rtm_flags;
+  unsigned char rtm_family;
+  unsigned char rtm_dst_len;
+  unsigned char rtm_src_len;
+  unsigned char rtm_tos;
+  unsigned char rtm_table;
+  unsigned char rtm_protocol;
+  unsigned char rtm_scope;
+  unsigned char rtm_type;
+  unsigned rtm_flags;
 };
 
 #define NLMSG_ERROR         0x2
@@ -147,55 +147,56 @@ extern scamper_addrcache_t *addrcache;
 typedef struct rtsock_pair
 {
   scamper_route_t *route; /* query */
-  uint16_t         seq;   /* sequence number used */
-  dlist_node_t    *node;  /* pointer to node in pair dlist */
+  uint16_t seq; /* sequence number used */
+  dlist_node_t *node; /* pointer to node in pair dlist */
 } rtsock_pair_t;
 
-static pid_t    pid;          /* [unpriviledged] process id */
-static uint16_t seq   = 0;    /* next sequence number to use */
+static pid_t pid; /* [unpriviledged] process id */
+static uint16_t seq = 0; /* next sequence number to use */
 static dlist_t *pairs = NULL; /* list of addresses queried with their seq */
 
-static rtsock_pair_t *rtsock_pair_alloc(scamper_route_t *route, int seq)
+static rtsock_pair_t* rtsock_pair_alloc(scamper_route_t *route, int seq)
 {
   rtsock_pair_t *pair;
-  if((pair = malloc_zero(sizeof(rtsock_pair_t))) == NULL)
+  if ((pair = malloc_zero(sizeof(rtsock_pair_t))) == NULL)
     return NULL;
   pair->route = route;
   pair->seq = seq;
-  if((pair->node = dlist_head_push(pairs, pair)) == NULL)
-    {
-      free(pair);
-      return NULL;
-    }
+  if ((pair->node = dlist_head_push (pairs, pair)) == NULL)
+  {
+    free (pair);
+    return NULL;
+  }
   route->internal = pair;
   return pair;
 }
 
 static void rtsock_pair_free(rtsock_pair_t *pair)
 {
-  if(pair == NULL)
+  if (pair == NULL)
     return;
   pair->route->internal = NULL;
-  if(pair->node != NULL)
-    dlist_node_pop(pairs, pair->node);
-  free(pair);
+  if (pair->node != NULL)
+    dlist_node_pop (pairs, pair->node);
+  free (pair);
   return;
 }
 
-static rtsock_pair_t *rtsock_pair_get(uint16_t seq)
+static rtsock_pair_t* rtsock_pair_get(uint16_t seq)
 {
   rtsock_pair_t *pair;
-  dlist_node_t  *node;
+  dlist_node_t *node;
 
-  for(node=dlist_head_node(pairs); node != NULL; node=dlist_node_next(node))
-    {
-      pair = dlist_node_item(node);
-      if(pair->seq != seq)
-	continue;
-      dlist_node_pop(pairs, node);
-      pair->node = NULL;
-      return pair;
-    }
+  for (node = dlist_head_node (pairs); node != NULL;
+      node = dlist_node_next (node))
+  {
+    pair = dlist_node_item (node);
+    if (pair->seq != seq)
+      continue;
+    dlist_node_pop (pairs, node);
+    pair->node = NULL;
+    return pair;
+  }
 
   return NULL;
 }
@@ -334,27 +335,27 @@ static int scamper_rtsock_getifindex(int fd, scamper_addr_t *dst)
 static int scamper_rtsock_getifindex(int fd, scamper_addr_t *dst)
 {
   struct nlmsghdr *nlmsg;
-  struct rtmsg    *rtmsg;
-  struct rtattr   *rta;
-  int              error;
-  int              dst_len;
-  uint8_t          buf[1024];
-  int              af;
+  struct rtmsg *rtmsg;
+  struct rtattr *rta;
+  int error;
+  int dst_len;
+  uint8_t buf[1024];
+  int af;
 
-  if(SCAMPER_ADDR_TYPE_IS_IPV4(dst))
-    {
-      dst_len  = 4;
-      af       = AF_INET;
-    }
-  else if(SCAMPER_ADDR_TYPE_IS_IPV6(dst))
-    {
-      dst_len  = 16;
-      af       = AF_INET6;
-    }
+  if (SCAMPER_ADDR_TYPE_IS_IPV4(dst))
+  {
+    dst_len = 4;
+    af = AF_INET;
+  }
+  else if (SCAMPER_ADDR_TYPE_IS_IPV6(dst))
+  {
+    dst_len = 16;
+    af = AF_INET6;
+  }
   else
-    {
-      return -1;
-    }
+  {
+    return -1;
+  }
 
   /*
    * fill out a route request.
@@ -363,32 +364,32 @@ static int scamper_rtsock_getifindex(int fd, scamper_addr_t *dst)
    * the message includes one attribute - the destination address
    * we are querying the route for.
    */
-  memset(buf, 0, sizeof(buf));
-  nlmsg  = (struct nlmsghdr *)buf;
-  nlmsg->nlmsg_len   = NLMSG_LENGTH(sizeof(struct rtmsg));
-  nlmsg->nlmsg_type  = RTM_GETROUTE;
+  memset (buf, 0, sizeof(buf));
+  nlmsg = (struct nlmsghdr*) buf;
+  nlmsg->nlmsg_len = NLMSG_LENGTH(sizeof(struct rtmsg));
+  nlmsg->nlmsg_type = RTM_GETROUTE;
   nlmsg->nlmsg_flags = NLM_F_REQUEST;
-  nlmsg->nlmsg_seq   = seq;
-  nlmsg->nlmsg_pid   = pid;
+  nlmsg->nlmsg_seq = seq;
+  nlmsg->nlmsg_pid = pid;
 
   /* netlink wants the bit length of each address */
   rtmsg = NLMSG_DATA(nlmsg);
-  rtmsg->rtm_family  = af;
-  rtmsg->rtm_flags   = 0;
+  rtmsg->rtm_family = af;
+  rtmsg->rtm_flags = 0;
   rtmsg->rtm_dst_len = dst_len * 8;
 
-  rta = (struct rtattr *)(buf + NLMSG_ALIGN(nlmsg->nlmsg_len));
+  rta = (struct rtattr*) (buf + NLMSG_ALIGN(nlmsg->nlmsg_len));
   rta->rta_type = RTA_DST;
-  rta->rta_len  = RTA_LENGTH(dst_len);
+  rta->rta_len = RTA_LENGTH(dst_len);
   nlmsg->nlmsg_len += RTA_LENGTH(dst_len);
-  memcpy(RTA_DATA(rta), dst->addr, dst_len);
+  memcpy (RTA_DATA(rta), dst->addr, dst_len);
 
   /* send the request */
-  if((error = send(fd, buf, nlmsg->nlmsg_len, 0)) != nlmsg->nlmsg_len)
-    {
-      printerror(__func__, "could not send");
-      return -1;
-    }
+  if ((error = send (fd, buf, nlmsg->nlmsg_len, 0)) != nlmsg->nlmsg_len)
+  {
+    printerror (__func__, "could not send");
+    return -1;
+  }
 
   return 0;
 }
@@ -399,15 +400,15 @@ int scamper_rtsock_getroute(scamper_fd_t *fdn, scamper_route_t *route)
   int fd;
 
   /* get the route socket fd */
-  if((fd = scamper_fd_fd_get(fdn)) == -1)
+  if ((fd = scamper_fd_fd_get (fdn)) == -1)
     return -1;
 
   /* ask the question */
-  if(scamper_rtsock_getifindex(fd, route->dst) != 0)
+  if (scamper_rtsock_getifindex (fd, route->dst) != 0)
     return -1;
 
   /* keep track of the question */
-  if(rtsock_pair_alloc(route, seq++) == NULL)
+  if (rtsock_pair_alloc (route, seq++) == NULL)
     return -1;
   return 0;
 }
@@ -463,80 +464,82 @@ static void rtsock_parsemsg(uint8_t *buf, size_t len)
 {
   struct nlmsghdr *nlmsg;
   struct nlmsgerr *nlerr;
-  struct rtmsg    *rtmsg;
-  struct rtattr   *rta;
-  void            *gwa = NULL;
-  int              ifindex = -1;
-  scamper_addr_t  *gw = NULL;
-  rtsock_pair_t   *pair = NULL;
+  struct rtmsg *rtmsg;
+  struct rtattr *rta;
+  void *gwa = NULL;
+  int ifindex = -1;
+  scamper_addr_t *gw = NULL;
+  rtsock_pair_t *pair = NULL;
   scamper_route_t *route = NULL;
 
-  if(len < sizeof(struct nlmsghdr))
-    {
-      scamper_debug(__func__, "len %d != %d", len, sizeof(struct nlmsghdr));
-      return;
-    }
+  if (len < sizeof(struct nlmsghdr))
+  {
+    scamper_debug (__func__, "len %d != %d", len, sizeof(struct nlmsghdr));
+    return;
+  }
 
-  nlmsg = (struct nlmsghdr *)buf;
+  nlmsg = (struct nlmsghdr*) buf;
 
   /* if the message isn't addressed to this pid, drop it */
-  if(nlmsg->nlmsg_pid != pid)
+  if (nlmsg->nlmsg_pid != pid)
     return;
 
-  if((pair = rtsock_pair_get(nlmsg->nlmsg_seq)) == NULL)
+  if ((pair = rtsock_pair_get (nlmsg->nlmsg_seq)) == NULL)
     return;
   route = pair->route;
-  rtsock_pair_free(pair);
+  rtsock_pair_free (pair);
 
-  if(nlmsg->nlmsg_type == RTM_NEWROUTE)
+  if (nlmsg->nlmsg_type == RTM_NEWROUTE)
+  {
+    rtmsg = NLMSG_DATA(nlmsg);
+
+    /* this is the payload length of the response packet */
+    len = nlmsg->nlmsg_len - NLMSG_LENGTH(sizeof(struct rtmsg));
+
+    /* hunt through the payload for the RTA_OIF entry */
+    rta = RTM_RTA(rtmsg);
+    while (RTA_OK(rta, len))
     {
-      rtmsg = NLMSG_DATA(nlmsg);
+      switch (rta->rta_type)
+      {
+        case RTA_OIF:
+          ifindex = *(unsigned*) RTA_DATA(rta);
+          break;
 
-      /* this is the payload length of the response packet */
-      len = nlmsg->nlmsg_len - NLMSG_LENGTH(sizeof(struct rtmsg));
-
-      /* hunt through the payload for the RTA_OIF entry */
-      rta = RTM_RTA(rtmsg);
-      while(RTA_OK(rta, len))
-	{
-	  switch(rta->rta_type)
-	    {
-	    case RTA_OIF:
-	      ifindex = *(unsigned *)RTA_DATA(rta);
-	      break;
-
-	    case RTA_GATEWAY:
-	      gwa = RTA_DATA(rta);
-	      break;
-	    }
-	  rta = RTA_NEXT(rta, len);
-	}
-
-      if(gwa != NULL)
-	{
-	  if(rtmsg->rtm_family == AF_INET)
-	    gw = scamper_addrcache_get_ipv4(addrcache, gwa);
-	  else if(rtmsg->rtm_family == AF_INET6)
-	    gw = scamper_addrcache_get_ipv6(addrcache, gwa);
-	  else
-	    route->error = EINVAL;
-	}
+        case RTA_GATEWAY:
+          gwa = RTA_DATA(rta);
+          break;
+      }
+      rta = RTA_NEXT(rta, len);
     }
-  else if(nlmsg->nlmsg_type == NLMSG_ERROR)
+
+    if (gwa != NULL)
     {
-      nlerr = NLMSG_DATA(nlmsg);
-      route->error = nlerr->error;
+      if (rtmsg->rtm_family == AF_INET)
+        gw = scamper_addrcache_get_ipv4(addrcache, gwa);
+      else if (rtmsg->rtm_family == AF_INET6)
+        gw = scamper_addrcache_get_ipv6(addrcache, gwa);
+      else
+        route->error = EINVAL;
     }
-  else goto skip;
+  }
+  else if (nlmsg->nlmsg_type == NLMSG_ERROR)
+  {
+    nlerr = NLMSG_DATA(nlmsg);
+    route->error = nlerr->error;
+  }
+  else
+    goto skip;
 
   route->gw = gw;
   route->ifindex = ifindex;
-  route->cb(route);
+  route->cb (route);
 
   return;
 
- skip:
-  if(route != NULL) scamper_route_free(route);
+skip:
+  if (route != NULL)
+    scamper_route_free (route);
   return;
 }
 #endif
@@ -694,21 +697,21 @@ void scamper_rtsock_read_cb(const int fd, void *param)
   uint8_t buf[2048];
   ssize_t len;
 
-  if((len = recv(fd, buf, sizeof(buf), 0)) < 0)
-    {
-      printerror(__func__, "recv failed");
-      return;
-    }
+  if ((len = recv (fd, buf, sizeof(buf), 0)) < 0)
+  {
+    printerror (__func__, "recv failed");
+    return;
+  }
 
-  if(len > 0)
-    rtsock_parsemsg(buf, len);
+  if (len > 0)
+    rtsock_parsemsg (buf, len);
 
   return;
 }
 
 void scamper_rtsock_close(int fd)
 {
-  close(fd);
+  close (fd);
   return;
 }
 
@@ -717,7 +720,7 @@ int scamper_rtsock_open_fd()
 #if defined(HAVE_BSD_ROUTE_SOCKET)
   return socket(PF_ROUTE, SOCK_RAW, AF_UNSPEC);
 #elif defined(__linux__)
-  return socket(PF_NETLINK, SOCK_DGRAM, NETLINK_ROUTE);
+  return socket (PF_NETLINK, SOCK_DGRAM, NETLINK_ROUTE);
 #else
 #error "route socket support for this system not implemented"
 #endif
@@ -730,12 +733,12 @@ int scamper_rtsock_open()
 #if defined(WITHOUT_PRIVSEP)
   if((fd = scamper_rtsock_open_fd()) == -1)
 #else
-  if((fd = scamper_privsep_open_rtsock()) == -1)
+  if ((fd = scamper_privsep_open_rtsock ()) == -1)
 #endif
-    {
-      printerror(__func__, "could not open route socket");
-      return -1;
-    }
+  {
+    printerror (__func__, "could not open route socket");
+    return -1;
+  }
 
   return fd;
 }
@@ -784,27 +787,27 @@ int scamper_rtsock_getroute(scamper_route_t *route)
 
 void scamper_route_free(scamper_route_t *route)
 {
-  if(route == NULL)
+  if (route == NULL)
     return;
 #ifndef _WIN32
-  if(route->internal != NULL)
-    rtsock_pair_free(route->internal);
+  if (route->internal != NULL)
+    rtsock_pair_free (route->internal);
 #endif
-  if(route->dst != NULL)
-    scamper_addr_free(route->dst);
-  if(route->gw != NULL)
-    scamper_addr_free(route->gw);
-  free(route);
+  if (route->dst != NULL)
+    scamper_addr_free (route->dst);
+  if (route->gw != NULL)
+    scamper_addr_free (route->gw);
+  free (route);
   return;
 }
 
-scamper_route_t *scamper_route_alloc(scamper_addr_t *dst, void *param,
-				     void (*cb)(scamper_route_t *rt))
+scamper_route_t* scamper_route_alloc(scamper_addr_t *dst, void *param,
+                                     void (*cb)(scamper_route_t *rt))
 {
   scamper_route_t *route;
-  if((route = malloc_zero(sizeof(scamper_route_t))) == NULL)
+  if ((route = malloc_zero(sizeof(scamper_route_t))) == NULL)
     return NULL;
-  route->dst = scamper_addr_use(dst);
+  route->dst = scamper_addr_use (dst);
   route->param = param;
   route->cb = cb;
   return route;
@@ -813,12 +816,12 @@ scamper_route_t *scamper_route_alloc(scamper_addr_t *dst, void *param,
 int scamper_rtsock_init()
 {
 #ifndef _WIN32
-  if((pairs = dlist_alloc()) == NULL)
-    {
-      printerror(__func__, "could not allocate pair list");
-      return -1;
-    }
-  pid = getpid();
+  if ((pairs = dlist_alloc ()) == NULL)
+  {
+    printerror (__func__, "could not allocate pair list");
+    return -1;
+  }
+  pid = getpid ();
 #endif
 
   return 0;
@@ -829,17 +832,17 @@ void scamper_rtsock_cleanup()
 #ifndef _WIN32
   rtsock_pair_t *pair;
 
-  if(pairs != NULL)
+  if (pairs != NULL)
+  {
+    while ((pair = dlist_head_pop (pairs)) != NULL)
     {
-      while((pair = dlist_head_pop(pairs)) != NULL)
-	{
-	  pair->node = NULL;
-	  rtsock_pair_free(pair);
-	}
-
-      dlist_free(pairs);
-      pairs = NULL;
+      pair->node = NULL;
+      rtsock_pair_free (pair);
     }
+
+    dlist_free (pairs);
+    pairs = NULL;
+  }
 #endif
 
   return;

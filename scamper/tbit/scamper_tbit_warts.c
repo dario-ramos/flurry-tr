@@ -222,8 +222,8 @@ typedef struct warts_tbit_app_bgp
   uint32_t len;
 } warts_tbit_app_bgp_t;
 
-static void warts_tbit_blind_params (const scamper_tbit_t *tbit,
-                                     warts_tbit_blind_t *state)
+static void warts_tbit_blind_params(const scamper_tbit_t *tbit,
+                                    warts_tbit_blind_t *state)
 {
   scamper_tbit_blind_t *blind = tbit->data;
   const warts_var_t *var;
@@ -252,8 +252,8 @@ static void warts_tbit_blind_params (const scamper_tbit_t *tbit,
   return;
 }
 
-static void warts_tbit_icw_params (const scamper_tbit_t *tbit,
-                                   warts_tbit_icw_t *state)
+static void warts_tbit_icw_params(const scamper_tbit_t *tbit,
+                                  warts_tbit_icw_t *state)
 {
   scamper_tbit_icw_t *icw = tbit->data;
   const warts_var_t *var;
@@ -282,8 +282,8 @@ static void warts_tbit_icw_params (const scamper_tbit_t *tbit,
   return;
 }
 
-static void warts_tbit_null_params (const scamper_tbit_t *tbit,
-                                    warts_tbit_null_t *state)
+static void warts_tbit_null_params(const scamper_tbit_t *tbit,
+                                   warts_tbit_null_t *state)
 {
   scamper_tbit_null_t *null = tbit->data;
   const warts_var_t *var;
@@ -315,9 +315,9 @@ static void warts_tbit_null_params (const scamper_tbit_t *tbit,
   return;
 }
 
-static void warts_tbit_pmtud_params (const scamper_tbit_t *tbit,
-                                     warts_addrtable_t *table,
-                                     warts_tbit_pmtud_t *state)
+static void warts_tbit_pmtud_params(const scamper_tbit_t *tbit,
+                                    warts_addrtable_t *table,
+                                    warts_tbit_pmtud_t *state)
 {
   scamper_tbit_pmtud_t *pmtud = tbit->data;
   const warts_var_t *var;
@@ -360,8 +360,8 @@ static void warts_tbit_pmtud_params (const scamper_tbit_t *tbit,
   return;
 }
 
-static int warts_tbit_null_read (scamper_tbit_t *tbit, const uint8_t *buf,
-                                 uint32_t *off, uint32_t len)
+static int warts_tbit_null_read(scamper_tbit_t *tbit, const uint8_t *buf,
+                                uint32_t *off, uint32_t len)
 {
   scamper_tbit_null_t *null = tbit->data;
   uint16_t options = 0;
@@ -381,9 +381,9 @@ err:
   return -1;
 }
 
-static void warts_tbit_null_write (const scamper_tbit_t *tbit, uint8_t *buf,
-                                   uint32_t *off, uint32_t len,
-                                   warts_tbit_null_t *state)
+static void warts_tbit_null_write(const scamper_tbit_t *tbit, uint8_t *buf,
+                                  uint32_t *off, uint32_t len,
+                                  warts_tbit_null_t *state)
 {
   scamper_tbit_null_t *null = tbit->data;
   warts_param_writer_t handlers[] =
@@ -396,9 +396,9 @@ static void warts_tbit_null_write (const scamper_tbit_t *tbit, uint8_t *buf,
   return;
 }
 
-static int warts_tbit_pmtud_read (scamper_tbit_t *tbit,
-                                  warts_addrtable_t *table, const uint8_t *buf,
-                                  uint32_t *off, uint32_t len)
+static int warts_tbit_pmtud_read(scamper_tbit_t *tbit, warts_addrtable_t *table,
+                                 const uint8_t *buf, uint32_t *off,
+                                 uint32_t len)
 {
   scamper_tbit_pmtud_t *pmtud = tbit->data;
   scamper_addr_t *ptbsrc = NULL;
@@ -427,10 +427,10 @@ err:
   return -1;
 }
 
-static void warts_tbit_pmtud_write (const scamper_tbit_t *tbit, uint8_t *buf,
-                                    uint32_t *off, uint32_t len,
-                                    warts_addrtable_t *table,
-                                    warts_tbit_pmtud_t *state)
+static void warts_tbit_pmtud_write(const scamper_tbit_t *tbit, uint8_t *buf,
+                                   uint32_t *off, uint32_t len,
+                                   warts_addrtable_t *table,
+                                   warts_tbit_pmtud_t *state)
 {
   scamper_tbit_pmtud_t *pmtud = tbit->data;
   warts_param_writer_t handlers[] =
@@ -445,8 +445,8 @@ static void warts_tbit_pmtud_write (const scamper_tbit_t *tbit, uint8_t *buf,
   return;
 }
 
-static int warts_tbit_icw_read (scamper_tbit_t *tbit, const uint8_t *buf,
-                                uint32_t *off, uint32_t len)
+static int warts_tbit_icw_read(scamper_tbit_t *tbit, const uint8_t *buf,
+                               uint32_t *off, uint32_t len)
 {
   scamper_tbit_icw_t *icw = tbit->data;
   warts_param_reader_t handlers[] =
@@ -456,9 +456,9 @@ static int warts_tbit_icw_read (scamper_tbit_t *tbit, const uint8_t *buf,
   return warts_params_read (buf, off, len, handlers, handler_cnt);
 }
 
-static void warts_tbit_icw_write (const scamper_tbit_t *tbit, uint8_t *buf,
-                                  uint32_t *off, uint32_t len,
-                                  warts_tbit_icw_t *state)
+static void warts_tbit_icw_write(const scamper_tbit_t *tbit, uint8_t *buf,
+                                 uint32_t *off, uint32_t len,
+                                 warts_tbit_icw_t *state)
 {
   scamper_tbit_icw_t *icw = tbit->data;
   warts_param_writer_t handlers[] =
@@ -470,8 +470,8 @@ static void warts_tbit_icw_write (const scamper_tbit_t *tbit, uint8_t *buf,
   return;
 }
 
-static int warts_tbit_blind_read (scamper_tbit_t *tbit, const uint8_t *buf,
-                                  uint32_t *off, uint32_t len)
+static int warts_tbit_blind_read(scamper_tbit_t *tbit, const uint8_t *buf,
+                                 uint32_t *off, uint32_t len)
 {
   scamper_tbit_blind_t *blind = tbit->data;
   warts_param_reader_t handlers[] =
@@ -482,9 +482,9 @@ static int warts_tbit_blind_read (scamper_tbit_t *tbit, const uint8_t *buf,
   return warts_params_read (buf, off, len, handlers, handler_cnt);
 }
 
-static void warts_tbit_blind_write (const scamper_tbit_t *tbit, uint8_t *buf,
-                                    uint32_t *off, uint32_t len,
-                                    warts_tbit_blind_t *state)
+static void warts_tbit_blind_write(const scamper_tbit_t *tbit, uint8_t *buf,
+                                   uint32_t *off, uint32_t len,
+                                   warts_tbit_blind_t *state)
 {
   scamper_tbit_blind_t *blind = tbit->data;
   warts_param_writer_t handlers[] =
@@ -497,8 +497,8 @@ static void warts_tbit_blind_write (const scamper_tbit_t *tbit, uint8_t *buf,
   return;
 }
 
-static void warts_tbit_app_http_params (const scamper_tbit_t *tbit,
-                                        warts_tbit_app_http_t *state)
+static void warts_tbit_app_http_params(const scamper_tbit_t *tbit,
+                                       warts_tbit_app_http_t *state)
 {
   scamper_tbit_app_http_t *http = tbit->app_data;
   const warts_var_t *var;
@@ -542,8 +542,8 @@ static void warts_tbit_app_http_params (const scamper_tbit_t *tbit,
   return;
 }
 
-static int warts_tbit_app_http_read (scamper_tbit_t *tbit, const uint8_t *buf,
-                                     uint32_t *off, uint32_t len)
+static int warts_tbit_app_http_read(scamper_tbit_t *tbit, const uint8_t *buf,
+                                    uint32_t *off, uint32_t len)
 {
   scamper_tbit_app_http_t *http;
   char *host = NULL, *file = NULL;
@@ -581,9 +581,9 @@ err:
   return -1;
 }
 
-static void warts_tbit_app_http_write (const scamper_tbit_t *tbit, uint8_t *buf,
-                                       uint32_t *off, uint32_t len,
-                                       warts_tbit_app_http_t *state)
+static void warts_tbit_app_http_write(const scamper_tbit_t *tbit, uint8_t *buf,
+                                      uint32_t *off, uint32_t len,
+                                      warts_tbit_app_http_t *state)
 {
   scamper_tbit_app_http_t *http = tbit->app_data;
   warts_param_writer_t handlers[] =
@@ -597,8 +597,8 @@ static void warts_tbit_app_http_write (const scamper_tbit_t *tbit, uint8_t *buf,
   return;
 }
 
-static void warts_tbit_app_bgp_params (const scamper_tbit_t *tbit,
-                                       warts_tbit_app_bgp_t *state)
+static void warts_tbit_app_bgp_params(const scamper_tbit_t *tbit,
+                                      warts_tbit_app_bgp_t *state)
 {
   scamper_tbit_app_bgp_t *bgp = tbit->app_data;
   const warts_var_t *var;
@@ -628,8 +628,8 @@ static void warts_tbit_app_bgp_params (const scamper_tbit_t *tbit,
   return;
 }
 
-static int warts_tbit_app_bgp_read (scamper_tbit_t *tbit, const uint8_t *buf,
-                                    uint32_t *off, uint32_t len)
+static int warts_tbit_app_bgp_read(scamper_tbit_t *tbit, const uint8_t *buf,
+                                   uint32_t *off, uint32_t len)
 {
   scamper_tbit_app_bgp_t *bgp;
   uint32_t asn = 0;
@@ -646,9 +646,9 @@ static int warts_tbit_app_bgp_read (scamper_tbit_t *tbit, const uint8_t *buf,
   return 0;
 }
 
-static void warts_tbit_app_bgp_write (const scamper_tbit_t *tbit, uint8_t *buf,
-                                      uint32_t *off, uint32_t len,
-                                      warts_tbit_app_bgp_t *state)
+static void warts_tbit_app_bgp_write(const scamper_tbit_t *tbit, uint8_t *buf,
+                                     uint32_t *off, uint32_t len,
+                                     warts_tbit_app_bgp_t *state)
 {
   scamper_tbit_app_bgp_t *bgp = tbit->app_data;
   warts_param_writer_t handlers[] =
@@ -660,8 +660,8 @@ static void warts_tbit_app_bgp_write (const scamper_tbit_t *tbit, uint8_t *buf,
   return;
 }
 
-static void warts_tbit_pkt_params (const scamper_tbit_pkt_t *pkt,
-                                   warts_tbit_pkt_t *state, uint32_t *len)
+static void warts_tbit_pkt_params(const scamper_tbit_pkt_t *pkt,
+                                  warts_tbit_pkt_t *state, uint32_t *len)
 {
   const warts_var_t *var;
   int max_id = 0;
@@ -699,9 +699,9 @@ static void warts_tbit_pkt_params (const scamper_tbit_pkt_t *pkt,
   return;
 }
 
-static scamper_tbit_pkt_t* warts_tbit_pkt_read (warts_state_t *state,
-                                                uint8_t *buf, uint32_t *off,
-                                                uint32_t len)
+static scamper_tbit_pkt_t* warts_tbit_pkt_read(warts_state_t *state,
+                                               uint8_t *buf, uint32_t *off,
+                                               uint32_t len)
 {
   scamper_tbit_pkt_t *pkt = NULL;
   uint8_t dir, *data = NULL;
@@ -727,10 +727,10 @@ err:
   return NULL;
 }
 
-static int warts_tbit_pkt_write (const scamper_tbit_pkt_t *pkt,
-                                 const scamper_file_t *sf, uint8_t *buf,
-                                 uint32_t *off, const uint32_t len,
-                                 warts_tbit_pkt_t *state)
+static int warts_tbit_pkt_write(const scamper_tbit_pkt_t *pkt,
+                                const scamper_file_t *sf, uint8_t *buf,
+                                uint32_t *off, const uint32_t len,
+                                warts_tbit_pkt_t *state)
 {
   uint16_t dl = pkt->len;
   warts_param_writer_t handlers[] =
@@ -745,8 +745,8 @@ static int warts_tbit_pkt_write (const scamper_tbit_pkt_t *pkt,
   return 0;
 }
 
-void insert_cookie (uint8_t *buf, uint32_t *off, const uint32_t len,
-                    const uint8_t *cookie, uint8_t *count)
+void insert_cookie(uint8_t *buf, uint32_t *off, const uint32_t len,
+                   const uint8_t *cookie, uint8_t *count)
 {
   assert(len - *off >= ((*count) + 1));
   buf[(*off)++] = *count;
@@ -755,8 +755,8 @@ void insert_cookie (uint8_t *buf, uint32_t *off, const uint32_t len,
   return;
 }
 
-int extract_cookie (const uint8_t *buf, uint32_t *off, const uint32_t len,
-                    uint8_t *out, void *param)
+int extract_cookie(const uint8_t *buf, uint32_t *off, const uint32_t len,
+                   uint8_t *out, void *param)
 {
   uint8_t cookielen;
   if (*off >= len || len - *off < 1)
@@ -769,9 +769,9 @@ int extract_cookie (const uint8_t *buf, uint32_t *off, const uint32_t len,
   return 0;
 }
 
-static void warts_tbit_params (const scamper_tbit_t *tbit,
-                               warts_addrtable_t *table, uint8_t *flags,
-                               uint16_t *flags_len, uint16_t *params_len)
+static void warts_tbit_params(const scamper_tbit_t *tbit,
+                              warts_addrtable_t *table, uint8_t *flags,
+                              uint16_t *flags_len, uint16_t *params_len)
 {
   const warts_var_t *var;
   int i, max_id = 0;
@@ -825,10 +825,10 @@ static void warts_tbit_params (const scamper_tbit_t *tbit,
   return;
 }
 
-static int warts_tbit_params_read (scamper_tbit_t *tbit,
-                                   warts_addrtable_t *table,
-                                   warts_state_t *state, uint8_t *buf,
-                                   uint32_t *off, uint32_t len)
+static int warts_tbit_params_read(scamper_tbit_t *tbit,
+                                  warts_addrtable_t *table,
+                                  warts_state_t *state, uint8_t *buf,
+                                  uint32_t *off, uint32_t len)
 {
   uint16_t pktc16 = 0;
   uint32_t pktc32 = 0;
@@ -882,13 +882,13 @@ static int warts_tbit_params_read (scamper_tbit_t *tbit,
   return 0;
 }
 
-static int warts_tbit_params_write (const scamper_tbit_t *tbit,
-                                    const scamper_file_t *sf,
-                                    warts_addrtable_t *table, uint8_t *buf,
-                                    uint32_t *off, const uint32_t len,
-                                    const uint8_t *flags,
-                                    const uint16_t flags_len,
-                                    const uint16_t params_len)
+static int warts_tbit_params_write(const scamper_tbit_t *tbit,
+                                   const scamper_file_t *sf,
+                                   warts_addrtable_t *table, uint8_t *buf,
+                                   uint32_t *off, const uint32_t len,
+                                   const uint8_t *flags,
+                                   const uint16_t flags_len,
+                                   const uint16_t params_len)
 {
   uint32_t list_id, cycle_id;
   uint8_t cookielen = tbit->fo_cookielen;
@@ -930,8 +930,8 @@ static int warts_tbit_params_write (const scamper_tbit_t *tbit,
   return 0;
 }
 
-int scamper_file_warts_tbit_read (scamper_file_t *sf, const warts_hdr_t *hdr,
-                                  scamper_tbit_t **tbit_out)
+int scamper_file_warts_tbit_read(scamper_file_t *sf, const warts_hdr_t *hdr,
+                                 scamper_tbit_t **tbit_out)
 {
   scamper_tbit_t *tbit = NULL;
   warts_addrtable_t *table = NULL;
@@ -1082,8 +1082,8 @@ err:
 }
 
 /* Write data from a scamper tbit object to a warts file */
-int scamper_file_warts_tbit_write (const scamper_file_t *sf,
-                                   const scamper_tbit_t *tbit)
+int scamper_file_warts_tbit_write(const scamper_file_t *sf,
+                                  const scamper_tbit_t *tbit)
 {
   warts_addrtable_t *table = NULL;
   warts_tbit_pkt_t *pkts = NULL;
@@ -1111,7 +1111,7 @@ int scamper_file_warts_tbit_write (const scamper_file_t *sf,
   {
     /* Allocate memory for the state */
     size = tbit->pktc * sizeof(warts_tbit_pkt_t);
-    if ((pkts = (warts_tbit_pkt_t*) malloc_zero (size)) == NULL)
+    if ((pkts = (warts_tbit_pkt_t*) malloc_zero(size)) == NULL)
       goto err;
 
     for (i = 0; i < tbit->pktc; i++)
@@ -1170,7 +1170,7 @@ int scamper_file_warts_tbit_write (const scamper_file_t *sf,
   len += 2;
 
   /* Allocate memory to store all of the data (including packets) */
-  if ((buf = malloc_zero (len)) == NULL)
+  if ((buf = malloc_zero(len)) == NULL)
     goto err;
   insert_wartshdr (buf, &off, len, SCAMPER_FILE_OBJ_TBIT);
 

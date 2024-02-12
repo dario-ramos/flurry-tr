@@ -65,7 +65,7 @@ struct scamper_neighbourdisc_do
 {
   scamper_task_t *task;
   void *param;
-  void (*cb) (void*, scamper_addr_t*, scamper_addr_t*);
+  void (*cb)(void*, scamper_addr_t*, scamper_addr_t*);
   dlist_node_t *node;
 };
 
@@ -88,34 +88,34 @@ static const scamper_option_in_t opts[] =
     { 'w', NULL, ND_OPT_WAIT, SCAMPER_OPTION_TYPE_NUM }, };
 static const int opts_cnt = SCAMPER_OPTION_COUNT(opts);
 
-const char* scamper_do_neighbourdisc_usage (void)
+const char* scamper_do_neighbourdisc_usage(void)
 {
   return "neighbourdisc [-FQ] [-i if] [-o replyc] [-q attempts] [-S srcaddr] [-w wait]\n";
 }
 
-static scamper_neighbourdisc_t* nd_getdata (const scamper_task_t *task)
+static scamper_neighbourdisc_t* nd_getdata(const scamper_task_t *task)
 {
   return scamper_task_getdata (task);
 }
 
-static nd_state_t* nd_getstate (const scamper_task_t *task)
+static nd_state_t* nd_getstate(const scamper_task_t *task)
 {
   return scamper_task_getstate (task);
 }
 
-static void nd_handleerror (scamper_task_t *task, int error)
+static void nd_handleerror(scamper_task_t *task, int error)
 {
   scamper_task_queue_done (task, 0);
   return;
 }
 
-static void nd_done (scamper_task_t *task)
+static void nd_done(scamper_task_t *task)
 {
   scamper_task_queue_done (task, 0);
   return;
 }
 
-static void nd_state_free (nd_state_t *state)
+static void nd_state_free(nd_state_t *state)
 {
   if (state->fd != NULL)
     scamper_fd_free (state->fd);
@@ -123,7 +123,7 @@ static void nd_state_free (nd_state_t *state)
   return;
 }
 
-static int nd_state_alloc (scamper_task_t *task)
+static int nd_state_alloc(scamper_task_t *task)
 {
   scamper_neighbourdisc_t *nd = nd_getdata (task);
   scamper_dl_t *dl;
@@ -135,7 +135,7 @@ static int nd_state_alloc (scamper_task_t *task)
 
   gettimeofday_wrap (&nd->start);
 
-  if ((state = malloc_zero (sizeof(nd_state_t))) == NULL)
+  if ((state = malloc_zero(sizeof(nd_state_t))) == NULL)
   {
     printerror (__func__, "could not malloc state");
     goto err;
@@ -193,7 +193,7 @@ err:
   return -1;
 }
 
-static void do_nd_handle_timeout (scamper_task_t *task)
+static void do_nd_handle_timeout(scamper_task_t *task)
 {
   scamper_neighbourdisc_t *nd = nd_getdata (task);
   nd_state_t *state = nd_getstate (task);
@@ -209,7 +209,7 @@ static void do_nd_handle_timeout (scamper_task_t *task)
   return;
 }
 
-static void do_nd_probe_arp (scamper_task_t *task)
+static void do_nd_probe_arp(scamper_task_t *task)
 {
   scamper_neighbourdisc_t *nd = nd_getdata (task);
   size_t off;
@@ -254,7 +254,7 @@ static void do_nd_probe_arp (scamper_task_t *task)
   return;
 }
 
-static void do_nd_probe_nsol (scamper_task_t *task)
+static void do_nd_probe_nsol(scamper_task_t *task)
 {
   scamper_neighbourdisc_t *nd = nd_getdata (task);
   struct ip6_hdr *ip6;
@@ -347,7 +347,7 @@ static void do_nd_probe_nsol (scamper_task_t *task)
   return;
 }
 
-static void do_nd_handle_dl (scamper_task_t *task, scamper_dl_rec_t *dl)
+static void do_nd_handle_dl(scamper_task_t *task, scamper_dl_rec_t *dl)
 {
   scamper_neighbourdisc_t *nd = nd_getdata (task);
   nd_state_t *state = nd_getstate (task);
@@ -448,7 +448,7 @@ err:
   return;
 }
 
-static void do_nd_probe (scamper_task_t *task)
+static void do_nd_probe(scamper_task_t *task)
 {
   scamper_neighbourdisc_probe_t *probe = NULL;
   scamper_neighbourdisc_t *nd = nd_getdata (task);
@@ -524,19 +524,19 @@ err:
   return;
 }
 
-static void do_nd_write (scamper_file_t *sf, scamper_task_t *task)
+static void do_nd_write(scamper_file_t *sf, scamper_task_t *task)
 {
   scamper_file_write_neighbourdisc (sf, nd_getdata (task));
   return;
 }
 
-static void do_nd_halt (scamper_task_t *task)
+static void do_nd_halt(scamper_task_t *task)
 {
   nd_done (task);
   return;
 }
 
-static void do_nd_free (scamper_task_t *task)
+static void do_nd_free(scamper_task_t *task)
 {
   scamper_neighbourdisc_do_t *nddo;
   scamper_neighbourdisc_t *nd = nd_getdata (task);
@@ -571,7 +571,7 @@ static void do_nd_free (scamper_task_t *task)
   return;
 }
 
-static int nd_arg_param_validate (int optid, char *param, long long *out)
+static int nd_arg_param_validate(int optid, char *param, long long *out)
 {
   long tmp;
 
@@ -607,15 +607,15 @@ static int nd_arg_param_validate (int optid, char *param, long long *out)
   return 0;
 }
 
-int scamper_do_neighbourdisc_arg_validate (int argc, char *argv[], int *stop)
+int scamper_do_neighbourdisc_arg_validate(int argc, char *argv[], int *stop)
 {
   return scamper_options_validate (opts, opts_cnt, argc, argv, stop,
                                    nd_arg_param_validate);
 }
 
-scamper_task_t* scamper_do_neighbourdisc_alloctask (void *data,
-                                                    scamper_list_t *list,
-                                                    scamper_cycle_t *cycle)
+scamper_task_t* scamper_do_neighbourdisc_alloctask(void *data,
+                                                   scamper_list_t *list,
+                                                   scamper_cycle_t *cycle)
 {
   scamper_neighbourdisc_t *nd = (scamper_neighbourdisc_t*) data;
   scamper_task_sig_t *sig = NULL;
@@ -649,7 +649,7 @@ err:
   return NULL;
 }
 
-void* scamper_do_neighbourdisc_alloc (char *str)
+void* scamper_do_neighbourdisc_alloc(char *str)
 {
   scamper_neighbourdisc_t *nd = NULL;
   scamper_option_out_t *opts_out = NULL, *opt;
@@ -789,7 +789,7 @@ err:
   return NULL;
 }
 
-void scamper_neighbourdisc_do_free (scamper_neighbourdisc_do_t *nddo)
+void scamper_neighbourdisc_do_free(scamper_neighbourdisc_do_t *nddo)
 {
   scamper_task_t *task;
   nd_state_t *state;
@@ -808,9 +808,9 @@ void scamper_neighbourdisc_do_free (scamper_neighbourdisc_do_t *nddo)
   return;
 }
 
-static scamper_neighbourdisc_do_t* scamper_neighbourdisc_do_add (
+static scamper_neighbourdisc_do_t* scamper_neighbourdisc_do_add(
     scamper_task_t *task, void *param,
-    void (*cb) (void *param, scamper_addr_t *ip, scamper_addr_t *dst))
+    void (*cb)(void *param, scamper_addr_t *ip, scamper_addr_t *dst))
 {
   scamper_neighbourdisc_do_t *nddo = NULL;
   nd_state_t *state = nd_getstate (task);
@@ -820,7 +820,7 @@ static scamper_neighbourdisc_do_t* scamper_neighbourdisc_do_add (
     printerror (__func__, "could not alloc state->cbs");
     return NULL;
   }
-  if ((nddo = malloc_zero (sizeof(scamper_neighbourdisc_do_t))) == NULL)
+  if ((nddo = malloc_zero(sizeof(scamper_neighbourdisc_do_t))) == NULL)
   {
     printerror (__func__, "could not alloc nddo");
     return NULL;
@@ -837,9 +837,9 @@ static scamper_neighbourdisc_do_t* scamper_neighbourdisc_do_add (
   return nddo;
 }
 
-scamper_neighbourdisc_do_t* scamper_do_neighbourdisc_do (
+scamper_neighbourdisc_do_t* scamper_do_neighbourdisc_do(
     int ifindex, scamper_addr_t *dst, void *param,
-    void (*cb) (void *param, scamper_addr_t *ip, scamper_addr_t *dst))
+    void (*cb)(void *param, scamper_addr_t *ip, scamper_addr_t *dst))
 {
   scamper_neighbourdisc_t *nd = NULL;
   scamper_task_sig_t sig;
@@ -899,13 +899,13 @@ err:
   return NULL;
 }
 
-void scamper_do_neighbourdisc_free (void *data)
+void scamper_do_neighbourdisc_free(void *data)
 {
   scamper_neighbourdisc_free ((scamper_neighbourdisc_t*) data);
   return;
 }
 
-void scamper_do_neighbourdisc_cleanup ()
+void scamper_do_neighbourdisc_cleanup()
 {
   if (pktbuf != NULL)
   {
@@ -916,7 +916,7 @@ void scamper_do_neighbourdisc_cleanup ()
   return;
 }
 
-int scamper_do_neighbourdisc_init ()
+int scamper_do_neighbourdisc_init()
 {
   nd_funcs.probe = do_nd_probe;
   nd_funcs.handle_timeout = do_nd_handle_timeout;

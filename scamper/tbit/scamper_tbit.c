@@ -60,14 +60,14 @@ struct scamper_tbit_tcpq
   int tqec;
 };
 
-int scamper_tbit_data_seqoff (uint32_t rcv_nxt, uint32_t seq)
+int scamper_tbit_data_seqoff(uint32_t rcv_nxt, uint32_t seq)
 {
   if (seq >= rcv_nxt)
     return seq - rcv_nxt;
   return TCP_MAX_SEQNUM - rcv_nxt + seq + 1;
 }
 
-static int tqe_cmp (const tqe_t *a, const tqe_t *b)
+static int tqe_cmp(const tqe_t *a, const tqe_t *b)
 {
   if (a->off < b->off)
     return -1;
@@ -80,8 +80,8 @@ static int tqe_cmp (const tqe_t *a, const tqe_t *b)
   return 0;
 }
 
-int scamper_tbit_fo_setcookie (scamper_tbit_t *tbit, uint8_t *cookie,
-                               uint8_t len)
+int scamper_tbit_fo_setcookie(scamper_tbit_t *tbit, uint8_t *cookie,
+                              uint8_t len)
 {
   if ((tbit->fo_cookie = memdup (cookie, len)) == NULL)
     return -1;
@@ -89,7 +89,7 @@ int scamper_tbit_fo_setcookie (scamper_tbit_t *tbit, uint8_t *cookie,
   return 0;
 }
 
-int scamper_tbit_fo_getcookie (scamper_tbit_t *tbit, uint8_t *c, uint8_t *l)
+int scamper_tbit_fo_getcookie(scamper_tbit_t *tbit, uint8_t *c, uint8_t *l)
 {
   uint8_t u8, v, iphlen, tcphlen, *pktptr;
   scamper_tbit_pkt_t *pkt;
@@ -179,7 +179,7 @@ int scamper_tbit_fo_getcookie (scamper_tbit_t *tbit, uint8_t *c, uint8_t *l)
   return 0;
 }
 
-void scamper_tbit_tcpqe_free (scamper_tbit_tcpqe_t *qe, void (*ff) (void*))
+void scamper_tbit_tcpqe_free(scamper_tbit_tcpqe_t *qe, void (*ff)(void*))
 {
   if (qe == NULL)
     return;
@@ -195,7 +195,7 @@ void scamper_tbit_tcpqe_free (scamper_tbit_tcpqe_t *qe, void (*ff) (void*))
  * returns the sequence number at the tail of the tcpq, even if there
  * are gaps in the tcpq.
  */
-uint32_t scamper_tbit_tcpq_tail (const scamper_tbit_tcpq_t *tcpq)
+uint32_t scamper_tbit_tcpq_tail(const scamper_tbit_tcpq_t *tcpq)
 {
   uint32_t range = 0, edge, u32;
   scamper_tbit_tcpqe_t *qe;
@@ -212,10 +212,10 @@ uint32_t scamper_tbit_tcpq_tail (const scamper_tbit_tcpq_t *tcpq)
   return tcpq->seq + range;
 }
 
-scamper_tbit_tcpq_t* scamper_tbit_tcpq_alloc (uint32_t isn)
+scamper_tbit_tcpq_t* scamper_tbit_tcpq_alloc(uint32_t isn)
 {
   scamper_tbit_tcpq_t *q;
-  if ((q = malloc_zero (sizeof(scamper_tbit_tcpq_t))) == NULL)
+  if ((q = malloc_zero(sizeof(scamper_tbit_tcpq_t))) == NULL)
     goto err;
   q->seq = isn;
   return q;
@@ -224,7 +224,7 @@ err:
   return NULL;
 }
 
-void scamper_tbit_tcpq_flush (scamper_tbit_tcpq_t *q, void (*ff) (void*))
+void scamper_tbit_tcpq_flush(scamper_tbit_tcpq_t *q, void (*ff)(void*))
 {
   tqe_t *tqe;
   int i;
@@ -244,7 +244,7 @@ void scamper_tbit_tcpq_flush (scamper_tbit_tcpq_t *q, void (*ff) (void*))
   return;
 }
 
-void scamper_tbit_tcpq_free (scamper_tbit_tcpq_t *q, void (*ff) (void*))
+void scamper_tbit_tcpq_free(scamper_tbit_tcpq_t *q, void (*ff)(void*))
 {
   if (q == NULL)
     return;
@@ -254,7 +254,7 @@ void scamper_tbit_tcpq_free (scamper_tbit_tcpq_t *q, void (*ff) (void*))
   return;
 }
 
-int scamper_tbit_tcpq_seg (scamper_tbit_tcpq_t *q, uint32_t *seq, uint16_t *len)
+int scamper_tbit_tcpq_seg(scamper_tbit_tcpq_t *q, uint32_t *seq, uint16_t *len)
 {
   tqe_t *tqe;
   assert(q->tqec >= 0);
@@ -267,7 +267,7 @@ int scamper_tbit_tcpq_seg (scamper_tbit_tcpq_t *q, uint32_t *seq, uint16_t *len)
   return 0;
 }
 
-scamper_tbit_tcpqe_t* scamper_tbit_tcpq_pop (scamper_tbit_tcpq_t *q)
+scamper_tbit_tcpqe_t* scamper_tbit_tcpq_pop(scamper_tbit_tcpq_t *q)
 {
   scamper_tbit_tcpqe_t *qe;
   uint16_t len;
@@ -296,15 +296,15 @@ scamper_tbit_tcpqe_t* scamper_tbit_tcpq_pop (scamper_tbit_tcpq_t *q)
   return qe;
 }
 
-int scamper_tbit_tcpq_add (scamper_tbit_tcpq_t *q, uint32_t seq, uint8_t flags,
-                           uint16_t len, uint8_t *data)
+int scamper_tbit_tcpq_add(scamper_tbit_tcpq_t *q, uint32_t seq, uint8_t flags,
+                          uint16_t len, uint8_t *data)
 {
   tqe_t *tqe;
 
   assert(scamper_tbit_data_inrange(q->seq, seq, len) != 0);
-  if ((tqe = malloc_zero (sizeof(tqe_t))) == NULL)
+  if ((tqe = malloc_zero(sizeof(tqe_t))) == NULL)
     goto err;
-  if ((tqe->qe = malloc_zero (sizeof(scamper_tbit_tcpqe_t))) == NULL)
+  if ((tqe->qe = malloc_zero(sizeof(scamper_tbit_tcpqe_t))) == NULL)
     goto err;
   tqe->off = scamper_tbit_data_seqoff (q->seq, seq);
   tqe->qe->seq = seq;
@@ -325,7 +325,7 @@ err:
   return -1;
 }
 
-int scamper_tbit_tcpq_sack (scamper_tbit_tcpq_t *q, uint32_t *sack, int count)
+int scamper_tbit_tcpq_sack(scamper_tbit_tcpq_t *q, uint32_t *sack, int count)
 {
   uint32_t left, right;
   scamper_tbit_tcpqe_t *qe;
@@ -380,7 +380,7 @@ int scamper_tbit_tcpq_sack (scamper_tbit_tcpq_t *q, uint32_t *sack, int count)
  * rcv_nxt <= beginning sequence number of segment < rcv_nxt + rcv_wnd OR
  * rcv_nxt <= ending sequence number of segment < rcv_nxt + rcv_wnd
  */
-int scamper_tbit_data_inrange (uint32_t rcv_nxt, uint32_t seq, uint16_t len)
+int scamper_tbit_data_inrange(uint32_t rcv_nxt, uint32_t seq, uint16_t len)
 {
   if ((SEQ_LEQ(rcv_nxt, seq) && SEQ_LT(seq, rcv_nxt + 65535))
       || (SEQ_LEQ(rcv_nxt, seq+len-1) && SEQ_LT(seq + len - 1, rcv_nxt + 65535)))
@@ -388,7 +388,7 @@ int scamper_tbit_data_inrange (uint32_t rcv_nxt, uint32_t seq, uint16_t len)
   return 0;
 }
 
-int scamper_tbit_pkt_iplen (const scamper_tbit_pkt_t *pkt)
+int scamper_tbit_pkt_iplen(const scamper_tbit_pkt_t *pkt)
 {
   uint8_t v = pkt->data[0] >> 4;
   int rc = -1;
@@ -401,8 +401,8 @@ int scamper_tbit_pkt_iplen (const scamper_tbit_pkt_t *pkt)
   return rc;
 }
 
-int scamper_tbit_pkt_iph (const scamper_tbit_pkt_t *pkt, uint8_t *proto,
-                          uint8_t *iphlen, uint16_t *iplen)
+int scamper_tbit_pkt_iph(const scamper_tbit_pkt_t *pkt, uint8_t *proto,
+                         uint8_t *iphlen, uint16_t *iplen)
 {
   uint8_t v = pkt->data[0] >> 4;
 
@@ -446,7 +446,7 @@ int scamper_tbit_pkt_iph (const scamper_tbit_pkt_t *pkt, uint8_t *proto,
   return -1;
 }
 
-int scamper_tbit_pkt_tcpdatabytes (const scamper_tbit_pkt_t *pkt, uint16_t *bc)
+int scamper_tbit_pkt_tcpdatabytes(const scamper_tbit_pkt_t *pkt, uint16_t *bc)
 {
   uint8_t iphlen, tcphlen, proto;
   uint16_t iplen;
@@ -460,7 +460,7 @@ int scamper_tbit_pkt_tcpdatabytes (const scamper_tbit_pkt_t *pkt, uint16_t *bc)
   return 0;
 }
 
-int scamper_tbit_pkt_tcpack (const scamper_tbit_pkt_t *pkt, uint32_t *ack)
+int scamper_tbit_pkt_tcpack(const scamper_tbit_pkt_t *pkt, uint32_t *ack)
 {
   uint8_t iphlen, proto;
   uint16_t iplen;
@@ -472,7 +472,7 @@ int scamper_tbit_pkt_tcpack (const scamper_tbit_pkt_t *pkt, uint32_t *ack)
   return 0;
 }
 
-int scamper_tbit_icw_size (const scamper_tbit_t *tbit, uint32_t *icw_out)
+int scamper_tbit_icw_size(const scamper_tbit_t *tbit, uint32_t *icw_out)
 {
   const scamper_tbit_icw_t *icw = tbit->data;
   const scamper_tbit_pkt_t *pkt;
@@ -540,7 +540,7 @@ done:
   return rc;
 }
 
-int scamper_tbit_stats (const scamper_tbit_t *tbit, scamper_tbit_stats_t *stats)
+int scamper_tbit_stats(const scamper_tbit_t *tbit, scamper_tbit_stats_t *stats)
 {
   const scamper_tbit_pkt_t *pkt, *syn;
   scamper_tbit_tcpq_t *q = NULL;
@@ -641,7 +641,7 @@ err:
   return -1;
 }
 
-char* scamper_tbit_type2str (const scamper_tbit_t *tbit, char *buf, size_t len)
+char* scamper_tbit_type2str(const scamper_tbit_t *tbit, char *buf, size_t len)
 {
   static char *t[] =
     {
@@ -657,7 +657,7 @@ char* scamper_tbit_type2str (const scamper_tbit_t *tbit, char *buf, size_t len)
   return t[tbit->type];
 }
 
-char* scamper_tbit_res2str (const scamper_tbit_t *tbit, char *buf, size_t len)
+char* scamper_tbit_res2str(const scamper_tbit_t *tbit, char *buf, size_t len)
 {
   static char *t[] =
     { "none", /* 0 */
@@ -727,12 +727,12 @@ char* scamper_tbit_res2str (const scamper_tbit_t *tbit, char *buf, size_t len)
   return t[tbit->result];
 }
 
-scamper_tbit_pkt_t* scamper_tbit_pkt_alloc (uint8_t dir, uint8_t *data,
-                                            uint16_t len, struct timeval *tv)
+scamper_tbit_pkt_t* scamper_tbit_pkt_alloc(uint8_t dir, uint8_t *data,
+                                           uint16_t len, struct timeval *tv)
 {
   scamper_tbit_pkt_t *pkt;
 
-  if ((pkt = malloc_zero (sizeof(scamper_tbit_pkt_t))) == NULL)
+  if ((pkt = malloc_zero(sizeof(scamper_tbit_pkt_t))) == NULL)
     goto err;
 
   pkt->dir = dir;
@@ -751,7 +751,7 @@ err:
   return NULL;
 }
 
-void scamper_tbit_pkt_free (scamper_tbit_pkt_t *pkt)
+void scamper_tbit_pkt_free(scamper_tbit_pkt_t *pkt)
 {
   if (pkt == NULL)
     return;
@@ -761,15 +761,15 @@ void scamper_tbit_pkt_free (scamper_tbit_pkt_t *pkt)
   return;
 }
 
-int scamper_tbit_pkts_alloc (scamper_tbit_t *tbit, uint32_t count)
+int scamper_tbit_pkts_alloc(scamper_tbit_t *tbit, uint32_t count)
 {
   size_t size = count * sizeof(scamper_tbit_pkt_t*);
-  if ((tbit->pkts = (scamper_tbit_pkt_t**) malloc_zero (size)) == NULL)
+  if ((tbit->pkts = (scamper_tbit_pkt_t**) malloc_zero(size)) == NULL)
     return -1;
   return 0;
 }
 
-int scamper_tbit_record_pkt (scamper_tbit_t *tbit, scamper_tbit_pkt_t *pkt)
+int scamper_tbit_record_pkt(scamper_tbit_t *tbit, scamper_tbit_pkt_t *pkt)
 {
   size_t len = (tbit->pktc + 1) * sizeof(scamper_tbit_pkt_t*);
 
@@ -781,12 +781,12 @@ int scamper_tbit_record_pkt (scamper_tbit_t *tbit, scamper_tbit_pkt_t *pkt)
   return 0;
 }
 
-scamper_tbit_app_http_t* scamper_tbit_app_http_alloc (uint8_t type, char *host,
-                                                      char *file)
+scamper_tbit_app_http_t* scamper_tbit_app_http_alloc(uint8_t type, char *host,
+                                                     char *file)
 {
   scamper_tbit_app_http_t *http;
 
-  if ((http = malloc_zero (sizeof(scamper_tbit_app_http_t))) == NULL
+  if ((http = malloc_zero(sizeof(scamper_tbit_app_http_t))) == NULL
       || (host != NULL && (http->host = strdup (host)) == NULL)
       || (file != NULL && (http->file = strdup (file)) == NULL))
   {
@@ -804,7 +804,7 @@ scamper_tbit_app_http_t* scamper_tbit_app_http_alloc (uint8_t type, char *host,
   return http;
 }
 
-void scamper_tbit_app_http_free (scamper_tbit_app_http_t *http)
+void scamper_tbit_app_http_free(scamper_tbit_app_http_t *http)
 {
   if (http == NULL)
     return;
@@ -816,12 +816,12 @@ void scamper_tbit_app_http_free (scamper_tbit_app_http_t *http)
   return;
 }
 
-scamper_tbit_app_bgp_t* scamper_tbit_app_bgp_alloc (void)
+scamper_tbit_app_bgp_t* scamper_tbit_app_bgp_alloc(void)
 {
-  return malloc_zero (sizeof(scamper_tbit_app_bgp_t));
+  return malloc_zero(sizeof(scamper_tbit_app_bgp_t));
 }
 
-void scamper_tbit_app_bgp_free (scamper_tbit_app_bgp_t *bgp)
+void scamper_tbit_app_bgp_free(scamper_tbit_app_bgp_t *bgp)
 {
   if (bgp == NULL)
     return;
@@ -829,12 +829,12 @@ void scamper_tbit_app_bgp_free (scamper_tbit_app_bgp_t *bgp)
   return;
 }
 
-scamper_tbit_pmtud_t* scamper_tbit_pmtud_alloc (void)
+scamper_tbit_pmtud_t* scamper_tbit_pmtud_alloc(void)
 {
-  return malloc_zero (sizeof(scamper_tbit_pmtud_t));
+  return malloc_zero(sizeof(scamper_tbit_pmtud_t));
 }
 
-void scamper_tbit_pmtud_free (scamper_tbit_pmtud_t *pmtud)
+void scamper_tbit_pmtud_free(scamper_tbit_pmtud_t *pmtud)
 {
   if (pmtud == NULL)
     return;
@@ -844,12 +844,12 @@ void scamper_tbit_pmtud_free (scamper_tbit_pmtud_t *pmtud)
   return;
 }
 
-scamper_tbit_null_t* scamper_tbit_null_alloc (void)
+scamper_tbit_null_t* scamper_tbit_null_alloc(void)
 {
-  return malloc_zero (sizeof(scamper_tbit_null_t));
+  return malloc_zero(sizeof(scamper_tbit_null_t));
 }
 
-void scamper_tbit_null_free (scamper_tbit_null_t *null)
+void scamper_tbit_null_free(scamper_tbit_null_t *null)
 {
   if (null == NULL)
     return;
@@ -857,23 +857,23 @@ void scamper_tbit_null_free (scamper_tbit_null_t *null)
   return;
 }
 
-scamper_tbit_icw_t* scamper_tbit_icw_alloc (void)
+scamper_tbit_icw_t* scamper_tbit_icw_alloc(void)
 {
-  return malloc_zero (sizeof(scamper_tbit_icw_t));
+  return malloc_zero(sizeof(scamper_tbit_icw_t));
 }
 
-void scamper_tbit_icw_free (scamper_tbit_icw_t *icw)
+void scamper_tbit_icw_free(scamper_tbit_icw_t *icw)
 {
   free (icw);
   return;
 }
 
-scamper_tbit_blind_t* scamper_tbit_blind_alloc (void)
+scamper_tbit_blind_t* scamper_tbit_blind_alloc(void)
 {
-  return malloc_zero (sizeof(scamper_tbit_blind_t));
+  return malloc_zero(sizeof(scamper_tbit_blind_t));
 }
 
-void scamper_tbit_blind_free (scamper_tbit_blind_t *blind)
+void scamper_tbit_blind_free(scamper_tbit_blind_t *blind)
 {
   if (blind == NULL)
     return;
@@ -882,7 +882,7 @@ void scamper_tbit_blind_free (scamper_tbit_blind_t *blind)
 }
 
 /* Free the tbit object. */
-void scamper_tbit_free (scamper_tbit_t *tbit)
+void scamper_tbit_free(scamper_tbit_t *tbit)
 {
   uint32_t i;
 
@@ -936,7 +936,7 @@ void scamper_tbit_free (scamper_tbit_t *tbit)
   return;
 }
 
-scamper_tbit_t* scamper_tbit_alloc (void)
+scamper_tbit_t* scamper_tbit_alloc(void)
 {
-  return (scamper_tbit_t*) malloc_zero (sizeof(scamper_tbit_t));
+  return (scamper_tbit_t*) malloc_zero(sizeof(scamper_tbit_t));
 }

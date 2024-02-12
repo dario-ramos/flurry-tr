@@ -79,7 +79,7 @@ static int sunos = 0;
 /* address cache used to avoid reallocating the same address multiple times */
 extern scamper_addrcache_t *addrcache;
 
-void* scamper_do_traceb_alloc (char *str)
+void* scamper_do_traceb_alloc(char *str)
 {
   char *addr;
   scamper_option_out_t *opts_out = NULL, *opt;
@@ -124,8 +124,8 @@ err:
  * scamper_do_traceb_alloctask
  *
  */
-scamper_task_t* scamper_do_traceb_alloctask (void *data, scamper_list_t *list,
-                                             scamper_cycle_t *cycle)
+scamper_task_t* scamper_do_traceb_alloctask(void *data, scamper_list_t *list,
+                                            scamper_cycle_t *cycle)
 {
   scamper_traceb_t *trace = (scamper_traceb_t*) data;
   scamper_task_sig_t *sig = NULL;
@@ -156,12 +156,12 @@ err:
   return NULL;
 }
 
-const char* scamper_do_traceb_usage (void)
+const char* scamper_do_traceb_usage(void)
 {
   return "traceb";
 }
 
-static int traceb_arg_param_validate (int optid, char *param, long long *out)
+static int traceb_arg_param_validate(int optid, char *param, long long *out)
 {
   // TODO Implement
   return 0;
@@ -172,23 +172,23 @@ static int traceb_arg_param_validate (int optid, char *param, long long *out)
  *
  *
  */
-int scamper_do_traceb_arg_validate (int argc, char *argv[], int *stop)
+int scamper_do_traceb_arg_validate(int argc, char *argv[], int *stop)
 {
   return scamper_options_validate (opts, opts_cnt, argc, argv, stop,
                                    traceb_arg_param_validate);
 }
 
-void scamper_do_traceb_free (void *data)
+void scamper_do_traceb_free(void *data)
 {
   scamper_traceb_free ((scamper_traceb_t*) data);
 }
 
-static scamper_traceb_t* traceb_getdata (const scamper_task_t *task)
+static scamper_traceb_t* traceb_getdata(const scamper_task_t *task)
 {
   return scamper_task_getdata (task);
 }
 
-static void do_traceb_free (scamper_task_t *task)
+static void do_traceb_free(scamper_task_t *task)
 {
   scamper_traceb_t *trace = traceb_getdata (task);
 
@@ -203,19 +203,19 @@ static void do_traceb_free (scamper_task_t *task)
  *
  * time to probe, so send the packet.
  */
-static void do_traceb_probe (scamper_task_t *task)
+static void do_traceb_probe(scamper_task_t *task)
 {
   // TODO Implement the actual probing instead of going straight to "done"
   scamper_task_queue_done (task, 500);
 }
 
-static void do_traceb_write (scamper_file_t *sf, scamper_task_t *task)
+static void do_traceb_write(scamper_file_t *sf, scamper_task_t *task)
 {
   scamper_file_write_traceb (sf, NULL); // TODO Pass trace data
   return;
 }
 
-int scamper_do_traceb_init (void)
+int scamper_do_traceb_init(void)
 {
   const scamper_osinfo_t *osinfo;
 

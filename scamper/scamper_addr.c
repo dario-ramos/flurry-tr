@@ -67,62 +67,62 @@ static const uint16_t uint16_mask[] = {
 };
 #endif
 
-static int ipv4_cmp (const scamper_addr_t*, const scamper_addr_t*);
-static int ipv4_human_cmp (const scamper_addr_t*, const scamper_addr_t*);
-static int ipv6_cmp (const scamper_addr_t*, const scamper_addr_t*);
-static int ipv6_human_cmp (const scamper_addr_t*, const scamper_addr_t*);
-static int ethernet_cmp (const scamper_addr_t*, const scamper_addr_t*);
-static int firewire_cmp (const scamper_addr_t*, const scamper_addr_t*);
+static int ipv4_cmp(const scamper_addr_t*, const scamper_addr_t*);
+static int ipv4_human_cmp(const scamper_addr_t*, const scamper_addr_t*);
+static int ipv6_cmp(const scamper_addr_t*, const scamper_addr_t*);
+static int ipv6_human_cmp(const scamper_addr_t*, const scamper_addr_t*);
+static int ethernet_cmp(const scamper_addr_t*, const scamper_addr_t*);
+static int firewire_cmp(const scamper_addr_t*, const scamper_addr_t*);
 
-static void ipv4_tostr (const scamper_addr_t*, char*, const size_t);
-static void ipv6_tostr (const scamper_addr_t*, char*, const size_t);
-static void ethernet_tostr (const scamper_addr_t*, char*, const size_t);
-static void firewire_tostr (const scamper_addr_t*, char*, const size_t);
+static void ipv4_tostr(const scamper_addr_t*, char*, const size_t);
+static void ipv6_tostr(const scamper_addr_t*, char*, const size_t);
+static void ethernet_tostr(const scamper_addr_t*, char*, const size_t);
+static void firewire_tostr(const scamper_addr_t*, char*, const size_t);
 
-static int ipv4_inprefix (const scamper_addr_t*, const void*, int len);
-static int ipv6_inprefix (const scamper_addr_t*, const void*, int len);
+static int ipv4_inprefix(const scamper_addr_t*, const void*, int len);
+static int ipv6_inprefix(const scamper_addr_t*, const void*, int len);
 
-static int ipv4_prefix (const scamper_addr_t*, const scamper_addr_t*);
-static int ipv4_prefixhosts (const scamper_addr_t*, const scamper_addr_t*);
-static int ipv6_prefix (const scamper_addr_t*, const scamper_addr_t*);
+static int ipv4_prefix(const scamper_addr_t*, const scamper_addr_t*);
+static int ipv4_prefixhosts(const scamper_addr_t*, const scamper_addr_t*);
+static int ipv6_prefix(const scamper_addr_t*, const scamper_addr_t*);
 
-static int ipv4_bit (const scamper_addr_t*, int bit);
-static int ipv6_bit (const scamper_addr_t*, int bit);
-static int ethernet_bit (const scamper_addr_t*, int bit);
-static int firewire_bit (const scamper_addr_t*, int bit);
+static int ipv4_bit(const scamper_addr_t*, int bit);
+static int ipv6_bit(const scamper_addr_t*, int bit);
+static int ethernet_bit(const scamper_addr_t*, int bit);
+static int firewire_bit(const scamper_addr_t*, int bit);
 
-static int ipv4_fbd (const scamper_addr_t*, const scamper_addr_t*);
-static int ipv6_fbd (const scamper_addr_t*, const scamper_addr_t*);
-static int ethernet_fbd (const scamper_addr_t*, const scamper_addr_t*);
-static int firewire_fbd (const scamper_addr_t*, const scamper_addr_t*);
+static int ipv4_fbd(const scamper_addr_t*, const scamper_addr_t*);
+static int ipv6_fbd(const scamper_addr_t*, const scamper_addr_t*);
+static int ethernet_fbd(const scamper_addr_t*, const scamper_addr_t*);
+static int firewire_fbd(const scamper_addr_t*, const scamper_addr_t*);
 
-static int ipv4_islinklocal (const scamper_addr_t*);
-static int ipv6_islinklocal (const scamper_addr_t*);
+static int ipv4_islinklocal(const scamper_addr_t*);
+static int ipv6_islinklocal(const scamper_addr_t*);
 
-static int ipv4_netaddr (const scamper_addr_t*, void*, int);
-static int ipv6_netaddr (const scamper_addr_t*, void*, int);
+static int ipv4_netaddr(const scamper_addr_t*, void*, int);
+static int ipv6_netaddr(const scamper_addr_t*, void*, int);
 
-static int ipv4_isreserved (const scamper_addr_t*);
-static int ipv6_isreserved (const scamper_addr_t*);
+static int ipv4_isreserved(const scamper_addr_t*);
+static int ipv6_isreserved(const scamper_addr_t*);
 
-static int ipv6_isunicast (const scamper_addr_t*);
+static int ipv6_isunicast(const scamper_addr_t*);
 
 struct handler
 {
   int type;
   size_t size;
-  int (*cmp) (const scamper_addr_t *sa, const scamper_addr_t *sb);
-  int (*human_cmp) (const scamper_addr_t *sa, const scamper_addr_t *sb);
-  void (*tostr) (const scamper_addr_t *addr, char *buf, const size_t len);
-  int (*inprefix) (const scamper_addr_t *addr, const void *prefix, int len);
-  int (*prefix) (const scamper_addr_t *a, const scamper_addr_t *b);
-  int (*prefixhosts) (const scamper_addr_t *a, const scamper_addr_t *b);
-  int (*islinklocal) (const scamper_addr_t *a);
-  int (*netaddr) (const scamper_addr_t *a, void *net, int netlen);
-  int (*isunicast) (const scamper_addr_t *a);
-  int (*isreserved) (const scamper_addr_t *a);
-  int (*bit) (const scamper_addr_t *a, int bit);
-  int (*fbd) (const scamper_addr_t *a, const scamper_addr_t *b);
+  int (*cmp)(const scamper_addr_t *sa, const scamper_addr_t *sb);
+  int (*human_cmp)(const scamper_addr_t *sa, const scamper_addr_t *sb);
+  void (*tostr)(const scamper_addr_t *addr, char *buf, const size_t len);
+  int (*inprefix)(const scamper_addr_t *addr, const void *prefix, int len);
+  int (*prefix)(const scamper_addr_t *a, const scamper_addr_t *b);
+  int (*prefixhosts)(const scamper_addr_t *a, const scamper_addr_t *b);
+  int (*islinklocal)(const scamper_addr_t *a);
+  int (*netaddr)(const scamper_addr_t *a, void *net, int netlen);
+  int (*isunicast)(const scamper_addr_t *a);
+  int (*isreserved)(const scamper_addr_t *a);
+  int (*bit)(const scamper_addr_t *a, int bit);
+  int (*fbd)(const scamper_addr_t *a, const scamper_addr_t *b);
 };
 
 static const struct handler handlers[] =
@@ -161,7 +161,7 @@ struct scamper_addrcache
   splaytree_t *tree[sizeof(handlers) / sizeof(struct handler)];
 };
 
-static int ipv4_cmp (const scamper_addr_t *sa, const scamper_addr_t *sb)
+static int ipv4_cmp(const scamper_addr_t *sa, const scamper_addr_t *sb)
 {
   struct in_addr *a, *b;
 
@@ -179,7 +179,7 @@ static int ipv4_cmp (const scamper_addr_t *sa, const scamper_addr_t *sb)
   return 0;
 }
 
-static int ipv4_human_cmp (const scamper_addr_t *sa, const scamper_addr_t *sb)
+static int ipv4_human_cmp(const scamper_addr_t *sa, const scamper_addr_t *sb)
 {
   uint32_t a, b;
 
@@ -197,13 +197,13 @@ static int ipv4_human_cmp (const scamper_addr_t *sa, const scamper_addr_t *sb)
   return 0;
 }
 
-static void ipv4_tostr (const scamper_addr_t *addr, char *buf, const size_t len)
+static void ipv4_tostr(const scamper_addr_t *addr, char *buf, const size_t len)
 {
   addr_tostr (AF_INET, addr->addr, buf, len);
   return;
 }
 
-static int ipv4_inprefix (const scamper_addr_t *sa, const void *p, int len)
+static int ipv4_inprefix(const scamper_addr_t *sa, const void *p, int len)
 {
   const struct in_addr *addr = sa->addr;
   const struct in_addr *prefix = p;
@@ -220,7 +220,7 @@ static int ipv4_inprefix (const scamper_addr_t *sa, const void *p, int len)
   return 0;
 }
 
-static int ipv4_prefix (const scamper_addr_t *sa, const scamper_addr_t *sb)
+static int ipv4_prefix(const scamper_addr_t *sa, const scamper_addr_t *sb)
 {
   const struct in_addr *a = sa->addr;
   const struct in_addr *b = sb->addr;
@@ -235,7 +235,7 @@ static int ipv4_prefix (const scamper_addr_t *sa, const scamper_addr_t *sb)
   return i;
 }
 
-static int ipv4_prefixhosts (const scamper_addr_t *sa, const scamper_addr_t *sb)
+static int ipv4_prefixhosts(const scamper_addr_t *sa, const scamper_addr_t *sb)
 {
   const struct in_addr *a = sa->addr;
   const struct in_addr *b = sb->addr;
@@ -277,7 +277,7 @@ static int ipv4_prefixhosts (const scamper_addr_t *sa, const scamper_addr_t *sb)
  *
  * an IPv4 address is a link local address if it is in 169.254.0.0/16
  */
-static int ipv4_islinklocal (const scamper_addr_t *sa)
+static int ipv4_islinklocal(const scamper_addr_t *sa)
 {
   const struct in_addr *a = sa->addr;
   if ((ntohl (a->s_addr) & 0xffff0000) == 0xa9fe0000)
@@ -285,7 +285,7 @@ static int ipv4_islinklocal (const scamper_addr_t *sa)
   return 0;
 }
 
-static int ipv4_netaddr (const scamper_addr_t *sa, void *net, int netlen)
+static int ipv4_netaddr(const scamper_addr_t *sa, void *net, int netlen)
 {
   const struct in_addr *a = sa->addr;
   struct in_addr p;
@@ -296,7 +296,7 @@ static int ipv4_netaddr (const scamper_addr_t *sa, void *net, int netlen)
   return 0;
 }
 
-static int ipv4_isreserved (const scamper_addr_t *a)
+static int ipv4_isreserved(const scamper_addr_t *a)
 {
   static const uint32_t prefs[][2] =
     {
@@ -331,7 +331,7 @@ static int ipv4_isreserved (const scamper_addr_t *a)
  * return a bit from the IPv4 address.  bit 1 is the left most bit,
  * bit 32 is the right most bit.
  */
-static int ipv4_bit (const scamper_addr_t *sa, int bit)
+static int ipv4_bit(const scamper_addr_t *sa, int bit)
 {
   struct in_addr *a = (struct in_addr*) sa->addr;
   assert(bit > 0);
@@ -345,7 +345,7 @@ static int ipv4_bit (const scamper_addr_t *sa, int bit)
  * determine the first bit that is different between two IPv4 addresses.
  * bit 32 is the right most bit
  */
-static int ipv4_fbd (const scamper_addr_t *sa, const scamper_addr_t *sb)
+static int ipv4_fbd(const scamper_addr_t *sa, const scamper_addr_t *sb)
 {
   const struct in_addr *a, *b;
   uint32_t v, r;
@@ -375,7 +375,7 @@ static int ipv4_fbd (const scamper_addr_t *sa, const scamper_addr_t *sb)
   return r;
 }
 
-static int ipv6_cmp (const scamper_addr_t *sa, const scamper_addr_t *sb)
+static int ipv6_cmp(const scamper_addr_t *sa, const scamper_addr_t *sb)
 {
   struct in6_addr *a, *b;
   int i;
@@ -405,7 +405,7 @@ static int ipv6_cmp (const scamper_addr_t *sa, const scamper_addr_t *sb)
   return 0;
 }
 
-static int ipv6_human_cmp (const scamper_addr_t *sa, const scamper_addr_t *sb)
+static int ipv6_human_cmp(const scamper_addr_t *sa, const scamper_addr_t *sb)
 {
   struct in6_addr *a, *b;
   int i;
@@ -447,13 +447,13 @@ static int ipv6_human_cmp (const scamper_addr_t *sa, const scamper_addr_t *sb)
   return 0;
 }
 
-static void ipv6_tostr (const scamper_addr_t *addr, char *buf, const size_t len)
+static void ipv6_tostr(const scamper_addr_t *addr, char *buf, const size_t len)
 {
   addr_tostr (AF_INET6, addr->addr, buf, len);
   return;
 }
 
-static int ipv6_inprefix (const scamper_addr_t *sa, const void *p, int len)
+static int ipv6_inprefix(const scamper_addr_t *sa, const void *p, int len)
 {
   const struct in6_addr *addr = sa->addr;
   const struct in6_addr *prefix = p;
@@ -513,7 +513,7 @@ static int ipv6_inprefix (const scamper_addr_t *sa, const void *p, int len)
   return -1;
 }
 
-static int ipv6_prefix (const scamper_addr_t *sa, const scamper_addr_t *sb)
+static int ipv6_prefix(const scamper_addr_t *sa, const scamper_addr_t *sb)
 {
   const struct in6_addr *a = sa->addr;
   const struct in6_addr *b = sb->addr;
@@ -573,7 +573,7 @@ static int ipv6_prefix (const scamper_addr_t *sa, const scamper_addr_t *sb)
  *
  * an IPv6 address is a link local address if it is in fe80::/10
  */
-static int ipv6_islinklocal (const scamper_addr_t *sa)
+static int ipv6_islinklocal(const scamper_addr_t *sa)
 {
   const struct in6_addr *a = sa->addr;
   if (a->s6_addr[0] == 0xfe && (a->s6_addr[1] & 0xc0) == 0x80)
@@ -581,7 +581,7 @@ static int ipv6_islinklocal (const scamper_addr_t *sa)
   return 0;
 }
 
-static int ipv6_netaddr (const scamper_addr_t *sa, void *net, int nl)
+static int ipv6_netaddr(const scamper_addr_t *sa, void *net, int nl)
 {
   const struct in6_addr *a = sa->addr;
   struct in6_addr p;
@@ -620,7 +620,7 @@ static int ipv6_netaddr (const scamper_addr_t *sa, void *net, int nl)
   return 0;
 }
 
-static int ipv6_isreserved (const scamper_addr_t *sa)
+static int ipv6_isreserved(const scamper_addr_t *sa)
 {
   const struct in6_addr *a = sa->addr;
 
@@ -666,7 +666,7 @@ static int ipv6_isreserved (const scamper_addr_t *sa)
   return 0;
 }
 
-static int ipv6_isunicast (const scamper_addr_t *sa)
+static int ipv6_isunicast(const scamper_addr_t *sa)
 {
   const struct in6_addr *a = sa->addr;
   if ((a->s6_addr[0] & 0xe0) == 0x20)
@@ -674,7 +674,7 @@ static int ipv6_isunicast (const scamper_addr_t *sa)
   return 0;
 }
 
-static int ipv6_bit (const scamper_addr_t *sa, int bit)
+static int ipv6_bit(const scamper_addr_t *sa, int bit)
 {
   struct in6_addr *a = (struct in6_addr*) sa->addr;
   assert(bit > 0);
@@ -686,7 +686,7 @@ static int ipv6_bit (const scamper_addr_t *sa, int bit)
 #endif
 }
 
-static int ipv6_fbd (const scamper_addr_t *sa, const scamper_addr_t *sb)
+static int ipv6_fbd(const scamper_addr_t *sa, const scamper_addr_t *sb)
 {
   const struct in6_addr *a, *b;
   int i, r;
@@ -720,15 +720,15 @@ static int ipv6_fbd (const scamper_addr_t *sa, const scamper_addr_t *sb)
   return 128;
 }
 
-static int ethernet_cmp (const scamper_addr_t *sa, const scamper_addr_t *sb)
+static int ethernet_cmp(const scamper_addr_t *sa, const scamper_addr_t *sb)
 {
   assert(sa->type == SCAMPER_ADDR_TYPE_ETHERNET);
   assert(sb->type == SCAMPER_ADDR_TYPE_ETHERNET);
   return memcmp (sa->addr, sb->addr, 6);
 }
 
-static void ethernet_tostr (const scamper_addr_t *addr, char *buf,
-                            const size_t len)
+static void ethernet_tostr(const scamper_addr_t *addr, char *buf,
+                           const size_t len)
 {
   uint8_t *mac = (uint8_t*) addr->addr;
   snprintf (buf, len, "%02x:%02x:%02x:%02x:%02x:%02x", mac[0], mac[1], mac[2],
@@ -736,7 +736,7 @@ static void ethernet_tostr (const scamper_addr_t *addr, char *buf,
   return;
 }
 
-static int ethernet_bit (const scamper_addr_t *addr, int bit)
+static int ethernet_bit(const scamper_addr_t *addr, int bit)
 {
   static const uint8_t mask[] =
     { 0x01, 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02 };
@@ -747,7 +747,7 @@ static int ethernet_bit (const scamper_addr_t *addr, int bit)
   return (mac[(bit - 1) / 8] & mask[bit % 8]) >> shift[bit % 8];
 }
 
-static int ethernet_fbd (const scamper_addr_t *sa, const scamper_addr_t *sb)
+static int ethernet_fbd(const scamper_addr_t *sa, const scamper_addr_t *sb)
 {
   const uint8_t *a, *b;
   uint8_t v;
@@ -783,15 +783,15 @@ static int ethernet_fbd (const scamper_addr_t *sa, const scamper_addr_t *sb)
   return r;
 }
 
-static int firewire_cmp (const scamper_addr_t *sa, const scamper_addr_t *sb)
+static int firewire_cmp(const scamper_addr_t *sa, const scamper_addr_t *sb)
 {
   assert(sa->type == SCAMPER_ADDR_TYPE_FIREWIRE);
   assert(sb->type == SCAMPER_ADDR_TYPE_FIREWIRE);
   return memcmp (sa->addr, sb->addr, 8);
 }
 
-static void firewire_tostr (const scamper_addr_t *addr, char *buf,
-                            const size_t len)
+static void firewire_tostr(const scamper_addr_t *addr, char *buf,
+                           const size_t len)
 {
   uint8_t *lla = (uint8_t*) addr->addr;
   snprintf (buf, len, "%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x", lla[0], lla[1],
@@ -799,7 +799,7 @@ static void firewire_tostr (const scamper_addr_t *addr, char *buf,
   return;
 }
 
-static int firewire_bit (const scamper_addr_t *addr, int bit)
+static int firewire_bit(const scamper_addr_t *addr, int bit)
 {
   static const uint8_t mask[] =
     { 0x01, 0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02 };
@@ -810,7 +810,7 @@ static int firewire_bit (const scamper_addr_t *addr, int bit)
   return (lla[(bit - 1) / 8] >> mask[bit % 8]) >> shift[bit % 8];
 }
 
-static int firewire_fbd (const scamper_addr_t *sa, const scamper_addr_t *sb)
+static int firewire_fbd(const scamper_addr_t *sa, const scamper_addr_t *sb)
 {
   const uint8_t *a, *b;
   uint8_t v;
@@ -846,19 +846,19 @@ static int firewire_fbd (const scamper_addr_t *sa, const scamper_addr_t *sb)
   return r;
 }
 
-size_t scamper_addr_size (const scamper_addr_t *sa)
+size_t scamper_addr_size(const scamper_addr_t *sa)
 {
   return handlers[sa->type - 1].size;
 }
 
-const char* scamper_addr_tostr (const scamper_addr_t *sa, char *dst,
-                                const size_t size)
+const char* scamper_addr_tostr(const scamper_addr_t *sa, char *dst,
+                               const size_t size)
 {
   handlers[sa->type - 1].tostr (sa, dst, size);
   return dst;
 }
 
-scamper_addr_t* scamper_addr_alloc (const int type, const void *addr)
+scamper_addr_t* scamper_addr_alloc(const int type, const void *addr)
 {
   scamper_addr_t *sa;
 
@@ -889,7 +889,7 @@ scamper_addr_t* scamper_addr_alloc (const int type, const void *addr)
  * tells us what family the address belongs to, and has a binary
  * representation of the address
  */
-scamper_addr_t* scamper_addr_resolve (const int af, const char *addr)
+scamper_addr_t* scamper_addr_resolve(const int af, const char *addr)
 {
   struct addrinfo hints, *res, *res0;
   scamper_addr_t *sa = NULL;
@@ -926,24 +926,24 @@ scamper_addr_t* scamper_addr_resolve (const int af, const char *addr)
   return sa;
 }
 
-int scamper_addr_inprefix (const scamper_addr_t *addr, const void *p, int len)
+int scamper_addr_inprefix(const scamper_addr_t *addr, const void *p, int len)
 {
   if (handlers[addr->type - 1].inprefix != NULL)
     return handlers[addr->type - 1].inprefix (addr, p, len);
   return -1;
 }
 
-int scamper_addr_bit (const scamper_addr_t *a, int bit)
+int scamper_addr_bit(const scamper_addr_t *a, int bit)
 {
   return handlers[a->type - 1].bit (a, bit);
 }
 
-int scamper_addr_fbd (const scamper_addr_t *a, const scamper_addr_t *b)
+int scamper_addr_fbd(const scamper_addr_t *a, const scamper_addr_t *b)
 {
   return handlers[a->type - 1].fbd (a, b);
 }
 
-int scamper_addr_prefix (const scamper_addr_t *a, const scamper_addr_t *b)
+int scamper_addr_prefix(const scamper_addr_t *a, const scamper_addr_t *b)
 {
   if (a->type != b->type || handlers[a->type - 1].prefix == NULL)
     return -1;
@@ -951,7 +951,7 @@ int scamper_addr_prefix (const scamper_addr_t *a, const scamper_addr_t *b)
   return handlers[a->type - 1].prefix (a, b);
 }
 
-int scamper_addr_prefixhosts (const scamper_addr_t *a, const scamper_addr_t *b)
+int scamper_addr_prefixhosts(const scamper_addr_t *a, const scamper_addr_t *b)
 {
   if (a->type != b->type || handlers[a->type - 1].prefixhosts == NULL)
     return -1;
@@ -959,7 +959,7 @@ int scamper_addr_prefixhosts (const scamper_addr_t *a, const scamper_addr_t *b)
   return handlers[a->type - 1].prefixhosts (a, b);
 }
 
-int scamper_addr_af (const scamper_addr_t *sa)
+int scamper_addr_af(const scamper_addr_t *sa)
 {
   if (sa->type == SCAMPER_ADDR_TYPE_IPV4)
     return AF_INET;
@@ -969,21 +969,21 @@ int scamper_addr_af (const scamper_addr_t *sa)
     return -1;
 }
 
-int scamper_addr_islinklocal (const scamper_addr_t *a)
+int scamper_addr_islinklocal(const scamper_addr_t *a)
 {
   if (handlers[a->type - 1].islinklocal == NULL)
     return 0;
   return handlers[a->type - 1].islinklocal (a);
 }
 
-int scamper_addr_netaddr (const scamper_addr_t *a, void *net, int netlen)
+int scamper_addr_netaddr(const scamper_addr_t *a, void *net, int netlen)
 {
   if (handlers[a->type - 1].netaddr == NULL)
     return -1;
   return handlers[a->type - 1].netaddr (a, net, netlen);
 }
 
-int scamper_addr_isrfc1918 (const scamper_addr_t *sa)
+int scamper_addr_isrfc1918(const scamper_addr_t *sa)
 {
   uint32_t x;
 
@@ -1000,7 +1000,7 @@ int scamper_addr_isrfc1918 (const scamper_addr_t *sa)
   return 0;
 }
 
-int scamper_addr_is6to4 (const scamper_addr_t *sa)
+int scamper_addr_is6to4(const scamper_addr_t *sa)
 {
   const struct in6_addr *a;
 
@@ -1019,22 +1019,22 @@ int scamper_addr_is6to4 (const scamper_addr_t *sa)
   return 0;
 }
 
-int scamper_addr_isunicast (const scamper_addr_t *sa)
+int scamper_addr_isunicast(const scamper_addr_t *sa)
 {
   if (handlers[sa->type - 1].isunicast == NULL)
     return -1;
   return handlers[sa->type - 1].isunicast (sa);
 }
 
-int scamper_addr_isreserved (const scamper_addr_t *sa)
+int scamper_addr_isreserved(const scamper_addr_t *sa)
 {
   if (handlers[sa->type - 1].isreserved == NULL)
     return -1;
   return handlers[sa->type - 1].isreserved (sa);
 }
 
-scamper_addr_t* scamper_addrcache_get (scamper_addrcache_t *ac, const int type,
-                                       const void *addr)
+scamper_addr_t* scamper_addrcache_get(scamper_addrcache_t *ac, const int type,
+                                      const void *addr)
 {
   scamper_addr_t *sa, findme;
 
@@ -1069,8 +1069,8 @@ err:
  * tells us what family the address belongs to, and has a binary
  * representation of the address
  */
-scamper_addr_t* scamper_addrcache_resolve (scamper_addrcache_t *addrcache,
-                                           const int af, const char *addr)
+scamper_addr_t* scamper_addrcache_resolve(scamper_addrcache_t *addrcache,
+                                          const int af, const char *addr)
 {
   struct addrinfo hints, *res, *res0;
   scamper_addr_t *sa = NULL;
@@ -1107,14 +1107,14 @@ scamper_addr_t* scamper_addrcache_resolve (scamper_addrcache_t *addrcache,
   return sa;
 }
 
-scamper_addr_t* scamper_addr_use (scamper_addr_t *sa)
+scamper_addr_t* scamper_addr_use(scamper_addr_t *sa)
 {
   if (sa != NULL)
     sa->refcnt++;
   return sa;
 }
 
-void scamper_addr_free (scamper_addr_t *sa)
+void scamper_addr_free(scamper_addr_t *sa)
 {
   scamper_addrcache_t *ac;
 
@@ -1136,7 +1136,7 @@ void scamper_addr_free (scamper_addr_t *sa)
   return;
 }
 
-int scamper_addr_cmp (const scamper_addr_t *a, const scamper_addr_t *b)
+int scamper_addr_cmp(const scamper_addr_t *a, const scamper_addr_t *b)
 {
   assert(a->type > 0 && a->type <= sizeof(handlers)/sizeof(struct handler));
   assert(b->type > 0 && b->type <= sizeof(handlers)/sizeof(struct handler));
@@ -1170,7 +1170,7 @@ int scamper_addr_cmp (const scamper_addr_t *a, const scamper_addr_t *b)
   }
 }
 
-int scamper_addr_human_cmp (const scamper_addr_t *a, const scamper_addr_t *b)
+int scamper_addr_human_cmp(const scamper_addr_t *a, const scamper_addr_t *b)
 {
   assert(a->type > 0 && a->type <= sizeof(handlers)/sizeof(struct handler));
   assert(b->type > 0 && b->type <= sizeof(handlers)/sizeof(struct handler));
@@ -1204,18 +1204,18 @@ int scamper_addr_human_cmp (const scamper_addr_t *a, const scamper_addr_t *b)
   }
 }
 
-int scamper_addr_raw_cmp (const scamper_addr_t *a, const void *raw)
+int scamper_addr_raw_cmp(const scamper_addr_t *a, const void *raw)
 {
   return memcmp (a->addr, raw, handlers[a->type - 1].size);
 }
 
-static void free_cb (void *node)
+static void free_cb(void *node)
 {
   ((scamper_addr_t*) node)->internal = NULL;
   return;
 }
 
-void scamper_addrcache_free (scamper_addrcache_t *ac)
+void scamper_addrcache_free(scamper_addrcache_t *ac)
 {
   int i;
 
@@ -1227,7 +1227,7 @@ void scamper_addrcache_free (scamper_addrcache_t *ac)
   return;
 }
 
-scamper_addrcache_t* scamper_addrcache_alloc ()
+scamper_addrcache_t* scamper_addrcache_alloc()
 {
   scamper_addrcache_t *ac;
   int i;

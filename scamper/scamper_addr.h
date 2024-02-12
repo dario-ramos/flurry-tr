@@ -104,17 +104,17 @@ typedef struct scamper_addr
  * scamper_addr_netaddr:
  *  return the network address for the supplied address given prefix length.
  */
-scamper_addr_t* scamper_addr_alloc (const int type, const void *addr);
-scamper_addr_t* scamper_addr_use (scamper_addr_t *sa);
-void scamper_addr_free (scamper_addr_t *sa);
-scamper_addr_t* scamper_addr_resolve (const int af, const char *str);
-int scamper_addr_af (const scamper_addr_t *sa);
-int scamper_addr_inprefix (const scamper_addr_t *sa, const void *p, int len);
-int scamper_addr_prefix (const scamper_addr_t *a, const scamper_addr_t *b);
-int scamper_addr_prefixhosts (const scamper_addr_t *a, const scamper_addr_t *b);
-int scamper_addr_netaddr (const scamper_addr_t *a, void *net, int netlen);
-int scamper_addr_bit (const scamper_addr_t *a, int bit);
-int scamper_addr_fbd (const scamper_addr_t *a, const scamper_addr_t *b);
+scamper_addr_t* scamper_addr_alloc(const int type, const void *addr);
+scamper_addr_t* scamper_addr_use(scamper_addr_t *sa);
+void scamper_addr_free(scamper_addr_t *sa);
+scamper_addr_t* scamper_addr_resolve(const int af, const char *str);
+int scamper_addr_af(const scamper_addr_t *sa);
+int scamper_addr_inprefix(const scamper_addr_t *sa, const void *p, int len);
+int scamper_addr_prefix(const scamper_addr_t *a, const scamper_addr_t *b);
+int scamper_addr_prefixhosts(const scamper_addr_t *a, const scamper_addr_t *b);
+int scamper_addr_netaddr(const scamper_addr_t *a, void *net, int netlen);
+int scamper_addr_bit(const scamper_addr_t *a, int bit);
+int scamper_addr_fbd(const scamper_addr_t *a, const scamper_addr_t *b);
 
 /*
  * scamper_addr_alloc_[ipv4|ipv6|ethernet|firewire]
@@ -138,24 +138,24 @@ int scamper_addr_fbd (const scamper_addr_t *a, const scamper_addr_t *b);
  * scamper_addr_cmp:
  *  given two addresses, return their sort order.
  */
-int scamper_addr_cmp (const scamper_addr_t *a, const scamper_addr_t *b);
-int scamper_addr_human_cmp (const scamper_addr_t *a, const scamper_addr_t *b);
-int scamper_addr_raw_cmp (const scamper_addr_t *a, const void *raw);
+int scamper_addr_cmp(const scamper_addr_t *a, const scamper_addr_t *b);
+int scamper_addr_human_cmp(const scamper_addr_t *a, const scamper_addr_t *b);
+int scamper_addr_raw_cmp(const scamper_addr_t *a, const void *raw);
 
 /*
  * scamper_addr_tostr:
  *  given a scamper address, convert it to a string representation in the
  *  buffer of specified size.
  */
-const char* scamper_addr_tostr (const scamper_addr_t *sa, char *dst,
-                                const size_t size);
+const char* scamper_addr_tostr(const scamper_addr_t *sa, char *dst,
+                               const size_t size);
 
 /*
  * scamper_addr_size
  *  return the size of the underlying address stored in the scamper_addr
  *  structure.  useful for writing address objects to disk...
  */
-size_t scamper_addr_size (const scamper_addr_t *sa);
+size_t scamper_addr_size(const scamper_addr_t *sa);
 
 /*
  * scamper_addrcache:
@@ -170,19 +170,19 @@ size_t scamper_addr_size (const scamper_addr_t *sa);
  *  address is freed as well.
  */
 typedef struct scamper_addrcache scamper_addrcache_t;
-scamper_addrcache_t* scamper_addrcache_alloc (void);
-void scamper_addrcache_free (scamper_addrcache_t *ac);
+scamper_addrcache_t* scamper_addrcache_alloc(void);
+void scamper_addrcache_free(scamper_addrcache_t *ac);
 
 /*
  * scamper_addrcache_get:
  *  return a pointer to a scamper_addr_t which corresponds to the address
  *  out of the cache; allocate the address from scratch if necessary
  */
-scamper_addr_t* scamper_addrcache_get (scamper_addrcache_t *ac, const int type,
-                                       const void *addr);
+scamper_addr_t* scamper_addrcache_get(scamper_addrcache_t *ac, const int type,
+                                      const void *addr);
 
-scamper_addr_t* scamper_addrcache_resolve (scamper_addrcache_t *ac,
-                                           const int af, const char *addr);
+scamper_addr_t* scamper_addrcache_resolve(scamper_addrcache_t *ac, const int af,
+                                          const char *addr);
 
 /*
  * scamper_addr_islinklocal:
@@ -191,11 +191,11 @@ scamper_addr_t* scamper_addrcache_resolve (scamper_addrcache_t *ac,
  * scamper_addr_isrfc1918:
  * determine if the address is an RFC 1918 address.
  */
-int scamper_addr_islinklocal (const scamper_addr_t *a);
-int scamper_addr_isrfc1918 (const scamper_addr_t *a);
-int scamper_addr_isunicast (const scamper_addr_t *a);
-int scamper_addr_is6to4 (const scamper_addr_t *a);
-int scamper_addr_isreserved (const scamper_addr_t *a);
+int scamper_addr_islinklocal(const scamper_addr_t *a);
+int scamper_addr_isrfc1918(const scamper_addr_t *a);
+int scamper_addr_isunicast(const scamper_addr_t *a);
+int scamper_addr_is6to4(const scamper_addr_t *a);
+int scamper_addr_isreserved(const scamper_addr_t *a);
 
 /*
  * scamper_addrcache_get_[ipv4|ipv6|ethernet|firewire]

@@ -62,23 +62,23 @@ typedef struct scamper_neighbourdisc
   uint16_t probec; /* probe count sent */
 } scamper_neighbourdisc_t;
 
-scamper_neighbourdisc_t* scamper_neighbourdisc_alloc (void);
-void scamper_neighbourdisc_free (scamper_neighbourdisc_t*);
-scamper_addr_t* scamper_neighbourdisc_addr (const void *va);
+scamper_neighbourdisc_t* scamper_neighbourdisc_alloc(void);
+void scamper_neighbourdisc_free(scamper_neighbourdisc_t*);
+scamper_addr_t* scamper_neighbourdisc_addr(const void *va);
 
-scamper_neighbourdisc_probe_t* scamper_neighbourdisc_probe_alloc (void);
-void scamper_neighbourdisc_probe_free (scamper_neighbourdisc_probe_t*);
-int scamper_neighbourdisc_probe_add (scamper_neighbourdisc_t*,
-                                     scamper_neighbourdisc_probe_t*);
-int scamper_neighbourdisc_probes_alloc (scamper_neighbourdisc_t*, uint16_t);
+scamper_neighbourdisc_probe_t* scamper_neighbourdisc_probe_alloc(void);
+void scamper_neighbourdisc_probe_free(scamper_neighbourdisc_probe_t*);
+int scamper_neighbourdisc_probe_add(scamper_neighbourdisc_t*,
+                                    scamper_neighbourdisc_probe_t*);
+int scamper_neighbourdisc_probes_alloc(scamper_neighbourdisc_t*, uint16_t);
 
-int scamper_neighbourdisc_ifname_set (scamper_neighbourdisc_t*, char*);
+int scamper_neighbourdisc_ifname_set(scamper_neighbourdisc_t*, char*);
 
-scamper_neighbourdisc_reply_t* scamper_neighbourdisc_reply_alloc (void);
-void scamper_neighbourdisc_reply_free (scamper_neighbourdisc_reply_t*);
-int scamper_neighbourdisc_reply_add (scamper_neighbourdisc_probe_t*,
-                                     scamper_neighbourdisc_reply_t*);
-int scamper_neighbourdisc_replies_alloc (scamper_neighbourdisc_probe_t*,
-                                         uint16_t);
+scamper_neighbourdisc_reply_t* scamper_neighbourdisc_reply_alloc(void);
+void scamper_neighbourdisc_reply_free(scamper_neighbourdisc_reply_t*);
+int scamper_neighbourdisc_reply_add(scamper_neighbourdisc_probe_t*,
+                                    scamper_neighbourdisc_reply_t*);
+int scamper_neighbourdisc_replies_alloc(scamper_neighbourdisc_probe_t*,
+                                        uint16_t);
 
 #endif /* __SCAMPER_NEIGHBOURDISC_H */

@@ -253,9 +253,9 @@ typedef struct warts_dealias_probe
   warts_dealias_reply_t *replies;
 } warts_dealias_probe_t;
 
-static void warts_dealias_params (const scamper_dealias_t *dealias,
-                                  uint8_t *flags, uint16_t *flags_len,
-                                  uint16_t *params_len)
+static void warts_dealias_params(const scamper_dealias_t *dealias,
+                                 uint8_t *flags, uint16_t *flags_len,
+                                 uint16_t *params_len)
 {
   const warts_var_t *var;
   int i, max_id = 0;
@@ -280,9 +280,9 @@ static void warts_dealias_params (const scamper_dealias_t *dealias,
   return;
 }
 
-static int warts_dealias_params_read (scamper_dealias_t *dealias,
-                                      warts_state_t *state, uint8_t *buf,
-                                      uint32_t *off, uint32_t len)
+static int warts_dealias_params_read(scamper_dealias_t *dealias,
+                                     warts_state_t *state, uint8_t *buf,
+                                     uint32_t *off, uint32_t len)
 {
   warts_param_reader_t handlers[] =
     {
@@ -297,12 +297,12 @@ static int warts_dealias_params_read (scamper_dealias_t *dealias,
   return warts_params_read (buf, off, len, handlers, handler_cnt);
 }
 
-static int warts_dealias_params_write (const scamper_dealias_t *dealias,
-                                       const scamper_file_t *sf, uint8_t *buf,
-                                       uint32_t *off, const uint32_t len,
-                                       const uint8_t *flags,
-                                       const uint16_t flags_len,
-                                       const uint16_t params_len)
+static int warts_dealias_params_write(const scamper_dealias_t *dealias,
+                                      const scamper_file_t *sf, uint8_t *buf,
+                                      uint32_t *off, const uint32_t len,
+                                      const uint8_t *flags,
+                                      const uint16_t flags_len,
+                                      const uint16_t params_len)
 {
   uint32_t list_id, cycle_id;
   warts_param_writer_t handlers[] =
@@ -326,11 +326,11 @@ static int warts_dealias_params_write (const scamper_dealias_t *dealias,
   return 0;
 }
 
-static int warts_dealias_probedef_params (const scamper_file_t *sf,
-                                          const scamper_dealias_probedef_t *p,
-                                          warts_dealias_probedef_t *state,
-                                          warts_addrtable_t *table,
-                                          uint32_t *len)
+static int warts_dealias_probedef_params(const scamper_file_t *sf,
+                                         const scamper_dealias_probedef_t *p,
+                                         warts_dealias_probedef_t *state,
+                                         warts_addrtable_t *table,
+                                         uint32_t *len)
 {
   const warts_var_t *var;
   int i, max_id = 0;
@@ -390,10 +390,10 @@ static int warts_dealias_probedef_params (const scamper_file_t *sf,
   return 0;
 }
 
-static int warts_dealias_probedef_read (scamper_dealias_probedef_t *p,
-                                        warts_state_t *state,
-                                        warts_addrtable_t *table, uint8_t *buf,
-                                        uint32_t *off, uint32_t len)
+static int warts_dealias_probedef_read(scamper_dealias_probedef_t *p,
+                                       warts_state_t *state,
+                                       warts_addrtable_t *table, uint8_t *buf,
+                                       uint32_t *off, uint32_t len)
 {
   uint8_t bytes[4];
   uint16_t bytes_len = 4;
@@ -451,12 +451,11 @@ static int warts_dealias_probedef_read (scamper_dealias_probedef_t *p,
   return 0;
 }
 
-static void warts_dealias_probedef_write (const scamper_dealias_probedef_t *p,
-                                          warts_dealias_probedef_t *state,
-                                          const scamper_file_t *sf,
-                                          warts_addrtable_t *table,
-                                          uint8_t *buf, uint32_t *off,
-                                          const uint32_t len)
+static void warts_dealias_probedef_write(const scamper_dealias_probedef_t *p,
+                                         warts_dealias_probedef_t *state,
+                                         const scamper_file_t *sf,
+                                         warts_addrtable_t *table, uint8_t *buf,
+                                         uint32_t *off, const uint32_t len)
 {
   uint8_t bytes[4];
   uint16_t bytes_len = 4;
@@ -509,10 +508,10 @@ static void warts_dealias_probedef_write (const scamper_dealias_probedef_t *p,
   return;
 }
 
-static int extract_dealias_prefixscan_xs (const uint8_t *buf, uint32_t *off,
-                                          const uint32_t len,
-                                          scamper_dealias_prefixscan_t *pfs,
-                                          void *param)
+static int extract_dealias_prefixscan_xs(const uint8_t *buf, uint32_t *off,
+                                         const uint32_t len,
+                                         scamper_dealias_prefixscan_t *pfs,
+                                         void *param)
 {
   scamper_addr_t **xs;
   uint16_t xc, i;
@@ -536,10 +535,10 @@ static int extract_dealias_prefixscan_xs (const uint8_t *buf, uint32_t *off,
   return 0;
 }
 
-static void insert_dealias_prefixscan_xs (uint8_t *buf, uint32_t *off,
-                                          const uint32_t len,
-                                          const scamper_dealias_prefixscan_t *p,
-                                          void *param)
+static void insert_dealias_prefixscan_xs(uint8_t *buf, uint32_t *off,
+                                         const uint32_t len,
+                                         const scamper_dealias_prefixscan_t *p,
+                                         void *param)
 {
   uint16_t i;
 
@@ -552,11 +551,11 @@ static void insert_dealias_prefixscan_xs (uint8_t *buf, uint32_t *off,
   return;
 }
 
-static int warts_dealias_prefixscan_state (const scamper_file_t *sf,
-                                           const void *data,
-                                           warts_dealias_data_t *state,
-                                           warts_addrtable_t *table,
-                                           uint32_t *len)
+static int warts_dealias_prefixscan_state(const scamper_file_t *sf,
+                                          const void *data,
+                                          warts_dealias_data_t *state,
+                                          warts_addrtable_t *table,
+                                          uint32_t *len)
 {
   const scamper_dealias_prefixscan_t *p = data;
   const warts_var_t *var;
@@ -567,7 +566,7 @@ static int warts_dealias_prefixscan_state (const scamper_file_t *sf,
   if (p->probedefc > 0)
   {
     size = p->probedefc * sizeof(warts_dealias_probedef_t);
-    if ((state->probedefs = malloc_zero (size)) == NULL)
+    if ((state->probedefs = malloc_zero(size)) == NULL)
       return -1;
   }
 
@@ -655,12 +654,12 @@ static int warts_dealias_prefixscan_state (const scamper_file_t *sf,
   return 0;
 }
 
-static int warts_dealias_prefixscan_read (scamper_dealias_t *dealias,
-                                          warts_state_t *state,
-                                          warts_addrtable_t *table,
-                                          scamper_dealias_probedef_t **defs,
-                                          uint32_t *defc, uint8_t *buf,
-                                          uint32_t *off, uint32_t len)
+static int warts_dealias_prefixscan_read(scamper_dealias_t *dealias,
+                                         warts_state_t *state,
+                                         warts_addrtable_t *table,
+                                         scamper_dealias_probedef_t **defs,
+                                         uint32_t *defc, uint8_t *buf,
+                                         uint32_t *off, uint32_t len)
 {
   scamper_dealias_prefixscan_t pfs, *p;
   warts_param_reader_t handlers[] =
@@ -715,12 +714,12 @@ static int warts_dealias_prefixscan_read (scamper_dealias_t *dealias,
   return 0;
 }
 
-static void warts_dealias_prefixscan_write (const void *data,
-                                            const scamper_file_t *sf,
-                                            warts_addrtable_t *table,
-                                            uint8_t *buf, uint32_t *off,
-                                            const uint32_t len,
-                                            warts_dealias_data_t *state)
+static void warts_dealias_prefixscan_write(const void *data,
+                                           const scamper_file_t *sf,
+                                           warts_addrtable_t *table,
+                                           uint8_t *buf, uint32_t *off,
+                                           const uint32_t len,
+                                           warts_dealias_data_t *state)
 {
   const scamper_dealias_prefixscan_t *prefixscan = data;
   warts_param_writer_t handlers[] =
@@ -753,11 +752,10 @@ static void warts_dealias_prefixscan_write (const void *data,
   return;
 }
 
-static int warts_dealias_radargun_state (const scamper_file_t *sf,
-                                         const void *data,
-                                         warts_dealias_data_t *state,
-                                         warts_addrtable_t *table,
-                                         uint32_t *len)
+static int warts_dealias_radargun_state(const scamper_file_t *sf,
+                                        const void *data,
+                                        warts_dealias_data_t *state,
+                                        warts_addrtable_t *table, uint32_t *len)
 {
   const scamper_dealias_radargun_t *rg = data;
   const warts_var_t *var;
@@ -769,7 +767,7 @@ static int warts_dealias_radargun_state (const scamper_file_t *sf,
     return -1;
 
   size = rg->probedefc * sizeof(warts_dealias_probedef_t);
-  if ((state->probedefs = malloc_zero (size)) == NULL)
+  if ((state->probedefs = malloc_zero(size)) == NULL)
     return -1;
 
   memset (state->flags, 0, dealias_radargun_vars_mfb);
@@ -809,12 +807,12 @@ static int warts_dealias_radargun_state (const scamper_file_t *sf,
   return 0;
 }
 
-static int warts_dealias_radargun_read (scamper_dealias_t *dealias,
-                                        warts_state_t *state,
-                                        warts_addrtable_t *table,
-                                        scamper_dealias_probedef_t **defs,
-                                        uint32_t *defc, uint8_t *buf,
-                                        uint32_t *off, uint32_t len)
+static int warts_dealias_radargun_read(scamper_dealias_t *dealias,
+                                       warts_state_t *state,
+                                       warts_addrtable_t *table,
+                                       scamper_dealias_probedef_t **defs,
+                                       uint32_t *defc, uint8_t *buf,
+                                       uint32_t *off, uint32_t len)
 {
   scamper_dealias_radargun_t *rg;
   uint32_t probedefc = 0;
@@ -865,12 +863,11 @@ static int warts_dealias_radargun_read (scamper_dealias_t *dealias,
   return 0;
 }
 
-static void warts_dealias_radargun_write (const void *data,
-                                          const scamper_file_t *sf,
-                                          warts_addrtable_t *table,
-                                          uint8_t *buf, uint32_t *off,
-                                          const uint32_t len,
-                                          warts_dealias_data_t *state)
+static void warts_dealias_radargun_write(const void *data,
+                                         const scamper_file_t *sf,
+                                         warts_addrtable_t *table, uint8_t *buf,
+                                         uint32_t *off, const uint32_t len,
+                                         warts_dealias_data_t *state)
 {
   const scamper_dealias_radargun_t *rg = data;
   warts_param_writer_t handlers[] =
@@ -896,16 +893,16 @@ static void warts_dealias_radargun_write (const void *data,
   return;
 }
 
-static int warts_dealias_bump_state (const scamper_file_t *sf, const void *data,
-                                     warts_dealias_data_t *state,
-                                     warts_addrtable_t *table, uint32_t *len)
+static int warts_dealias_bump_state(const scamper_file_t *sf, const void *data,
+                                    warts_dealias_data_t *state,
+                                    warts_addrtable_t *table, uint32_t *len)
 {
   const scamper_dealias_bump_t *bump = data;
   const warts_var_t *var;
   int i, max_id = 0;
   size_t size = sizeof(warts_dealias_probedef_t) * 2;
 
-  if ((state->probedefs = malloc_zero (size)) == NULL)
+  if ((state->probedefs = malloc_zero(size)) == NULL)
     return -1;
 
   memset (state->flags, 0, dealias_bump_vars_mfb);
@@ -936,12 +933,12 @@ static int warts_dealias_bump_state (const scamper_file_t *sf, const void *data,
   return 0;
 }
 
-static int warts_dealias_bump_read (scamper_dealias_t *dealias,
-                                    warts_state_t *state,
-                                    warts_addrtable_t *table,
-                                    scamper_dealias_probedef_t **defs,
-                                    uint32_t *defc, uint8_t *buf, uint32_t *off,
-                                    uint32_t len)
+static int warts_dealias_bump_read(scamper_dealias_t *dealias,
+                                   warts_state_t *state,
+                                   warts_addrtable_t *table,
+                                   scamper_dealias_probedef_t **defs,
+                                   uint32_t *defc, uint8_t *buf, uint32_t *off,
+                                   uint32_t len)
 {
   scamper_dealias_bump_t *bump;
   uint16_t wait_probe = 0;
@@ -978,11 +975,10 @@ static int warts_dealias_bump_read (scamper_dealias_t *dealias,
   return 0;
 }
 
-static void warts_dealias_bump_write (const void *data,
-                                      const scamper_file_t *sf,
-                                      warts_addrtable_t *table, uint8_t *buf,
-                                      uint32_t *off, const uint32_t len,
-                                      warts_dealias_data_t *state)
+static void warts_dealias_bump_write(const void *data, const scamper_file_t *sf,
+                                     warts_addrtable_t *table, uint8_t *buf,
+                                     uint32_t *off, const uint32_t len,
+                                     warts_dealias_data_t *state)
 {
   const scamper_dealias_bump_t *bump = data;
   warts_param_writer_t handlers[] =
@@ -1000,16 +996,16 @@ static void warts_dealias_bump_write (const void *data,
   return;
 }
 
-static int warts_dealias_ally_state (const scamper_file_t *sf, const void *data,
-                                     warts_dealias_data_t *state,
-                                     warts_addrtable_t *table, uint32_t *len)
+static int warts_dealias_ally_state(const scamper_file_t *sf, const void *data,
+                                    warts_dealias_data_t *state,
+                                    warts_addrtable_t *table, uint32_t *len)
 {
   const scamper_dealias_ally_t *ally = data;
   const warts_var_t *var;
   int i, max_id = 0;
   size_t size = sizeof(warts_dealias_probedef_t) * 2;
 
-  if ((state->probedefs = malloc_zero (size)) == NULL)
+  if ((state->probedefs = malloc_zero(size)) == NULL)
     return -1;
 
   memset (state->flags, 0, dealias_ally_vars_mfb);
@@ -1043,12 +1039,12 @@ static int warts_dealias_ally_state (const scamper_file_t *sf, const void *data,
   return 0;
 }
 
-static int warts_dealias_ally_read (scamper_dealias_t *dealias,
-                                    warts_state_t *state,
-                                    warts_addrtable_t *table,
-                                    scamper_dealias_probedef_t **defs,
-                                    uint32_t *defc, uint8_t *buf, uint32_t *off,
-                                    uint32_t len)
+static int warts_dealias_ally_read(scamper_dealias_t *dealias,
+                                   warts_state_t *state,
+                                   warts_addrtable_t *table,
+                                   scamper_dealias_probedef_t **defs,
+                                   uint32_t *defc, uint8_t *buf, uint32_t *off,
+                                   uint32_t len)
 {
   scamper_dealias_ally_t *ally;
   uint16_t wait_probe = 0;
@@ -1091,11 +1087,10 @@ static int warts_dealias_ally_read (scamper_dealias_t *dealias,
   return 0;
 }
 
-static void warts_dealias_ally_write (const void *data,
-                                      const scamper_file_t *sf,
-                                      warts_addrtable_t *table, uint8_t *buf,
-                                      uint32_t *off, const uint32_t len,
-                                      warts_dealias_data_t *state)
+static void warts_dealias_ally_write(const void *data, const scamper_file_t *sf,
+                                     warts_addrtable_t *table, uint8_t *buf,
+                                     uint32_t *off, const uint32_t len,
+                                     warts_dealias_data_t *state)
 {
   const scamper_dealias_ally_t *ally = data;
   warts_param_writer_t handlers[] =
@@ -1115,18 +1110,17 @@ static void warts_dealias_ally_write (const void *data,
   return;
 }
 
-static int warts_dealias_mercator_state (const scamper_file_t *sf,
-                                         const void *data,
-                                         warts_dealias_data_t *state,
-                                         warts_addrtable_t *table,
-                                         uint32_t *len)
+static int warts_dealias_mercator_state(const scamper_file_t *sf,
+                                        const void *data,
+                                        warts_dealias_data_t *state,
+                                        warts_addrtable_t *table, uint32_t *len)
 {
   const scamper_dealias_mercator_t *m = data;
   const warts_var_t *var;
   int i, max_id = 0;
   size_t size = sizeof(warts_dealias_probedef_t);
 
-  if ((state->probedefs = malloc_zero (size)) == NULL)
+  if ((state->probedefs = malloc_zero(size)) == NULL)
     return -1;
 
   assert(sizeof(state->flags) >= dealias_mercator_vars_mfb);
@@ -1157,12 +1151,12 @@ static int warts_dealias_mercator_state (const scamper_file_t *sf,
   return 0;
 }
 
-static int warts_dealias_mercator_read (scamper_dealias_t *dealias,
-                                        warts_state_t *state,
-                                        warts_addrtable_t *table,
-                                        scamper_dealias_probedef_t **def,
-                                        uint32_t *defc, uint8_t *buf,
-                                        uint32_t *off, uint32_t len)
+static int warts_dealias_mercator_read(scamper_dealias_t *dealias,
+                                       warts_state_t *state,
+                                       warts_addrtable_t *table,
+                                       scamper_dealias_probedef_t **def,
+                                       uint32_t *defc, uint8_t *buf,
+                                       uint32_t *off, uint32_t len)
 {
   scamper_dealias_mercator_t *mercator;
   uint8_t attempts = 0;
@@ -1194,12 +1188,11 @@ static int warts_dealias_mercator_read (scamper_dealias_t *dealias,
   return 0;
 }
 
-static void warts_dealias_mercator_write (const void *data,
-                                          const scamper_file_t *sf,
-                                          warts_addrtable_t *table,
-                                          uint8_t *buf, uint32_t *off,
-                                          const uint32_t len,
-                                          warts_dealias_data_t *state)
+static void warts_dealias_mercator_write(const void *data,
+                                         const scamper_file_t *sf,
+                                         warts_addrtable_t *table, uint8_t *buf,
+                                         uint32_t *off, const uint32_t len,
+                                         warts_dealias_data_t *state)
 {
   const scamper_dealias_mercator_t *m = data;
   warts_param_writer_t handlers[] =
@@ -1214,10 +1207,10 @@ static void warts_dealias_mercator_write (const void *data,
   return;
 }
 
-static int extract_dealias_reply_icmptc (const uint8_t *buf, uint32_t *off,
-                                         uint32_t len,
-                                         scamper_dealias_reply_t *reply,
-                                         void *param)
+static int extract_dealias_reply_icmptc(const uint8_t *buf, uint32_t *off,
+                                        uint32_t len,
+                                        scamper_dealias_reply_t *reply,
+                                        void *param)
 {
   if (len - *off < 2)
   {
@@ -1228,10 +1221,10 @@ static int extract_dealias_reply_icmptc (const uint8_t *buf, uint32_t *off,
   return 0;
 }
 
-static void insert_dealias_reply_icmptc (uint8_t *buf, uint32_t *off,
-                                         const uint32_t len,
-                                         const scamper_dealias_reply_t *reply,
-                                         void *param)
+static void insert_dealias_reply_icmptc(uint8_t *buf, uint32_t *off,
+                                        const uint32_t len,
+                                        const scamper_dealias_reply_t *reply,
+                                        void *param)
 {
   assert(len - *off >= 2);
   buf[(*off)++] = reply->icmp_type;
@@ -1239,27 +1232,27 @@ static void insert_dealias_reply_icmptc (uint8_t *buf, uint32_t *off,
   return;
 }
 
-static int extract_dealias_reply_icmpext (const uint8_t *buf, uint32_t *off,
-                                          uint32_t len,
-                                          scamper_dealias_reply_t *reply,
-                                          void *param)
+static int extract_dealias_reply_icmpext(const uint8_t *buf, uint32_t *off,
+                                         uint32_t len,
+                                         scamper_dealias_reply_t *reply,
+                                         void *param)
 {
   return warts_icmpext_read (buf, off, len, &reply->icmp_ext);
 }
 
-static void insert_dealias_reply_icmpext (uint8_t *buf, uint32_t *off,
-                                          const uint32_t len,
-                                          const scamper_dealias_reply_t *reply,
-                                          void *param)
+static void insert_dealias_reply_icmpext(uint8_t *buf, uint32_t *off,
+                                         const uint32_t len,
+                                         const scamper_dealias_reply_t *reply,
+                                         void *param)
 {
   warts_icmpext_write (buf, off, len, reply->icmp_ext);
   return;
 }
 
-static int warts_dealias_reply_state (const scamper_dealias_reply_t *reply,
-                                      warts_dealias_reply_t *state,
-                                      const scamper_file_t *sf,
-                                      warts_addrtable_t *table, uint32_t *len)
+static int warts_dealias_reply_state(const scamper_dealias_reply_t *reply,
+                                     warts_dealias_reply_t *state,
+                                     const scamper_file_t *sf,
+                                     warts_addrtable_t *table, uint32_t *len)
 {
   const warts_var_t *var;
   scamper_icmpext_t *ie;
@@ -1350,10 +1343,10 @@ static int warts_dealias_reply_state (const scamper_dealias_reply_t *reply,
   return 0;
 }
 
-static int warts_dealias_reply_read (scamper_dealias_reply_t *reply,
-                                     warts_state_t *state,
-                                     warts_addrtable_t *table, uint8_t *buf,
-                                     uint32_t *off, uint32_t len)
+static int warts_dealias_reply_read(scamper_dealias_reply_t *reply,
+                                    warts_state_t *state,
+                                    warts_addrtable_t *table, uint8_t *buf,
+                                    uint32_t *off, uint32_t len)
 {
   warts_param_reader_t handlers[] =
     {
@@ -1387,11 +1380,11 @@ static int warts_dealias_reply_read (scamper_dealias_reply_t *reply,
   return i;
 }
 
-static int warts_dealias_reply_write (const scamper_dealias_reply_t *r,
-                                      const scamper_file_t *sf,
-                                      warts_addrtable_t *table, uint8_t *buf,
-                                      uint32_t *off, const uint32_t len,
-                                      warts_dealias_reply_t *state)
+static int warts_dealias_reply_write(const scamper_dealias_reply_t *r,
+                                     const scamper_file_t *sf,
+                                     warts_addrtable_t *table, uint8_t *buf,
+                                     uint32_t *off, const uint32_t len,
+                                     warts_dealias_reply_t *state)
 {
   warts_param_writer_t handlers[] =
     {
@@ -1413,10 +1406,10 @@ static int warts_dealias_reply_write (const scamper_dealias_reply_t *r,
   return 0;
 }
 
-static int warts_dealias_probe_state (const scamper_file_t *sf,
-                                      const scamper_dealias_probe_t *probe,
-                                      warts_dealias_probe_t *state,
-                                      warts_addrtable_t *table, uint32_t *len)
+static int warts_dealias_probe_state(const scamper_file_t *sf,
+                                     const scamper_dealias_probe_t *probe,
+                                     warts_dealias_probe_t *state,
+                                     warts_addrtable_t *table, uint32_t *len)
 {
   const warts_var_t *var;
   int i, max_id = 0;
@@ -1446,7 +1439,7 @@ static int warts_dealias_probe_state (const scamper_file_t *sf,
   if (probe->replyc > 0)
   {
     size = sizeof(warts_dealias_reply_t) * probe->replyc;
-    if ((state->replies = malloc_zero (size)) == NULL)
+    if ((state->replies = malloc_zero(size)) == NULL)
       return -1;
 
     for (i = 0; i < probe->replyc; i++)
@@ -1469,11 +1462,11 @@ static int warts_dealias_probe_state (const scamper_file_t *sf,
   return 0;
 }
 
-static int warts_dealias_probe_read (scamper_dealias_probe_t *probe,
-                                     warts_state_t *state,
-                                     scamper_dealias_probedef_t *defs,
-                                     uint32_t defc, warts_addrtable_t *table,
-                                     uint8_t *buf, uint32_t *off, uint32_t len)
+static int warts_dealias_probe_read(scamper_dealias_probe_t *probe,
+                                    warts_state_t *state,
+                                    scamper_dealias_probedef_t *defs,
+                                    uint32_t defc, warts_addrtable_t *table,
+                                    uint8_t *buf, uint32_t *off, uint32_t len)
 {
   uint32_t probedef_id = 0;
   warts_param_reader_t handlers[] =
@@ -1522,11 +1515,11 @@ static int warts_dealias_probe_read (scamper_dealias_probe_t *probe,
   return 0;
 }
 
-static void warts_dealias_probe_write (const scamper_dealias_probe_t *probe,
-                                       const scamper_file_t *sf,
-                                       warts_addrtable_t *table, uint8_t *buf,
-                                       uint32_t *off, const uint32_t len,
-                                       warts_dealias_probe_t *state)
+static void warts_dealias_probe_write(const scamper_dealias_probe_t *probe,
+                                      const scamper_file_t *sf,
+                                      warts_addrtable_t *table, uint8_t *buf,
+                                      uint32_t *off, const uint32_t len,
+                                      warts_dealias_probe_t *state)
 {
   int i;
   warts_param_writer_t handlers[] =
@@ -1549,18 +1542,18 @@ static void warts_dealias_probe_write (const scamper_dealias_probe_t *probe,
   return;
 }
 
-int scamper_file_warts_dealias_read (scamper_file_t *sf, const warts_hdr_t *hdr,
-                                     scamper_dealias_t **dealias_out)
+int scamper_file_warts_dealias_read(scamper_file_t *sf, const warts_hdr_t *hdr,
+                                    scamper_dealias_t **dealias_out)
 {
-  static int (*const read[]) (scamper_dealias_t*, warts_state_t*,
-                              warts_addrtable_t*, scamper_dealias_probedef_t**,
-                              uint32_t*, uint8_t*, uint32_t*, uint32_t) =
-                              {
-                                warts_dealias_mercator_read,
-                                warts_dealias_ally_read,
-                                warts_dealias_radargun_read,
-                                warts_dealias_prefixscan_read,
-                                warts_dealias_bump_read,
+  static int (*const read[])(scamper_dealias_t*, warts_state_t*,
+                             warts_addrtable_t*, scamper_dealias_probedef_t**,
+                             uint32_t*, uint8_t*, uint32_t*, uint32_t) =
+                             {
+                               warts_dealias_mercator_read,
+                               warts_dealias_ally_read,
+                               warts_dealias_radargun_read,
+                               warts_dealias_prefixscan_read,
+                               warts_dealias_bump_read,
     };
   scamper_dealias_t *dealias = NULL;
   scamper_dealias_probedef_t *defs;
@@ -1646,8 +1639,8 @@ err:
   return -1;
 }
 
-static void warts_dealias_probes_free (warts_dealias_probe_t *probes,
-                                       uint32_t cnt)
+static void warts_dealias_probes_free(warts_dealias_probe_t *probes,
+                                      uint32_t cnt)
 {
   uint32_t i;
 
@@ -1662,28 +1655,28 @@ static void warts_dealias_probes_free (warts_dealias_probe_t *probes,
   return;
 }
 
-int scamper_file_warts_dealias_write (const scamper_file_t *sf,
-                                      const scamper_dealias_t *dealias)
+int scamper_file_warts_dealias_write(const scamper_file_t *sf,
+                                     const scamper_dealias_t *dealias)
 {
-  static int (*const state[]) (const scamper_file_t*, const void*,
-                               warts_dealias_data_t*, warts_addrtable_t*,
-                               uint32_t*) =
-                               {
-                                 warts_dealias_mercator_state,
-                                 warts_dealias_ally_state,
-                                 warts_dealias_radargun_state,
-                                 warts_dealias_prefixscan_state,
-                                 warts_dealias_bump_state,
+  static int (*const state[])(const scamper_file_t*, const void*,
+                              warts_dealias_data_t*, warts_addrtable_t*,
+                              uint32_t*) =
+                              {
+                                warts_dealias_mercator_state,
+                                warts_dealias_ally_state,
+                                warts_dealias_radargun_state,
+                                warts_dealias_prefixscan_state,
+                                warts_dealias_bump_state,
     };
-  static void (*const write[]) (const void*, const scamper_file_t*,
-                                warts_addrtable_t*, uint8_t*, uint32_t*,
-                                const uint32_t, warts_dealias_data_t*) =
-                                {
-                                  warts_dealias_mercator_write,
-                                  warts_dealias_ally_write,
-                                  warts_dealias_radargun_write,
-                                  warts_dealias_prefixscan_write,
-                                  warts_dealias_bump_write,
+  static void (*const write[])(const void*, const scamper_file_t*,
+                               warts_addrtable_t*, uint8_t*, uint32_t*,
+                               const uint32_t, warts_dealias_data_t*) =
+                               {
+                                 warts_dealias_mercator_write,
+                                 warts_dealias_ally_write,
+                                 warts_dealias_radargun_write,
+                                 warts_dealias_prefixscan_write,
+                                 warts_dealias_bump_write,
     };
   uint8_t *buf = NULL;
   uint8_t flags[dealias_vars_mfb];
@@ -1718,7 +1711,7 @@ int scamper_file_warts_dealias_write (const scamper_file_t *sf,
   if (dealias->probec > 0)
   {
     size = dealias->probec * sizeof(warts_dealias_probe_t);
-    if ((probes = (warts_dealias_probe_t*) malloc_zero (size)) == NULL)
+    if ((probes = (warts_dealias_probe_t*) malloc_zero(size)) == NULL)
     {
       goto err;
     }
@@ -1735,7 +1728,7 @@ int scamper_file_warts_dealias_write (const scamper_file_t *sf,
     }
   }
 
-  if ((buf = malloc_zero (len)) == NULL)
+  if ((buf = malloc_zero(len)) == NULL)
     goto err;
   insert_wartshdr (buf, &off, len, SCAMPER_FILE_OBJ_DEALIAS);
 

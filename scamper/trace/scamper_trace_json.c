@@ -46,7 +46,7 @@ static const char rcsid[] =
 #include "scamper_trace_json.h"
 #include "utils.h"
 
-static char* hop_tostr (scamper_trace_hop_t *hop)
+static char* hop_tostr(scamper_trace_hop_t *hop)
 {
   char buf[1024], tmp[128];
   scamper_icmpext_t *ie;
@@ -130,7 +130,7 @@ static char* hop_tostr (scamper_trace_hop_t *hop)
   return strdup (buf);
 }
 
-static char* header_tostr (const scamper_trace_t *trace)
+static char* header_tostr(const scamper_trace_t *trace)
 {
   char buf[512], tmp[64];
   size_t off = 0;
@@ -172,8 +172,8 @@ static char* header_tostr (const scamper_trace_t *trace)
   return strdup (buf);
 }
 
-int scamper_file_json_trace_write (const scamper_file_t *sf,
-                                   const scamper_trace_t *trace)
+int scamper_file_json_trace_write(const scamper_file_t *sf,
+                                  const scamper_trace_t *trace)
 {
   scamper_trace_hop_t *hop;
   size_t len, off = 0;
@@ -190,7 +190,7 @@ int scamper_file_json_trace_write (const scamper_file_t *sf,
   if (hopc > 0)
   {
     len += 11; /* , "hops":[] */
-    if ((hops = malloc_zero (sizeof(char*) * hopc)) == NULL)
+    if ((hops = malloc_zero(sizeof(char*) * hopc)) == NULL)
       goto cleanup;
     for (i = trace->firsthop - 1, j = 0; i < trace->hop_count; i++)
     {
@@ -207,7 +207,7 @@ int scamper_file_json_trace_write (const scamper_file_t *sf,
   }
   len += 4; /* {}\n\0 */
 
-  if ((str = malloc_zero (len)) == NULL)
+  if ((str = malloc_zero(len)) == NULL)
     goto cleanup;
 
   string_concat (str, len, &off, "{%s", header);

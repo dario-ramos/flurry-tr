@@ -42,8 +42,8 @@ static const char rcsid[] =
 #include "scamper_dealias.h"
 #include "utils.h"
 
-int scamper_dealias_ipid (const scamper_dealias_probe_t **probes,
-                          uint32_t probec, scamper_dealias_ipid_t *ipid)
+int scamper_dealias_ipid(const scamper_dealias_probe_t **probes,
+                         uint32_t probec, scamper_dealias_ipid_t *ipid)
 {
   const scamper_dealias_probe_t *p;
   const scamper_dealias_reply_t *r;
@@ -145,7 +145,7 @@ int scamper_dealias_ipid (const scamper_dealias_probe_t **probes,
   return 0;
 }
 
-static void dealias_probedef_free (scamper_dealias_probedef_t *probedef)
+static void dealias_probedef_free(scamper_dealias_probedef_t *probedef)
 {
   if (probedef->src != NULL)
   {
@@ -160,7 +160,7 @@ static void dealias_probedef_free (scamper_dealias_probedef_t *probedef)
   return;
 }
 
-static void dealias_mercator_free (void *data)
+static void dealias_mercator_free(void *data)
 {
   scamper_dealias_mercator_t *mercator = (scamper_dealias_mercator_t*) data;
   dealias_probedef_free (&mercator->probedef);
@@ -168,7 +168,7 @@ static void dealias_mercator_free (void *data)
   return;
 }
 
-static void dealias_ally_free (void *data)
+static void dealias_ally_free(void *data)
 {
   scamper_dealias_ally_t *ally = (scamper_dealias_ally_t*) data;
   dealias_probedef_free (&ally->probedefs[0]);
@@ -177,7 +177,7 @@ static void dealias_ally_free (void *data)
   return;
 }
 
-static void dealias_radargun_free (void *data)
+static void dealias_radargun_free(void *data)
 {
   scamper_dealias_radargun_t *radargun = (scamper_dealias_radargun_t*) data;
   uint32_t i;
@@ -194,7 +194,7 @@ static void dealias_radargun_free (void *data)
   return;
 }
 
-static void dealias_prefixscan_free (void *data)
+static void dealias_prefixscan_free(void *data)
 {
   scamper_dealias_prefixscan_t *prefixscan = data;
   uint16_t i;
@@ -229,7 +229,7 @@ static void dealias_prefixscan_free (void *data)
   return;
 }
 
-static void dealias_bump_free (void *data)
+static void dealias_bump_free(void *data)
 {
   scamper_dealias_bump_t *bump = (scamper_dealias_bump_t*) data;
   dealias_probedef_free (&bump->probedefs[0]);
@@ -238,7 +238,7 @@ static void dealias_bump_free (void *data)
   return;
 }
 
-const char* scamper_dealias_probedef_method_tostr (
+const char* scamper_dealias_probedef_method_tostr(
     const scamper_dealias_probedef_t *d, char *b, size_t l)
 {
   static const char *m[] =
@@ -253,26 +253,26 @@ const char* scamper_dealias_probedef_method_tostr (
   return m[d->method];
 }
 
-scamper_dealias_probedef_t* scamper_dealias_probedef_alloc (void)
+scamper_dealias_probedef_t* scamper_dealias_probedef_alloc(void)
 {
   size_t size = sizeof(scamper_dealias_probedef_t);
-  return (scamper_dealias_probedef_t*) malloc_zero (size);
+  return (scamper_dealias_probedef_t*) malloc_zero(size);
 }
 
-void scamper_dealias_probedef_free (scamper_dealias_probedef_t *probedef)
+void scamper_dealias_probedef_free(scamper_dealias_probedef_t *probedef)
 {
   dealias_probedef_free (probedef);
   free (probedef);
   return;
 }
 
-scamper_dealias_probe_t* scamper_dealias_probe_alloc (void)
+scamper_dealias_probe_t* scamper_dealias_probe_alloc(void)
 {
   size_t size = sizeof(scamper_dealias_probe_t);
-  return (scamper_dealias_probe_t*) malloc_zero (size);
+  return (scamper_dealias_probe_t*) malloc_zero(size);
 }
 
-void scamper_dealias_probe_free (scamper_dealias_probe_t *probe)
+void scamper_dealias_probe_free(scamper_dealias_probe_t *probe)
 {
   uint16_t i;
 
@@ -290,13 +290,13 @@ void scamper_dealias_probe_free (scamper_dealias_probe_t *probe)
   return;
 }
 
-scamper_dealias_reply_t* scamper_dealias_reply_alloc (void)
+scamper_dealias_reply_t* scamper_dealias_reply_alloc(void)
 {
   size_t size = sizeof(scamper_dealias_reply_t);
-  return (scamper_dealias_reply_t*) malloc_zero (size);
+  return (scamper_dealias_reply_t*) malloc_zero(size);
 }
 
-void scamper_dealias_reply_free (scamper_dealias_reply_t *reply)
+void scamper_dealias_reply_free(scamper_dealias_reply_t *reply)
 {
   if (reply->src != NULL)
     scamper_addr_free (reply->src);
@@ -304,7 +304,7 @@ void scamper_dealias_reply_free (scamper_dealias_reply_t *reply)
   return;
 }
 
-uint32_t scamper_dealias_reply_count (const scamper_dealias_t *dealias)
+uint32_t scamper_dealias_reply_count(const scamper_dealias_t *dealias)
 {
   uint32_t rc = 0;
   uint16_t i;
@@ -316,14 +316,14 @@ uint32_t scamper_dealias_reply_count (const scamper_dealias_t *dealias)
   return rc;
 }
 
-static int dealias_probe_tx_cmp (const scamper_dealias_probe_t *a,
-                                 const scamper_dealias_probe_t *b)
+static int dealias_probe_tx_cmp(const scamper_dealias_probe_t *a,
+                                const scamper_dealias_probe_t *b)
 {
   return timeval_cmp (&a->tx, &b->tx);
 }
 
-static int dealias_probe_seq_cmp (const scamper_dealias_probe_t *a,
-                                  const scamper_dealias_probe_t *b)
+static int dealias_probe_seq_cmp(const scamper_dealias_probe_t *a,
+                                 const scamper_dealias_probe_t *b)
 {
   if (a->seq < b->seq)
     return -1;
@@ -336,8 +336,8 @@ static int dealias_probe_seq_cmp (const scamper_dealias_probe_t *a,
   return 0;
 }
 
-static int dealias_probe_def_cmp (const scamper_dealias_probe_t *a,
-                                  const scamper_dealias_probe_t *b)
+static int dealias_probe_def_cmp(const scamper_dealias_probe_t *a,
+                                 const scamper_dealias_probe_t *b)
 {
   if (a->def->id < b->def->id)
     return -1;
@@ -350,29 +350,29 @@ static int dealias_probe_def_cmp (const scamper_dealias_probe_t *a,
   return 0;
 }
 
-void scamper_dealias_probes_sort_tx (scamper_dealias_t *dealias)
+void scamper_dealias_probes_sort_tx(scamper_dealias_t *dealias)
 {
   array_qsort ((void**) dealias->probes, dealias->probec,
                (array_cmp_t) dealias_probe_tx_cmp);
   return;
 }
 
-void scamper_dealias_probes_sort_seq (scamper_dealias_t *dealias)
+void scamper_dealias_probes_sort_seq(scamper_dealias_t *dealias)
 {
   array_qsort ((void**) dealias->probes, dealias->probec,
                (array_cmp_t) dealias_probe_seq_cmp);
   return;
 }
 
-void scamper_dealias_probes_sort_def (scamper_dealias_t *dealias)
+void scamper_dealias_probes_sort_def(scamper_dealias_t *dealias)
 {
   array_qsort ((void**) dealias->probes, dealias->probec,
                (array_cmp_t) dealias_probe_def_cmp);
   return;
 }
 
-int scamper_dealias_probe_add (scamper_dealias_t *dealias,
-                               scamper_dealias_probe_t *probe)
+int scamper_dealias_probe_add(scamper_dealias_t *dealias,
+                              scamper_dealias_probe_t *probe)
 {
   size_t size = (dealias->probec + 1) * sizeof(scamper_dealias_probe_t*);
   if (realloc_wrap ((void**) &dealias->probes, size) == 0)
@@ -383,8 +383,8 @@ int scamper_dealias_probe_add (scamper_dealias_t *dealias,
   return -1;
 }
 
-int scamper_dealias_reply_add (scamper_dealias_probe_t *probe,
-                               scamper_dealias_reply_t *reply)
+int scamper_dealias_reply_add(scamper_dealias_probe_t *probe,
+                              scamper_dealias_reply_t *reply)
 {
   size_t size = (probe->replyc + 1) * sizeof(scamper_dealias_reply_t*);
   if (realloc_wrap ((void**) &probe->replies, size) == 0)
@@ -395,59 +395,58 @@ int scamper_dealias_reply_add (scamper_dealias_probe_t *probe,
   return -1;
 }
 
-int scamper_dealias_ally_alloc (scamper_dealias_t *dealias)
+int scamper_dealias_ally_alloc(scamper_dealias_t *dealias)
 {
-  if ((dealias->data = malloc_zero (sizeof(scamper_dealias_ally_t))) != NULL)
+  if ((dealias->data = malloc_zero(sizeof(scamper_dealias_ally_t))) != NULL)
     return 0;
   return -1;
 }
 
-int scamper_dealias_mercator_alloc (scamper_dealias_t *dealias)
+int scamper_dealias_mercator_alloc(scamper_dealias_t *dealias)
 {
-  if ((dealias->data = malloc_zero (sizeof(scamper_dealias_mercator_t))) != NULL)
+  if ((dealias->data = malloc_zero(sizeof(scamper_dealias_mercator_t))) != NULL)
     return 0;
   return -1;
 }
 
-int scamper_dealias_radargun_alloc (scamper_dealias_t *dealias)
+int scamper_dealias_radargun_alloc(scamper_dealias_t *dealias)
 {
-  if ((dealias->data = malloc_zero (sizeof(scamper_dealias_radargun_t))) != NULL)
+  if ((dealias->data = malloc_zero(sizeof(scamper_dealias_radargun_t))) != NULL)
     return 0;
   return -1;
 }
 
-int scamper_dealias_prefixscan_alloc (scamper_dealias_t *dealias)
+int scamper_dealias_prefixscan_alloc(scamper_dealias_t *dealias)
 {
-  dealias->data = malloc_zero (sizeof(scamper_dealias_prefixscan_t));
+  dealias->data = malloc_zero(sizeof(scamper_dealias_prefixscan_t));
   if (dealias->data != NULL)
     return 0;
   return -1;
 }
 
-int scamper_dealias_bump_alloc (scamper_dealias_t *dealias)
+int scamper_dealias_bump_alloc(scamper_dealias_t *dealias)
 {
-  if ((dealias->data = malloc_zero (sizeof(scamper_dealias_bump_t))) != NULL)
+  if ((dealias->data = malloc_zero(sizeof(scamper_dealias_bump_t))) != NULL)
     return 0;
 
   return -1;
 }
 
-static uint16_t dealias_ipid16_diff (uint16_t a, uint16_t b)
+static uint16_t dealias_ipid16_diff(uint16_t a, uint16_t b)
 {
   if (a <= b)
     return b - a;
   return (0xFFFFUL - a) + b + 1;
 }
 
-static int dealias_ipid16_inseq2 (uint16_t a, uint16_t b, uint16_t fudge)
+static int dealias_ipid16_inseq2(uint16_t a, uint16_t b, uint16_t fudge)
 {
   if (a == b || dealias_ipid16_diff (a, b) > fudge)
     return 0;
   return 1;
 }
 
-static int dealias_ipid16_inseq3 (uint32_t a, uint32_t b, uint32_t c,
-                                  uint32_t f)
+static int dealias_ipid16_inseq3(uint32_t a, uint32_t b, uint32_t c, uint32_t f)
 {
   if (a == b || b == c || a == c)
     return 0;
@@ -465,22 +464,21 @@ static int dealias_ipid16_inseq3 (uint32_t a, uint32_t b, uint32_t c,
   return 1;
 }
 
-static uint32_t dealias_ipid32_diff (uint32_t a, uint32_t b)
+static uint32_t dealias_ipid32_diff(uint32_t a, uint32_t b)
 {
   if (a <= b)
     return b - a;
   return (0xFFFFFFFFUL - a) + b + 1;
 }
 
-static int dealias_ipid32_inseq2 (uint32_t a, uint32_t b, uint32_t fudge)
+static int dealias_ipid32_inseq2(uint32_t a, uint32_t b, uint32_t fudge)
 {
   if (a == b || dealias_ipid32_diff (a, b) > fudge)
     return 0;
   return 1;
 }
 
-static int dealias_ipid32_inseq3 (uint64_t a, uint64_t b, uint64_t c,
-                                  uint64_t f)
+static int dealias_ipid32_inseq3(uint64_t a, uint64_t b, uint64_t c, uint64_t f)
 {
   if (a == b || b == c || a == c)
     return 0;
@@ -498,7 +496,7 @@ static int dealias_ipid32_inseq3 (uint64_t a, uint64_t b, uint64_t c,
   return 1;
 }
 
-static int dealias_ipid16_bo (scamper_dealias_probe_t **probes, int probec)
+static int dealias_ipid16_bo(scamper_dealias_probe_t **probes, int probec)
 {
   scamper_dealias_probe_t **s = NULL;
   uint16_t a, b, c = 1, max_bs = 0, max_nobs = 0, u16;
@@ -545,8 +543,8 @@ done:
   return rc;
 }
 
-static int dealias_ipid16_inseq (scamper_dealias_probe_t **probes, int probec,
-                                 uint16_t fudge, int bs)
+static int dealias_ipid16_inseq(scamper_dealias_probe_t **probes, int probec,
+                                uint16_t fudge, int bs)
 {
   uint16_t a, b, c;
   int i;
@@ -591,7 +589,7 @@ static int dealias_ipid16_inseq (scamper_dealias_probe_t **probes, int probec,
   return 1;
 }
 
-static int dealias_ipid32_bo (scamper_dealias_probe_t **probes, int probec)
+static int dealias_ipid32_bo(scamper_dealias_probe_t **probes, int probec)
 {
   scamper_dealias_probe_t **s = NULL;
   uint32_t a, b, c = 1, max_bs = 0, max_nobs = 0, u32;
@@ -638,8 +636,8 @@ done:
   return rc;
 }
 
-static int dealias_ipid32_inseq (scamper_dealias_probe_t **probes, int probec,
-                                 uint16_t fudge, int bs)
+static int dealias_ipid32_inseq(scamper_dealias_probe_t **probes, int probec,
+                                uint16_t fudge, int bs)
 {
   uint32_t a, b, c;
   int i;
@@ -684,15 +682,15 @@ static int dealias_ipid32_inseq (scamper_dealias_probe_t **probes, int probec,
   return 1;
 }
 
-int scamper_dealias_ipid_inseq (scamper_dealias_probe_t **probes, int probec,
-                                uint16_t fudge, int bs)
+int scamper_dealias_ipid_inseq(scamper_dealias_probe_t **probes, int probec,
+                               uint16_t fudge, int bs)
 {
-  static int (*const inseq[]) (scamper_dealias_probe_t**, int, uint16_t, int) =
+  static int (*const inseq[])(scamper_dealias_probe_t**, int, uint16_t, int) =
   {
     dealias_ipid16_inseq,
     dealias_ipid32_inseq,
     };
-  static int (*const bo[]) (scamper_dealias_probe_t**, int) =
+  static int (*const bo[])(scamper_dealias_probe_t**, int) =
   {
     dealias_ipid16_bo,
     dealias_ipid32_bo,
@@ -726,27 +724,27 @@ int scamper_dealias_ipid_inseq (scamper_dealias_probe_t **probes, int probec,
   return inseq[x] (probes, probec, fudge, bs);
 }
 
-int scamper_dealias_probes_alloc (scamper_dealias_t *dealias, uint32_t cnt)
+int scamper_dealias_probes_alloc(scamper_dealias_t *dealias, uint32_t cnt)
 {
   size_t size = cnt * sizeof(scamper_dealias_probe_t*);
-  if ((dealias->probes = malloc_zero (size)) == NULL)
+  if ((dealias->probes = malloc_zero(size)) == NULL)
     return -1;
   return 0;
 }
 
-int scamper_dealias_replies_alloc (scamper_dealias_probe_t *probe, uint16_t cnt)
+int scamper_dealias_replies_alloc(scamper_dealias_probe_t *probe, uint16_t cnt)
 {
   size_t size = cnt * sizeof(scamper_dealias_reply_t*);
-  if ((probe->replies = malloc_zero (size)) == NULL)
+  if ((probe->replies = malloc_zero(size)) == NULL)
     return -1;
   return 0;
 }
 
-int scamper_dealias_radargun_probedefs_alloc (scamper_dealias_radargun_t *rg,
-                                              uint32_t probedefc)
+int scamper_dealias_radargun_probedefs_alloc(scamper_dealias_radargun_t *rg,
+                                             uint32_t probedefc)
 {
   size_t len = probedefc * sizeof(scamper_dealias_probedef_t);
-  if ((rg->probedefs = malloc_zero (len)) == NULL)
+  if ((rg->probedefs = malloc_zero(len)) == NULL)
     return -1;
   return 0;
 }
@@ -758,9 +756,8 @@ typedef struct dealias_resolv
   int probet;
 } dealias_resolv_t;
 
-static int dealias_fudge_inseq (scamper_dealias_probe_t *pr_a,
-                                scamper_dealias_probe_t *pr_b, int bs,
-                                int fudge)
+static int dealias_fudge_inseq(scamper_dealias_probe_t *pr_a,
+                               scamper_dealias_probe_t *pr_b, int bs, int fudge)
 {
   uint32_t a = pr_a->replies[0]->ipid;
   uint32_t b = pr_b->replies[0]->ipid;
@@ -780,8 +777,8 @@ static int dealias_fudge_inseq (scamper_dealias_probe_t *pr_a,
   return 1;
 }
 
-int scamper_dealias_prefixscan_xs_add (scamper_dealias_t *dealias,
-                                       scamper_addr_t *addr)
+int scamper_dealias_prefixscan_xs_add(scamper_dealias_t *dealias,
+                                      scamper_addr_t *addr)
 {
   scamper_dealias_prefixscan_t *prefixscan = dealias->data;
   int tmp;
@@ -802,8 +799,8 @@ int scamper_dealias_prefixscan_xs_add (scamper_dealias_t *dealias,
   return 0;
 }
 
-int scamper_dealias_prefixscan_xs_in (scamper_dealias_t *dealias,
-                                      scamper_addr_t *addr)
+int scamper_dealias_prefixscan_xs_in(scamper_dealias_t *dealias,
+                                     scamper_addr_t *addr)
 {
   scamper_dealias_prefixscan_t *prefixscan = dealias->data;
   if (array_find ((void**) prefixscan->xs, prefixscan->xc, addr,
@@ -812,25 +809,25 @@ int scamper_dealias_prefixscan_xs_in (scamper_dealias_t *dealias,
   return 0;
 }
 
-int scamper_dealias_prefixscan_xs_alloc (scamper_dealias_prefixscan_t *p,
-                                         uint16_t xc)
+int scamper_dealias_prefixscan_xs_alloc(scamper_dealias_prefixscan_t *p,
+                                        uint16_t xc)
 {
-  if ((p->xs = malloc_zero (sizeof(scamper_addr_t*) * xc)) != NULL)
+  if ((p->xs = malloc_zero(sizeof(scamper_addr_t*) * xc)) != NULL)
     return 0;
   return -1;
 }
 
-int scamper_dealias_prefixscan_probedefs_alloc (scamper_dealias_prefixscan_t *p,
-                                                uint32_t probedefc)
+int scamper_dealias_prefixscan_probedefs_alloc(scamper_dealias_prefixscan_t *p,
+                                               uint32_t probedefc)
 {
   size_t len = probedefc * sizeof(scamper_dealias_probedef_t);
-  if ((p->probedefs = malloc_zero (len)) != NULL)
+  if ((p->probedefs = malloc_zero(len)) != NULL)
     return 0;
   return -1;
 }
 
-int scamper_dealias_prefixscan_probedef_add (scamper_dealias_t *dealias,
-                                             scamper_dealias_probedef_t *def)
+int scamper_dealias_prefixscan_probedef_add(scamper_dealias_t *dealias,
+                                            scamper_dealias_probedef_t *def)
 {
   scamper_dealias_prefixscan_t *prefixscan = dealias->data;
   size_t size;
@@ -853,10 +850,10 @@ int scamper_dealias_prefixscan_probedef_add (scamper_dealias_t *dealias,
   return 0;
 }
 
-int scamper_dealias_radargun_fudge (scamper_dealias_t *dealias,
-                                    scamper_dealias_probedef_t *def,
-                                    scamper_dealias_probedef_t **defs, int *cnt,
-                                    int fudge)
+int scamper_dealias_radargun_fudge(scamper_dealias_t *dealias,
+                                   scamper_dealias_probedef_t *def,
+                                   scamper_dealias_probedef_t **defs, int *cnt,
+                                   int fudge)
 {
   scamper_dealias_radargun_t *rg = dealias->data;
   scamper_dealias_probe_t *pr, *pr_a, *pr_b;
@@ -869,7 +866,7 @@ int scamper_dealias_radargun_fudge (scamper_dealias_t *dealias,
   if (dealias->method != SCAMPER_DEALIAS_METHOD_RADARGUN)
     goto err;
 
-  if ((dr = malloc_zero (sizeof(dealias_resolv_t) * rg->probedefc)) == NULL)
+  if ((dr = malloc_zero(sizeof(dealias_resolv_t) * rg->probedefc)) == NULL)
     goto err;
 
   for (x = 0; x < dealias->probec; x++)
@@ -1021,8 +1018,8 @@ err:
   return -1;
 }
 
-const char* scamper_dealias_method_tostr (const scamper_dealias_t *d, char *b,
-                                          size_t l)
+const char* scamper_dealias_method_tostr(const scamper_dealias_t *d, char *b,
+                                         size_t l)
 {
   static const char *m[] =
     {
@@ -1035,8 +1032,8 @@ const char* scamper_dealias_method_tostr (const scamper_dealias_t *d, char *b,
   return m[d->method];
 }
 
-const char* scamper_dealias_result_tostr (const scamper_dealias_t *d, char *b,
-                                          size_t l)
+const char* scamper_dealias_result_tostr(const scamper_dealias_t *d, char *b,
+                                         size_t l)
 {
   static char *t[] =
     { "none", "aliases", "not-aliases", "halted", "ipid-echo", };
@@ -1048,9 +1045,9 @@ const char* scamper_dealias_result_tostr (const scamper_dealias_t *d, char *b,
   return t[d->result];
 }
 
-void scamper_dealias_free (scamper_dealias_t *dealias)
+void scamper_dealias_free(scamper_dealias_t *dealias)
 {
-  static void (*const func[]) (void*) =
+  static void (*const func[])(void*) =
   {
     dealias_mercator_free,
     dealias_ally_free,
@@ -1090,7 +1087,7 @@ void scamper_dealias_free (scamper_dealias_t *dealias)
   return;
 }
 
-scamper_dealias_t* scamper_dealias_alloc (void)
+scamper_dealias_t* scamper_dealias_alloc(void)
 {
-  return (scamper_dealias_t*) malloc_zero (sizeof(scamper_dealias_t));
+  return (scamper_dealias_t*) malloc_zero(sizeof(scamper_dealias_t));
 }

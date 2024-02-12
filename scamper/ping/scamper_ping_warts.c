@@ -162,10 +162,10 @@ typedef struct warts_ping_reply
   uint16_t params_len;
 } warts_ping_reply_t;
 
-static void insert_ping_reply_v4rr (uint8_t *buf, uint32_t *off,
-                                    const uint32_t len,
-                                    const scamper_ping_reply_v4rr_t *rr,
-                                    void *param)
+static void insert_ping_reply_v4rr(uint8_t *buf, uint32_t *off,
+                                   const uint32_t len,
+                                   const scamper_ping_reply_v4rr_t *rr,
+                                   void *param)
 {
   uint8_t i;
 
@@ -177,10 +177,9 @@ static void insert_ping_reply_v4rr (uint8_t *buf, uint32_t *off,
   return;
 }
 
-static int extract_ping_reply_v4rr (const uint8_t *buf, uint32_t *off,
-                                    const uint32_t len,
-                                    scamper_ping_reply_v4rr_t **out,
-                                    void *param)
+static int extract_ping_reply_v4rr(const uint8_t *buf, uint32_t *off,
+                                   const uint32_t len,
+                                   scamper_ping_reply_v4rr_t **out, void *param)
 {
   scamper_addr_t *addr;
   uint8_t i, rrc;
@@ -203,10 +202,10 @@ static int extract_ping_reply_v4rr (const uint8_t *buf, uint32_t *off,
   return 0;
 }
 
-static void insert_ping_reply_v4ts (uint8_t *buf, uint32_t *off,
-                                    const uint32_t len,
-                                    const scamper_ping_reply_v4ts_t *ts,
-                                    void *param)
+static void insert_ping_reply_v4ts(uint8_t *buf, uint32_t *off,
+                                   const uint32_t len,
+                                   const scamper_ping_reply_v4ts_t *ts,
+                                   void *param)
 {
   uint8_t i, ipc;
 
@@ -225,10 +224,9 @@ static void insert_ping_reply_v4ts (uint8_t *buf, uint32_t *off,
   return;
 }
 
-static int extract_ping_reply_v4ts (const uint8_t *buf, uint32_t *off,
-                                    const uint32_t len,
-                                    scamper_ping_reply_v4ts_t **out,
-                                    void *param)
+static int extract_ping_reply_v4ts(const uint8_t *buf, uint32_t *off,
+                                   const uint32_t len,
+                                   scamper_ping_reply_v4ts_t **out, void *param)
 {
   scamper_addr_t *addr;
   uint8_t i, tsc, ipc;
@@ -269,10 +267,10 @@ static int extract_ping_reply_v4ts (const uint8_t *buf, uint32_t *off,
   return 0;
 }
 
-static void insert_ping_reply_tsreply (uint8_t *buf, uint32_t *off,
-                                       const uint32_t len,
-                                       const scamper_ping_reply_tsreply_t *ts,
-                                       void *param)
+static void insert_ping_reply_tsreply(uint8_t *buf, uint32_t *off,
+                                      const uint32_t len,
+                                      const scamper_ping_reply_tsreply_t *ts,
+                                      void *param)
 {
   insert_uint32 (buf, off, len, &ts->tso, NULL);
   insert_uint32 (buf, off, len, &ts->tsr, NULL);
@@ -280,10 +278,10 @@ static void insert_ping_reply_tsreply (uint8_t *buf, uint32_t *off,
   return;
 }
 
-static int extract_ping_reply_tsreply (uint8_t *buf, uint32_t *off,
-                                       const uint32_t len,
-                                       scamper_ping_reply_tsreply_t **out,
-                                       void *param)
+static int extract_ping_reply_tsreply(uint8_t *buf, uint32_t *off,
+                                      const uint32_t len,
+                                      scamper_ping_reply_tsreply_t **out,
+                                      void *param)
 {
   scamper_ping_reply_tsreply_t *tsreply;
   if (*off >= len || len - *off < 12)
@@ -297,10 +295,10 @@ static int extract_ping_reply_tsreply (uint8_t *buf, uint32_t *off,
   return 0;
 }
 
-static void warts_ping_reply_params (const scamper_ping_t *ping,
-                                     const scamper_ping_reply_t *reply,
-                                     warts_addrtable_t *table, uint8_t *flags,
-                                     uint16_t *flags_len, uint16_t *params_len)
+static void warts_ping_reply_params(const scamper_ping_t *ping,
+                                    const scamper_ping_reply_t *reply,
+                                    warts_addrtable_t *table, uint8_t *flags,
+                                    uint16_t *flags_len, uint16_t *params_len)
 {
   const warts_var_t *var;
   int i, j, max_id = 0;
@@ -374,11 +372,11 @@ static void warts_ping_reply_params (const scamper_ping_t *ping,
   return;
 }
 
-static int warts_ping_reply_state (const scamper_file_t *sf,
-                                   const scamper_ping_t *ping,
-                                   scamper_ping_reply_t *reply,
-                                   warts_ping_reply_t *state,
-                                   warts_addrtable_t *table, uint32_t *len)
+static int warts_ping_reply_state(const scamper_file_t *sf,
+                                  const scamper_ping_t *ping,
+                                  scamper_ping_reply_t *reply,
+                                  warts_ping_reply_t *state,
+                                  warts_addrtable_t *table, uint32_t *len)
 {
   warts_ping_reply_params (ping, reply, table, state->flags, &state->flags_len,
                            &state->params_len);
@@ -392,9 +390,9 @@ static int warts_ping_reply_state (const scamper_file_t *sf,
   return 0;
 }
 
-static int extract_ping_reply_icmptc (const uint8_t *buf, uint32_t *off,
-                                      uint32_t len, scamper_ping_reply_t *reply,
-                                      void *param)
+static int extract_ping_reply_icmptc(const uint8_t *buf, uint32_t *off,
+                                     uint32_t len, scamper_ping_reply_t *reply,
+                                     void *param)
 {
   if (*off >= len || len - *off < 2)
     return -1;
@@ -404,10 +402,10 @@ static int extract_ping_reply_icmptc (const uint8_t *buf, uint32_t *off,
   return 0;
 }
 
-static void insert_ping_reply_icmptc (uint8_t *buf, uint32_t *off,
-                                      const uint32_t len,
-                                      const scamper_ping_reply_t *reply,
-                                      void *param)
+static void insert_ping_reply_icmptc(uint8_t *buf, uint32_t *off,
+                                     const uint32_t len,
+                                     const scamper_ping_reply_t *reply,
+                                     void *param)
 {
   assert(len - *off >= 2);
 
@@ -417,11 +415,11 @@ static void insert_ping_reply_icmptc (uint8_t *buf, uint32_t *off,
   return;
 }
 
-static int warts_ping_reply_read (const scamper_ping_t *ping,
-                                  scamper_ping_reply_t *reply,
-                                  warts_state_t *state,
-                                  warts_addrtable_t *table, const uint8_t *buf,
-                                  uint32_t *off, uint32_t len)
+static int warts_ping_reply_read(const scamper_ping_t *ping,
+                                 scamper_ping_reply_t *reply,
+                                 warts_state_t *state, warts_addrtable_t *table,
+                                 const uint8_t *buf, uint32_t *off,
+                                 uint32_t len)
 {
   warts_param_reader_t handlers[] =
     {
@@ -467,9 +465,9 @@ static int warts_ping_reply_read (const scamper_ping_t *ping,
   return 0;
 }
 
-static void warts_ping_reply_write (const warts_ping_reply_t *state,
-                                    warts_addrtable_t *table, uint8_t *buf,
-                                    uint32_t *off, uint32_t len)
+static void warts_ping_reply_write(const warts_ping_reply_t *state,
+                                   warts_addrtable_t *table, uint8_t *buf,
+                                   uint32_t *off, uint32_t len)
 {
   scamper_ping_reply_t *reply = state->reply;
 
@@ -499,9 +497,9 @@ static void warts_ping_reply_write (const warts_ping_reply_t *state,
   return;
 }
 
-static void warts_ping_params (const scamper_ping_t *ping,
-                               warts_addrtable_t *table, uint8_t *flags,
-                               uint16_t *flags_len, uint16_t *params_len)
+static void warts_ping_params(const scamper_ping_t *ping,
+                              warts_addrtable_t *table, uint8_t *flags,
+                              uint16_t *flags_len, uint16_t *params_len)
 {
   const warts_var_t *var;
   int i, j, max_id = 0;
@@ -588,9 +586,9 @@ static void warts_ping_params (const scamper_ping_t *ping,
   return;
 }
 
-static void insert_ping_probe_tsps (uint8_t *buf, uint32_t *off,
-                                    const uint32_t len,
-                                    const scamper_ping_v4ts_t *ts, void *param)
+static void insert_ping_probe_tsps(uint8_t *buf, uint32_t *off,
+                                   const uint32_t len,
+                                   const scamper_ping_v4ts_t *ts, void *param)
 {
   uint8_t i;
 
@@ -602,9 +600,9 @@ static void insert_ping_probe_tsps (uint8_t *buf, uint32_t *off,
   return;
 }
 
-static int extract_ping_probe_tsps (const uint8_t *buf, uint32_t *off,
-                                    const uint32_t len,
-                                    scamper_ping_v4ts_t **out, void *param)
+static int extract_ping_probe_tsps(const uint8_t *buf, uint32_t *off,
+                                   const uint32_t len,
+                                   scamper_ping_v4ts_t **out, void *param)
 {
   scamper_addr_t *addr;
   uint8_t i, ipc;
@@ -628,9 +626,9 @@ static int extract_ping_probe_tsps (const uint8_t *buf, uint32_t *off,
   return 0;
 }
 
-static int warts_ping_params_read (scamper_ping_t *ping, warts_state_t *state,
-                                   warts_addrtable_t *table, uint8_t *buf,
-                                   uint32_t *off, uint32_t len)
+static int warts_ping_params_read(scamper_ping_t *ping, warts_state_t *state,
+                                  warts_addrtable_t *table, uint8_t *buf,
+                                  uint32_t *off, uint32_t len)
 {
   uint8_t flags8 = 0;
   warts_param_reader_t handlers[] =
@@ -682,13 +680,13 @@ static int warts_ping_params_read (scamper_ping_t *ping, warts_state_t *state,
   return 0;
 }
 
-static int warts_ping_params_write (const scamper_ping_t *ping,
-                                    const scamper_file_t *sf,
-                                    warts_addrtable_t *table, uint8_t *buf,
-                                    uint32_t *off, const uint32_t len,
-                                    const uint8_t *flags,
-                                    const uint16_t flags_len,
-                                    const uint16_t params_len)
+static int warts_ping_params_write(const scamper_ping_t *ping,
+                                   const scamper_file_t *sf,
+                                   warts_addrtable_t *table, uint8_t *buf,
+                                   uint32_t *off, const uint32_t len,
+                                   const uint8_t *flags,
+                                   const uint16_t flags_len,
+                                   const uint16_t params_len)
 {
   uint32_t list_id, cycle_id;
   uint16_t pad_len = ping->probe_datalen;
@@ -739,8 +737,8 @@ static int warts_ping_params_write (const scamper_ping_t *ping,
   return 0;
 }
 
-int scamper_file_warts_ping_read (scamper_file_t *sf, const warts_hdr_t *hdr,
-                                  scamper_ping_t **ping_out)
+int scamper_file_warts_ping_read(scamper_file_t *sf, const warts_hdr_t *hdr,
+                                 scamper_ping_t **ping_out)
 {
   warts_state_t *state = scamper_file_getstate (sf);
   scamper_ping_t *ping = NULL;
@@ -828,8 +826,8 @@ err:
   return -1;
 }
 
-int scamper_file_warts_ping_write (const scamper_file_t *sf,
-                                   const scamper_ping_t *ping)
+int scamper_file_warts_ping_write(const scamper_file_t *sf,
+                                  const scamper_ping_t *ping)
 {
   warts_addrtable_t *table = NULL;
   warts_ping_reply_t *reply_state = NULL;
@@ -854,7 +852,7 @@ int scamper_file_warts_ping_write (const scamper_file_t *sf,
   if ((reply_count = scamper_ping_reply_count (ping)) > 0)
   {
     size = reply_count * sizeof(warts_ping_reply_t);
-    if ((reply_state = (warts_ping_reply_t*) malloc_zero (size)) == NULL)
+    if ((reply_state = (warts_ping_reply_t*) malloc_zero(size)) == NULL)
     {
       goto err;
     }
@@ -872,7 +870,7 @@ int scamper_file_warts_ping_write (const scamper_file_t *sf,
     }
   }
 
-  if ((buf = malloc_zero (len)) == NULL)
+  if ((buf = malloc_zero(len)) == NULL)
   {
     goto err;
   }

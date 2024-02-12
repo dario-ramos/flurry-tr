@@ -29,23 +29,23 @@ typedef struct scamper_outfile scamper_outfile_t;
 
 struct scamper_file;
 
-struct scamper_file *scamper_outfile_getfile(scamper_outfile_t *sof);
-const char *scamper_outfile_getname(const scamper_outfile_t *sof);
+struct scamper_file* scamper_outfile_getfile(scamper_outfile_t *sof);
+const char* scamper_outfile_getname(const scamper_outfile_t *sof);
 int scamper_outfile_getrefcnt(const scamper_outfile_t *sof);
 
-scamper_outfile_t *scamper_outfile_open(char *alias, char *file, char *mo);
+scamper_outfile_t* scamper_outfile_open(char *alias, char *file, char *mo);
 int scamper_outfile_close(scamper_outfile_t *sof);
-scamper_outfile_t *scamper_outfile_use(scamper_outfile_t *sof);
+scamper_outfile_t* scamper_outfile_use(scamper_outfile_t *sof);
 void scamper_outfile_free(scamper_outfile_t *sof);
 
-scamper_outfile_t *scamper_outfile_openfd(char *name, int fd, char *type);
-scamper_outfile_t *scamper_outfile_opennull(char *name, char *format);
+scamper_outfile_t* scamper_outfile_openfd(char *name, int fd, char *type);
+scamper_outfile_t* scamper_outfile_opennull(char *name, char *format);
 
-scamper_outfile_t *scamper_outfiles_get(const char *alias);
+scamper_outfile_t* scamper_outfiles_get(const char *alias);
 void scamper_outfiles_swap(scamper_outfile_t *a, scamper_outfile_t *b);
 
 void scamper_outfiles_foreach(void *p,
-			      int (*func)(void *p, scamper_outfile_t *sof));
+                              int (*func)(void *p, scamper_outfile_t *sof));
 
 int scamper_outfiles_init(char *def_filename, char *def_type);
 void scamper_outfiles_cleanup(void);

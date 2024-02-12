@@ -278,31 +278,31 @@ typedef struct scamper_ping
 } scamper_ping_t;
 
 /* basic routines to allocate and free scamper_ping structures */
-scamper_ping_t* scamper_ping_alloc (void);
-void scamper_ping_free (scamper_ping_t *ping);
-scamper_addr_t* scamper_ping_addr (const void *va);
-int scamper_ping_setdata (scamper_ping_t *ping, uint8_t *bytes, uint16_t len);
+scamper_ping_t* scamper_ping_alloc(void);
+void scamper_ping_free(scamper_ping_t *ping);
+scamper_addr_t* scamper_ping_addr(const void *va);
+int scamper_ping_setdata(scamper_ping_t *ping, uint8_t *bytes, uint16_t len);
 
 /* utility function for allocating an array for recording replies */
-int scamper_ping_replies_alloc (scamper_ping_t *ping, int count);
+int scamper_ping_replies_alloc(scamper_ping_t *ping, int count);
 
 /* basic routines to allocate and free scamper_ping_reply structures */
-scamper_ping_reply_t* scamper_ping_reply_alloc (void);
-void scamper_ping_reply_free (scamper_ping_reply_t *reply);
-int scamper_ping_reply_append (scamper_ping_t *p, scamper_ping_reply_t *reply);
-uint32_t scamper_ping_reply_count (const scamper_ping_t *ping);
+scamper_ping_reply_t* scamper_ping_reply_alloc(void);
+void scamper_ping_reply_free(scamper_ping_reply_t *reply);
+int scamper_ping_reply_append(scamper_ping_t *p, scamper_ping_reply_t *reply);
+uint32_t scamper_ping_reply_count(const scamper_ping_t *ping);
 
-scamper_ping_reply_tsreply_t* scamper_ping_reply_tsreply_alloc (void);
-void scamper_ping_reply_tsreply_free (scamper_ping_reply_tsreply_t *tsr);
+scamper_ping_reply_tsreply_t* scamper_ping_reply_tsreply_alloc(void);
+void scamper_ping_reply_tsreply_free(scamper_ping_reply_tsreply_t *tsr);
 
-scamper_ping_reply_v4rr_t* scamper_ping_reply_v4rr_alloc (uint8_t rrc);
-void scamper_ping_reply_v4rr_free (scamper_ping_reply_v4rr_t *rr);
+scamper_ping_reply_v4rr_t* scamper_ping_reply_v4rr_alloc(uint8_t rrc);
+void scamper_ping_reply_v4rr_free(scamper_ping_reply_v4rr_t *rr);
 
-scamper_ping_reply_v4ts_t* scamper_ping_reply_v4ts_alloc (uint8_t tsc, int ip);
-void scamper_ping_reply_v4ts_free (scamper_ping_reply_v4ts_t *ts);
+scamper_ping_reply_v4ts_t* scamper_ping_reply_v4ts_alloc(uint8_t tsc, int ip);
+void scamper_ping_reply_v4ts_free(scamper_ping_reply_v4ts_t *ts);
 
-scamper_ping_v4ts_t* scamper_ping_v4ts_alloc (uint8_t ipc);
-void scamper_ping_v4ts_free (scamper_ping_v4ts_t *ts);
+scamper_ping_v4ts_t* scamper_ping_v4ts_alloc(uint8_t ipc);
+void scamper_ping_v4ts_free(scamper_ping_v4ts_t *ts);
 
 typedef struct scamper_ping_stats
 {
@@ -316,8 +316,8 @@ typedef struct scamper_ping_stats
 } scamper_ping_stats_t;
 
 /* routine to return basic stats for the measurement */
-int scamper_ping_stats (const scamper_ping_t *ping, scamper_ping_stats_t *stats);
+int scamper_ping_stats(const scamper_ping_t *ping, scamper_ping_stats_t *stats);
 
-char* scamper_ping_method2str (const scamper_ping_t*, char*, size_t);
+char* scamper_ping_method2str(const scamper_ping_t*, char*, size_t);
 
 #endif /* __SCAMPER_PING_H */

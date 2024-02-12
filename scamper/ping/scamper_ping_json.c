@@ -45,7 +45,7 @@ static const char rcsid[] =
 
 #include "utils.h"
 
-static char* ping_probe_data (const scamper_ping_t *ping, char *buf, size_t len)
+static char* ping_probe_data(const scamper_ping_t *ping, char *buf, size_t len)
 {
   size_t off = 0;
   uint16_t i;
@@ -58,7 +58,7 @@ static char* ping_probe_data (const scamper_ping_t *ping, char *buf, size_t len)
   return buf;
 }
 
-static char* ping_header (const scamper_ping_t *ping)
+static char* ping_header(const scamper_ping_t *ping)
 {
   static const char *flags[] =
     { "v4rr", "spoof", "payload", "tsonly", "tsandaddr", "icmpsum", "dl", "tbt",
@@ -140,8 +140,8 @@ static char* ping_header (const scamper_ping_t *ping)
   return strdup (buf);
 }
 
-static char* ping_reply_proto (const scamper_ping_reply_t *reply, char *buf,
-                               size_t len)
+static char* ping_reply_proto(const scamper_ping_reply_t *reply, char *buf,
+                              size_t len)
 {
   if (reply->reply_proto == IPPROTO_ICMP || reply->reply_proto == IPPROTO_ICMPV6)
     snprintf (buf, len, "\"icmp\"");
@@ -154,8 +154,8 @@ static char* ping_reply_proto (const scamper_ping_reply_t *reply, char *buf,
   return buf;
 }
 
-static char* ping_reply (const scamper_ping_t *ping,
-                         const scamper_ping_reply_t *reply)
+static char* ping_reply(const scamper_ping_t *ping,
+                        const scamper_ping_reply_t *reply)
 {
   scamper_ping_reply_v4rr_t *v4rr;
   scamper_ping_reply_v4ts_t *v4ts;
@@ -255,7 +255,7 @@ static char* ping_reply (const scamper_ping_t *ping,
   return strdup (buf);
 }
 
-static char* ping_stats (const scamper_ping_t *ping)
+static char* ping_stats(const scamper_ping_t *ping)
 {
   scamper_ping_stats_t stats;
   char buf[512], str[64];
@@ -296,8 +296,8 @@ static char* ping_stats (const scamper_ping_t *ping)
   return strdup (buf);
 }
 
-int scamper_file_json_ping_write (const scamper_file_t *sf,
-                                  const scamper_ping_t *ping)
+int scamper_file_json_ping_write(const scamper_file_t *sf,
+                                 const scamper_ping_t *ping)
 {
   scamper_ping_reply_t *reply;
   uint32_t reply_count = scamper_ping_reply_count (ping);
@@ -322,8 +322,8 @@ int scamper_file_json_ping_write (const scamper_file_t *sf,
   len += 15; /* , \"responses\":[", */
   if (reply_count > 0)
   {
-    if ((replies = malloc_zero (sizeof(char*) * reply_count)) == NULL
-        || (reply_lens = malloc_zero (sizeof(size_t) * reply_count)) == NULL)
+    if ((replies = malloc_zero(sizeof(char*) * reply_count)) == NULL
+        || (reply_lens = malloc_zero(sizeof(size_t) * reply_count)) == NULL)
     {
       goto cleanup;
     }
@@ -349,7 +349,7 @@ int scamper_file_json_ping_write (const scamper_file_t *sf,
     len += (stats_len = strlen (stats));
   len += 2; /* }\n */
 
-  if ((str = malloc_zero (len)) == NULL)
+  if ((str = malloc_zero(len)) == NULL)
     goto cleanup;
   memcpy (str + wc, header, header_len);
   wc += header_len;

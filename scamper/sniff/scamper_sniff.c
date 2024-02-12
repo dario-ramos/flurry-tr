@@ -37,12 +37,12 @@ static const char rcsid[] =
 
 #include "utils.h"
 
-scamper_sniff_pkt_t* scamper_sniff_pkt_alloc (uint8_t *data, uint16_t len,
-                                              struct timeval *tv)
+scamper_sniff_pkt_t* scamper_sniff_pkt_alloc(uint8_t *data, uint16_t len,
+                                             struct timeval *tv)
 {
   scamper_sniff_pkt_t *pkt;
 
-  if ((pkt = malloc_zero (sizeof(scamper_sniff_pkt_t))) == NULL)
+  if ((pkt = malloc_zero(sizeof(scamper_sniff_pkt_t))) == NULL)
     goto err;
 
   if (len != 0 && data != NULL)
@@ -60,7 +60,7 @@ err:
   return NULL;
 }
 
-void scamper_sniff_pkt_free (scamper_sniff_pkt_t *pkt)
+void scamper_sniff_pkt_free(scamper_sniff_pkt_t *pkt)
 {
   if (pkt == NULL)
     return;
@@ -70,12 +70,12 @@ void scamper_sniff_pkt_free (scamper_sniff_pkt_t *pkt)
   return;
 }
 
-scamper_sniff_t* scamper_sniff_alloc (void)
+scamper_sniff_t* scamper_sniff_alloc(void)
 {
-  return malloc_zero (sizeof(scamper_sniff_t));
+  return malloc_zero(sizeof(scamper_sniff_t));
 }
 
-void scamper_sniff_free (scamper_sniff_t *sniff)
+void scamper_sniff_free(scamper_sniff_t *sniff)
 {
   uint32_t i;
 
@@ -102,10 +102,10 @@ void scamper_sniff_free (scamper_sniff_t *sniff)
   return;
 }
 
-int scamper_sniff_pkts_alloc (scamper_sniff_t *sniff, int pktc)
+int scamper_sniff_pkts_alloc(scamper_sniff_t *sniff, int pktc)
 {
   size_t size = pktc * sizeof(scamper_sniff_pkt_t*);
-  if ((sniff->pkts = (scamper_sniff_pkt_t**) malloc_zero (size)) == NULL)
+  if ((sniff->pkts = (scamper_sniff_pkt_t**) malloc_zero(size)) == NULL)
     return -1;
   sniff->pktc = pktc;
   return 0;

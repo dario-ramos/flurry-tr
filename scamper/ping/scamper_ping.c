@@ -39,8 +39,7 @@ static const char rcsid[] =
 
 #include "utils.h"
 
-char* scamper_ping_method2str (const scamper_ping_t *ping, char *buf,
-                               size_t len)
+char* scamper_ping_method2str(const scamper_ping_t *ping, char *buf, size_t len)
 {
   static char *m[] =
     { "icmp-echo", "tcp-ack", "tcp-ack-sport", "udp", "udp-dport", "icmp-time",
@@ -55,7 +54,7 @@ char* scamper_ping_method2str (const scamper_ping_t *ping, char *buf,
   return m[ping->probe_method];
 }
 
-int scamper_ping_stats (const scamper_ping_t *ping, scamper_ping_stats_t *stats)
+int scamper_ping_stats(const scamper_ping_t *ping, scamper_ping_stats_t *stats)
 {
   scamper_ping_reply_t *reply;
   uint16_t i;
@@ -133,7 +132,7 @@ int scamper_ping_stats (const scamper_ping_t *ping, scamper_ping_stats_t *stats)
   return 0;
 }
 
-int scamper_ping_setdata (scamper_ping_t *ping, uint8_t *bytes, uint16_t len)
+int scamper_ping_setdata(scamper_ping_t *ping, uint8_t *bytes, uint16_t len)
 {
   uint8_t *dup;
 
@@ -164,23 +163,23 @@ int scamper_ping_setdata (scamper_ping_t *ping, uint8_t *bytes, uint16_t len)
   return 0;
 }
 
-scamper_addr_t* scamper_ping_addr (const void *va)
+scamper_addr_t* scamper_ping_addr(const void *va)
 {
   return ((const scamper_ping_t*) va)->dst;
 }
 
-scamper_ping_reply_tsreply_t* scamper_ping_reply_tsreply_alloc (void)
+scamper_ping_reply_tsreply_t* scamper_ping_reply_tsreply_alloc(void)
 {
-  return malloc_zero (sizeof(scamper_ping_reply_tsreply_t));
+  return malloc_zero(sizeof(scamper_ping_reply_tsreply_t));
 }
 
-void scamper_ping_reply_tsreply_free (scamper_ping_reply_tsreply_t *tsr)
+void scamper_ping_reply_tsreply_free(scamper_ping_reply_tsreply_t *tsr)
 {
   free (tsr);
   return;
 }
 
-void scamper_ping_v4ts_free (scamper_ping_v4ts_t *ts)
+void scamper_ping_v4ts_free(scamper_ping_v4ts_t *ts)
 {
   uint8_t i;
 
@@ -199,18 +198,18 @@ void scamper_ping_v4ts_free (scamper_ping_v4ts_t *ts)
   return;
 }
 
-scamper_ping_v4ts_t* scamper_ping_v4ts_alloc (uint8_t ipc)
+scamper_ping_v4ts_t* scamper_ping_v4ts_alloc(uint8_t ipc)
 {
   scamper_ping_v4ts_t *ts = NULL;
 
   if (ipc == 0)
     goto err;
 
-  if ((ts = malloc_zero (sizeof(scamper_ping_v4ts_t))) == NULL)
+  if ((ts = malloc_zero(sizeof(scamper_ping_v4ts_t))) == NULL)
     goto err;
   ts->ipc = ipc;
 
-  if ((ts->ips = malloc_zero (sizeof(scamper_addr_t*) * ipc)) == NULL)
+  if ((ts->ips = malloc_zero(sizeof(scamper_addr_t*) * ipc)) == NULL)
     goto err;
 
   return ts;
@@ -220,12 +219,12 @@ err:
   return NULL;
 }
 
-scamper_ping_t* scamper_ping_alloc ()
+scamper_ping_t* scamper_ping_alloc()
 {
-  return (scamper_ping_t*) malloc_zero (sizeof(scamper_ping_t));
+  return (scamper_ping_t*) malloc_zero(sizeof(scamper_ping_t));
 }
 
-void scamper_ping_free (scamper_ping_t *ping)
+void scamper_ping_free(scamper_ping_t *ping)
 {
   scamper_ping_reply_t *reply, *reply_next;
   uint16_t i;
@@ -267,7 +266,7 @@ void scamper_ping_free (scamper_ping_t *ping)
   return;
 }
 
-uint32_t scamper_ping_reply_count (const scamper_ping_t *ping)
+uint32_t scamper_ping_reply_count(const scamper_ping_t *ping)
 {
   scamper_ping_reply_t *reply;
   uint16_t i;
@@ -287,7 +286,7 @@ uint32_t scamper_ping_reply_count (const scamper_ping_t *ping)
   return count;
 }
 
-int scamper_ping_reply_append (scamper_ping_t *p, scamper_ping_reply_t *reply)
+int scamper_ping_reply_append(scamper_ping_t *p, scamper_ping_reply_t *reply)
 {
   scamper_ping_reply_t *replies;
 
@@ -313,12 +312,12 @@ int scamper_ping_reply_append (scamper_ping_t *p, scamper_ping_reply_t *reply)
   return 0;
 }
 
-int scamper_ping_replies_alloc (scamper_ping_t *ping, int count)
+int scamper_ping_replies_alloc(scamper_ping_t *ping, int count)
 {
   size_t size;
 
   size = sizeof(scamper_ping_reply_t*) * count;
-  if ((ping->ping_replies = (scamper_ping_reply_t**) malloc_zero (size)) != NULL)
+  if ((ping->ping_replies = (scamper_ping_reply_t**) malloc_zero(size)) != NULL)
   {
     return 0;
   }
@@ -326,7 +325,7 @@ int scamper_ping_replies_alloc (scamper_ping_t *ping, int count)
   return -1;
 }
 
-void scamper_ping_reply_v4ts_free (scamper_ping_reply_v4ts_t *ts)
+void scamper_ping_reply_v4ts_free(scamper_ping_reply_v4ts_t *ts)
 {
   uint8_t i;
 
@@ -348,17 +347,17 @@ void scamper_ping_reply_v4ts_free (scamper_ping_reply_v4ts_t *ts)
   return;
 }
 
-scamper_ping_reply_v4ts_t* scamper_ping_reply_v4ts_alloc (uint8_t tsc, int ip)
+scamper_ping_reply_v4ts_t* scamper_ping_reply_v4ts_alloc(uint8_t tsc, int ip)
 {
   scamper_ping_reply_v4ts_t *ts = NULL;
 
-  if ((ts = malloc_zero (sizeof(scamper_ping_reply_v4ts_t))) == NULL)
+  if ((ts = malloc_zero(sizeof(scamper_ping_reply_v4ts_t))) == NULL)
     goto err;
   ts->tsc = tsc;
 
   if (tsc > 0)
   {
-    if ((ts->tss = malloc_zero (sizeof(uint32_t) * tsc)) == NULL)
+    if ((ts->tss = malloc_zero(sizeof(uint32_t) * tsc)) == NULL)
       goto err;
     if (ip != 0&&
     (ts->ips = malloc_zero(sizeof(scamper_addr_t *) * tsc)) == NULL)
@@ -372,7 +371,7 @@ err:
   return NULL;
 }
 
-void scamper_ping_reply_v4rr_free (scamper_ping_reply_v4rr_t *rr)
+void scamper_ping_reply_v4rr_free(scamper_ping_reply_v4rr_t *rr)
 {
   uint8_t i;
 
@@ -391,18 +390,18 @@ void scamper_ping_reply_v4rr_free (scamper_ping_reply_v4rr_t *rr)
   return;
 }
 
-scamper_ping_reply_v4rr_t* scamper_ping_reply_v4rr_alloc (uint8_t rrc)
+scamper_ping_reply_v4rr_t* scamper_ping_reply_v4rr_alloc(uint8_t rrc)
 {
   scamper_ping_reply_v4rr_t *rr = NULL;
 
   if (rrc == 0)
     goto err;
 
-  if ((rr = malloc_zero (sizeof(scamper_ping_reply_v4rr_t))) == NULL)
+  if ((rr = malloc_zero(sizeof(scamper_ping_reply_v4rr_t))) == NULL)
     goto err;
   rr->rrc = rrc;
 
-  if ((rr->rr = malloc_zero (sizeof(scamper_addr_t*) * rrc)) == NULL)
+  if ((rr->rr = malloc_zero(sizeof(scamper_addr_t*) * rrc)) == NULL)
     goto err;
 
   return rr;
@@ -412,12 +411,12 @@ err:
   return NULL;
 }
 
-scamper_ping_reply_t* scamper_ping_reply_alloc (void)
+scamper_ping_reply_t* scamper_ping_reply_alloc(void)
 {
-  return (scamper_ping_reply_t*) malloc_zero (sizeof(scamper_ping_reply_t));
+  return (scamper_ping_reply_t*) malloc_zero(sizeof(scamper_ping_reply_t));
 }
 
-void scamper_ping_reply_free (scamper_ping_reply_t *reply)
+void scamper_ping_reply_free(scamper_ping_reply_t *reply)
 {
   if (reply == NULL)
     return;

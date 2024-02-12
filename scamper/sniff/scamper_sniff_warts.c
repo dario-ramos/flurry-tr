@@ -86,8 +86,8 @@ typedef struct warts_sniff_pkt
   uint16_t params_len;
 } warts_sniff_pkt_t;
 
-static void warts_sniff_pkt_params (const scamper_sniff_pkt_t *pkt,
-                                    warts_sniff_pkt_t *state, uint32_t *len)
+static void warts_sniff_pkt_params(const scamper_sniff_pkt_t *pkt,
+                                   warts_sniff_pkt_t *state, uint32_t *len)
 {
   const warts_var_t *var;
   int max_id = 0;
@@ -125,9 +125,9 @@ static void warts_sniff_pkt_params (const scamper_sniff_pkt_t *pkt,
   return;
 }
 
-static scamper_sniff_pkt_t* warts_sniff_pkt_read (warts_state_t *state,
-                                                  uint8_t *buf, uint32_t *off,
-                                                  uint32_t len)
+static scamper_sniff_pkt_t* warts_sniff_pkt_read(warts_state_t *state,
+                                                 uint8_t *buf, uint32_t *off,
+                                                 uint32_t len)
 {
   scamper_sniff_pkt_t *pkt = NULL;
   uint8_t *data = NULL;
@@ -153,10 +153,10 @@ err:
   return NULL;
 }
 
-static int warts_sniff_pkt_write (const scamper_sniff_pkt_t *pkt,
-                                  const scamper_file_t *sf, uint8_t *buf,
-                                  uint32_t *off, const uint32_t len,
-                                  warts_sniff_pkt_t *state)
+static int warts_sniff_pkt_write(const scamper_sniff_pkt_t *pkt,
+                                 const scamper_file_t *sf, uint8_t *buf,
+                                 uint32_t *off, const uint32_t len,
+                                 warts_sniff_pkt_t *state)
 {
   uint16_t dl = pkt->len;
   warts_param_writer_t handlers[] =
@@ -170,9 +170,9 @@ static int warts_sniff_pkt_write (const scamper_sniff_pkt_t *pkt,
   return 0;
 }
 
-static void warts_sniff_params (const scamper_sniff_t *sniff,
-                                warts_addrtable_t *table, uint8_t *flags,
-                                uint16_t *flags_len, uint16_t *params_len)
+static void warts_sniff_params(const scamper_sniff_t *sniff,
+                               warts_addrtable_t *table, uint8_t *flags,
+                               uint16_t *flags_len, uint16_t *params_len)
 {
   const warts_var_t *var;
   int i, max_id = 0;
@@ -213,10 +213,10 @@ static void warts_sniff_params (const scamper_sniff_t *sniff,
   return;
 }
 
-static int warts_sniff_params_read (scamper_sniff_t *sniff,
-                                    warts_addrtable_t *table,
-                                    warts_state_t *state, uint8_t *buf,
-                                    uint32_t *off, uint32_t len)
+static int warts_sniff_params_read(scamper_sniff_t *sniff,
+                                   warts_addrtable_t *table,
+                                   warts_state_t *state, uint8_t *buf,
+                                   uint32_t *off, uint32_t len)
 {
   warts_param_reader_t handlers[] =
     {
@@ -240,13 +240,13 @@ static int warts_sniff_params_read (scamper_sniff_t *sniff,
   return 0;
 }
 
-static int warts_sniff_params_write (const scamper_sniff_t *sniff,
-                                     const scamper_file_t *sf,
-                                     warts_addrtable_t *table, uint8_t *buf,
-                                     uint32_t *off, const uint32_t len,
-                                     const uint8_t *flags,
-                                     const uint16_t flags_len,
-                                     const uint16_t params_len)
+static int warts_sniff_params_write(const scamper_sniff_t *sniff,
+                                    const scamper_file_t *sf,
+                                    warts_addrtable_t *table, uint8_t *buf,
+                                    uint32_t *off, const uint32_t len,
+                                    const uint8_t *flags,
+                                    const uint16_t flags_len,
+                                    const uint16_t params_len)
 {
   uint32_t list_id, cycle_id;
 
@@ -277,8 +277,8 @@ static int warts_sniff_params_write (const scamper_sniff_t *sniff,
   return 0;
 }
 
-int scamper_file_warts_sniff_read (scamper_file_t *sf, const warts_hdr_t *hdr,
-                                   scamper_sniff_t **sniff_out)
+int scamper_file_warts_sniff_read(scamper_file_t *sf, const warts_hdr_t *hdr,
+                                  scamper_sniff_t **sniff_out)
 {
   scamper_sniff_t *sniff = NULL;
   warts_addrtable_t *table = NULL;
@@ -353,8 +353,8 @@ err:
 }
 
 /* Write data from a scamper sniff object to a warts file */
-int scamper_file_warts_sniff_write (const scamper_file_t *sf,
-                                    const scamper_sniff_t *sniff)
+int scamper_file_warts_sniff_write(const scamper_file_t *sf,
+                                   const scamper_sniff_t *sniff)
 {
   warts_addrtable_t *table = NULL;
   warts_sniff_pkt_t *pkts = NULL;
@@ -375,7 +375,7 @@ int scamper_file_warts_sniff_write (const scamper_file_t *sf,
   {
     /* Allocate memory for the state */
     size = sniff->pktc * sizeof(warts_sniff_pkt_t);
-    if ((pkts = (warts_sniff_pkt_t*) malloc_zero (size)) == NULL)
+    if ((pkts = (warts_sniff_pkt_t*) malloc_zero(size)) == NULL)
       goto err;
 
     for (i = 0; i < sniff->pktc; i++)
@@ -383,7 +383,7 @@ int scamper_file_warts_sniff_write (const scamper_file_t *sf,
   }
 
   /* Allocate memory to store all of the data (including packets) */
-  if ((buf = malloc_zero (len)) == NULL)
+  if ((buf = malloc_zero(len)) == NULL)
     goto err;
   insert_wartshdr (buf, &off, len, SCAMPER_FILE_OBJ_SNIFF);
 

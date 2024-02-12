@@ -178,7 +178,7 @@ static const scamper_option_in_t opts[] =
     { 'U', NULL, STING_OPT_USERID, SCAMPER_OPTION_TYPE_NUM }, };
 static const int opts_cnt = SCAMPER_OPTION_COUNT(opts);
 
-const char* scamper_do_sting_usage (void)
+const char* scamper_do_sting_usage(void)
 {
   return "sting [-c count] [-d dport] [-f distribution] [-h request]\n"
       "      [-H hole] [-i inter] [-m mean] [-s sport] [-U userid]";
@@ -196,17 +196,17 @@ static const char *defaultrequest =
         "User-Agent: Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt; Sting)\r\n"
         "\r\n";
 
-static scamper_sting_t* sting_getdata (const scamper_task_t *task)
+static scamper_sting_t* sting_getdata(const scamper_task_t *task)
 {
   return scamper_task_getdata (task);
 }
 
-static sting_state_t* sting_getstate (const scamper_task_t *task)
+static sting_state_t* sting_getstate(const scamper_task_t *task)
 {
   return scamper_task_getstate (task);
 }
 
-static void sting_handleerror (scamper_task_t *task, int error)
+static void sting_handleerror(scamper_task_t *task, int error)
 {
   scamper_task_queue_done (task, 0);
   return;
@@ -217,7 +217,7 @@ static void sting_handleerror (scamper_task_t *task, int error)
  *
  * retransmit a syn up to a specified number of times.
  */
-static void handletimeout_syn (scamper_task_t *task)
+static void handletimeout_syn(scamper_task_t *task)
 {
   scamper_sting_t *sting = sting_getdata (task);
   sting_state_t *state = sting_getstate (task);
@@ -237,7 +237,7 @@ static void handletimeout_syn (scamper_task_t *task)
  * the only point of this function is to shift the sting into the hole-filling
  * phase.
  */
-static void handletimeout_inter (scamper_task_t *task)
+static void handletimeout_inter(scamper_task_t *task)
 {
   sting_state_t *state = sting_getstate (task);
   state->attempt = 0;
@@ -254,7 +254,7 @@ static void handletimeout_inter (scamper_task_t *task)
  * state.  it allows a packet in a hole to be retransmitted a number of times
  * before giving up.
  */
-static void handletimeout_hole (scamper_task_t *task)
+static void handletimeout_hole(scamper_task_t *task)
 {
   scamper_sting_t *sting = sting_getdata (task);
   sting_state_t *state = sting_getstate (task);
@@ -276,7 +276,7 @@ static void handletimeout_hole (scamper_task_t *task)
  * this function exists solely to ensure a task makes its way into the
  * done queue after a reset has been transmitted.
  */
-static void handletimeout_rst (scamper_task_t *task)
+static void handletimeout_rst(scamper_task_t *task)
 {
   scamper_task_queue_done (task, 0);
   return;
@@ -288,9 +288,9 @@ static void handletimeout_rst (scamper_task_t *task)
  * this function ensures an appropriate action is taken when a timeout
  * occurs.
  */
-static void do_sting_handle_timeout (scamper_task_t *task)
+static void do_sting_handle_timeout(scamper_task_t *task)
 {
-  static void (*const func[]) (scamper_task_t*) =
+  static void (*const func[])(scamper_task_t*) =
   {
     NULL, /* MODE_RTSOCK */
     NULL, /* MODE_DLHDR */
@@ -316,7 +316,7 @@ static void do_sting_handle_timeout (scamper_task_t *task)
  *
  * this function checks the response to a syn
  */
-static void handletcp_syn (scamper_task_t *task, scamper_dl_rec_t *dl)
+static void handletcp_syn(scamper_task_t *task, scamper_dl_rec_t *dl)
 {
   scamper_sting_t *sting = sting_getdata (task);
   sting_state_t *state = sting_getstate (task);
@@ -371,7 +371,7 @@ static void handletcp_syn (scamper_task_t *task, scamper_dl_rec_t *dl)
  * for each acknowledgement received, check that it makes sense.
  * count the number of acknowledgements received in the data phase
  */
-static void handletcp_data (scamper_task_t *task, scamper_dl_rec_t *dl)
+static void handletcp_data(scamper_task_t *task, scamper_dl_rec_t *dl)
 {
   scamper_sting_t *sting = sting_getdata (task);
   sting_state_t *state = sting_getstate (task);
@@ -393,7 +393,7 @@ static void handletcp_data (scamper_task_t *task, scamper_dl_rec_t *dl)
  * for each acknowledgement received in the hole-filling phase, figure out
  * if all probes have been accounted for
  */
-static void handletcp_hole (scamper_task_t *task, scamper_dl_rec_t *dl)
+static void handletcp_hole(scamper_task_t *task, scamper_dl_rec_t *dl)
 {
   scamper_sting_t *sting = sting_getdata (task);
   sting_state_t *state = sting_getstate (task);
@@ -439,9 +439,9 @@ err:
  * for each packet received, check that the addresses and ports make sense,
  * and that the packet is not a reset
  */
-static void do_sting_handle_dl (scamper_task_t *task, scamper_dl_rec_t *dl)
+static void do_sting_handle_dl(scamper_task_t *task, scamper_dl_rec_t *dl)
 {
-  static void (*const func[]) (scamper_task_t*, scamper_dl_rec_t*) =
+  static void (*const func[])(scamper_task_t*, scamper_dl_rec_t*) =
   {
     NULL, /* MODE_RTSOCK */
     NULL, /* MODE_DLHDR */
@@ -465,7 +465,7 @@ static void do_sting_handle_dl (scamper_task_t *task, scamper_dl_rec_t *dl)
     return;
   }
 
-  scamper_dl_rec_tcp_print (dl);
+  scamper_dl_rec_tcp_print(dl);
 
   pkt = scamper_sting_pkt_alloc (SCAMPER_STING_PKT_FLAG_RX, dl->dl_net_raw,
                                  dl->dl_ip_size, &dl->dl_tv);
@@ -491,7 +491,7 @@ static void do_sting_handle_dl (scamper_task_t *task, scamper_dl_rec_t *dl)
   return;
 }
 
-static void sting_handle_dlhdr (scamper_dlhdr_t *dlhdr)
+static void sting_handle_dlhdr(scamper_dlhdr_t *dlhdr)
 {
   scamper_task_t *task = dlhdr->param;
   sting_state_t *state = sting_getstate (task);
@@ -507,7 +507,7 @@ static void sting_handle_dlhdr (scamper_dlhdr_t *dlhdr)
   return;
 }
 
-static void sting_handle_rt (scamper_route_t *rt)
+static void sting_handle_rt(scamper_route_t *rt)
 {
   scamper_task_t *task = rt->param;
   scamper_sting_t *sting = sting_getdata (task);
@@ -572,13 +572,13 @@ done:
   return;
 }
 
-static void do_sting_write (scamper_file_t *sf, scamper_task_t *task)
+static void do_sting_write(scamper_file_t *sf, scamper_task_t *task)
 {
   scamper_file_write_sting (sf, sting_getdata (task));
   return;
 }
 
-static void sting_state_free (sting_state_t *state)
+static void sting_state_free(sting_state_t *state)
 {
   if (state == NULL)
     return;
@@ -600,14 +600,14 @@ static void sting_state_free (sting_state_t *state)
   return;
 }
 
-static int sting_state_alloc (scamper_task_t *task)
+static int sting_state_alloc(scamper_task_t *task)
 {
   scamper_sting_t *sting = sting_getdata (task);
   sting_state_t *state;
   uint16_t u16;
   size_t size;
 
-  if ((state = malloc_zero (sizeof(sting_state_t))) == NULL)
+  if ((state = malloc_zero(sizeof(sting_state_t))) == NULL)
   {
     printerror (__func__, "could not malloc state");
     goto err;
@@ -615,7 +615,7 @@ static int sting_state_alloc (scamper_task_t *task)
   scamper_task_setstate (task, state);
 
   size = (sting->seqskip + sting->count) * sizeof(scamper_sting_pkt_t*);
-  if ((state->probes = malloc_zero (size)) == NULL)
+  if ((state->probes = malloc_zero(size)) == NULL)
     goto err;
 
   if (random_u16 (&u16) != 0)
@@ -639,13 +639,13 @@ err:
   return -1;
 }
 
-static void do_sting_halt (scamper_task_t *task)
+static void do_sting_halt(scamper_task_t *task)
 {
   scamper_task_queue_done (task, 0);
   return;
 }
 
-static void do_sting_free (scamper_task_t *task)
+static void do_sting_free(scamper_task_t *task)
 {
   scamper_sting_t *sting;
   sting_state_t *state;
@@ -665,7 +665,7 @@ static void do_sting_free (scamper_task_t *task)
   return;
 }
 
-static void do_sting_probe (scamper_task_t *task)
+static void do_sting_probe(scamper_task_t *task)
 {
   scamper_firewall_rule_t sfw;
   scamper_sting_pkt_t *pkt;
@@ -861,7 +861,7 @@ err:
   return;
 }
 
-static int sting_arg_param_validate (int optid, char *param, long long *out)
+static int sting_arg_param_validate(int optid, char *param, long long *out)
 {
   long tmp;
 
@@ -938,7 +938,7 @@ err:
  * assemble a sting.  return the sting structure so that it is all ready to
  * go.
  */
-void* scamper_do_sting_alloc (char *str)
+void* scamper_do_sting_alloc(char *str)
 {
   uint16_t sport = scamper_sport_default ();
   uint16_t dport = 80;
@@ -1062,13 +1062,13 @@ err:
  *
  *
  */
-int scamper_do_sting_arg_validate (int argc, char *argv[], int *stop)
+int scamper_do_sting_arg_validate(int argc, char *argv[], int *stop)
 {
   return scamper_options_validate (opts, opts_cnt, argc, argv, stop,
                                    sting_arg_param_validate);
 }
 
-void scamper_do_sting_free (void *data)
+void scamper_do_sting_free(void *data)
 {
   scamper_sting_free ((scamper_sting_t*) data);
   return;
@@ -1078,8 +1078,8 @@ void scamper_do_sting_free (void *data)
  * scamper_do_sting_alloctask
  *
  */
-scamper_task_t* scamper_do_sting_alloctask (void *data, scamper_list_t *list,
-                                            scamper_cycle_t *cycle)
+scamper_task_t* scamper_do_sting_alloctask(void *data, scamper_list_t *list,
+                                           scamper_cycle_t *cycle)
 {
   scamper_sting_t *sting = (scamper_sting_t*) data;
   scamper_task_sig_t *sig = NULL;
@@ -1118,12 +1118,12 @@ err:
   return NULL;
 }
 
-void scamper_do_sting_cleanup (void)
+void scamper_do_sting_cleanup(void)
 {
   return;
 }
 
-int scamper_do_sting_init (void)
+int scamper_do_sting_init(void)
 {
   sting_funcs.probe = do_sting_probe;
   sting_funcs.handle_icmp = NULL;

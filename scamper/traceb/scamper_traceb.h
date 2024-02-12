@@ -46,7 +46,7 @@ typedef struct scamper_traceb
   struct scamper_addr *dst;
 } scamper_traceb_t;
 
-scamper_traceb_t* scamper_traceb_alloc (void);
-void scamper_traceb_free (scamper_traceb_t *trace);
+scamper_traceb_t* scamper_traceb_alloc(void);
+void scamper_traceb_free(scamper_traceb_t *trace);
 
 #endif /* __SCAMPER_TRACEB_H */

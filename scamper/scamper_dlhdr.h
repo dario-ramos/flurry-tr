@@ -30,7 +30,7 @@ void scamper_dlhdr_cleanup(void);
 
 typedef struct scamper_dlhdr scamper_dlhdr_t;
 
-scamper_dlhdr_t *scamper_dlhdr_alloc(void);
+scamper_dlhdr_t* scamper_dlhdr_alloc(void);
 void scamper_dlhdr_free(scamper_dlhdr_t *dlhdr);
 
 int scamper_dlhdr_get(scamper_dlhdr_t *dlhdr);

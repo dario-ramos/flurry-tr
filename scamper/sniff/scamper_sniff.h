@@ -57,13 +57,13 @@ typedef struct scamper_sniff
 
 } scamper_sniff_t;
 
-scamper_sniff_t* scamper_sniff_alloc (void);
-void scamper_sniff_free (scamper_sniff_t*);
+scamper_sniff_t* scamper_sniff_alloc(void);
+void scamper_sniff_free(scamper_sniff_t*);
 
-scamper_sniff_pkt_t* scamper_sniff_pkt_alloc (uint8_t *data, uint16_t len,
-                                              struct timeval *tv);
-void scamper_sniff_pkt_free (scamper_sniff_pkt_t *pkt);
+scamper_sniff_pkt_t* scamper_sniff_pkt_alloc(uint8_t *data, uint16_t len,
+                                             struct timeval *tv);
+void scamper_sniff_pkt_free(scamper_sniff_pkt_t *pkt);
 
-int scamper_sniff_pkts_alloc (scamper_sniff_t *sniff, int pktc);
+int scamper_sniff_pkts_alloc(scamper_sniff_t *sniff, int pktc);
 
 #endif /* __SCAMPER_SNIFF_H */

@@ -218,9 +218,9 @@ typedef struct warts_tracelb_link
   uint8_t hopc;
 } warts_tracelb_link_t;
 
-static void warts_tracelb_params (const scamper_tracelb_t *trace,
-                                  warts_addrtable_t *table, uint8_t *flags,
-                                  uint16_t *flags_len, uint16_t *params_len)
+static void warts_tracelb_params(const scamper_tracelb_t *trace,
+                                 warts_addrtable_t *table, uint8_t *flags,
+                                 uint16_t *flags_len, uint16_t *params_len)
 {
   int i, max_id = 0;
   const warts_var_t *var;
@@ -271,10 +271,10 @@ static void warts_tracelb_params (const scamper_tracelb_t *trace,
   return;
 }
 
-static int warts_tracelb_params_read (scamper_tracelb_t *trace,
-                                      warts_state_t *state,
-                                      warts_addrtable_t *table, uint8_t *buf,
-                                      uint32_t *off, uint32_t len)
+static int warts_tracelb_params_read(scamper_tracelb_t *trace,
+                                     warts_state_t *state,
+                                     warts_addrtable_t *table, uint8_t *buf,
+                                     uint32_t *off, uint32_t len)
 {
   warts_param_reader_t handlers[] =
     {
@@ -312,13 +312,13 @@ static int warts_tracelb_params_read (scamper_tracelb_t *trace,
   return 0;
 }
 
-static int warts_tracelb_params_write (const scamper_tracelb_t *trace,
-                                       const scamper_file_t *sf,
-                                       warts_addrtable_t *table, uint8_t *buf,
-                                       uint32_t *off, const uint32_t len,
-                                       const uint8_t *flags,
-                                       const uint16_t flags_len,
-                                       const uint16_t params_len)
+static int warts_tracelb_params_write(const scamper_tracelb_t *trace,
+                                      const scamper_file_t *sf,
+                                      warts_addrtable_t *table, uint8_t *buf,
+                                      uint32_t *off, const uint32_t len,
+                                      const uint8_t *flags,
+                                      const uint16_t flags_len,
+                                      const uint16_t params_len)
 {
   uint32_t list_id, cycle_id;
   warts_param_writer_t handlers[] =
@@ -359,10 +359,10 @@ static int warts_tracelb_params_write (const scamper_tracelb_t *trace,
   return 0;
 }
 
-static int warts_tracelb_node_state (const scamper_file_t *sf,
-                                     const scamper_tracelb_node_t *node,
-                                     warts_addrtable_t *table,
-                                     warts_tracelb_node_t *state, uint32_t *len)
+static int warts_tracelb_node_state(const scamper_file_t *sf,
+                                    const scamper_tracelb_node_t *node,
+                                    warts_addrtable_t *table,
+                                    warts_tracelb_node_t *state, uint32_t *len)
 {
   const warts_var_t *var;
   int i, max_id = 0;
@@ -423,11 +423,10 @@ static int warts_tracelb_node_state (const scamper_file_t *sf,
   return 0;
 }
 
-static int warts_tracelb_node_read (scamper_tracelb_node_t *node,
-                                    warts_state_t *state,
-                                    warts_addrtable_t *table,
-                                    const uint8_t *buf, uint32_t *off,
-                                    uint32_t len)
+static int warts_tracelb_node_read(scamper_tracelb_node_t *node,
+                                   warts_state_t *state,
+                                   warts_addrtable_t *table, const uint8_t *buf,
+                                   uint32_t *off, uint32_t len)
 {
   warts_param_reader_t handlers[] =
     {
@@ -447,10 +446,10 @@ static int warts_tracelb_node_read (scamper_tracelb_node_t *node,
   return 0;
 }
 
-static void warts_tracelb_node_write (const scamper_tracelb_node_t *node,
-                                      const warts_tracelb_node_t *state,
-                                      warts_addrtable_t *table, uint8_t *buf,
-                                      uint32_t *off, uint32_t len)
+static void warts_tracelb_node_write(const scamper_tracelb_node_t *node,
+                                     const warts_tracelb_node_t *state,
+                                     warts_addrtable_t *table, uint8_t *buf,
+                                     uint32_t *off, uint32_t len)
 {
   warts_param_writer_t handlers[] =
     {
@@ -466,10 +465,10 @@ static void warts_tracelb_node_write (const scamper_tracelb_node_t *node,
   return;
 }
 
-static int extract_tracelb_reply_icmp_tc (const uint8_t *buf, uint32_t *off,
-                                          uint32_t len,
-                                          scamper_tracelb_reply_t *reply,
-                                          void *param)
+static int extract_tracelb_reply_icmp_tc(const uint8_t *buf, uint32_t *off,
+                                         uint32_t len,
+                                         scamper_tracelb_reply_t *reply,
+                                         void *param)
 {
   if (*off >= len || len - *off < 2)
     return -1;
@@ -478,10 +477,10 @@ static int extract_tracelb_reply_icmp_tc (const uint8_t *buf, uint32_t *off,
   return 0;
 }
 
-static void insert_tracelb_reply_icmp_tc (uint8_t *buf, uint32_t *off,
-                                          const uint32_t len,
-                                          const scamper_tracelb_reply_t *reply,
-                                          void *param)
+static void insert_tracelb_reply_icmp_tc(uint8_t *buf, uint32_t *off,
+                                         const uint32_t len,
+                                         const scamper_tracelb_reply_t *reply,
+                                         void *param)
 {
   assert(len - *off >= 2);
   buf[(*off)++] = reply->reply_icmp_type;
@@ -489,27 +488,27 @@ static void insert_tracelb_reply_icmp_tc (uint8_t *buf, uint32_t *off,
   return;
 }
 
-static int extract_tracelb_reply_icmp_ext (const uint8_t *buf, uint32_t *off,
-                                           uint32_t len,
-                                           scamper_tracelb_reply_t *reply,
-                                           void *param)
+static int extract_tracelb_reply_icmp_ext(const uint8_t *buf, uint32_t *off,
+                                          uint32_t len,
+                                          scamper_tracelb_reply_t *reply,
+                                          void *param)
 {
   return warts_icmpext_read (buf, off, len, &reply->reply_icmp_ext);
 }
 
-static void insert_tracelb_reply_icmp_ext (uint8_t *buf, uint32_t *off,
-                                           const uint32_t len,
-                                           const scamper_tracelb_reply_t *reply,
-                                           void *param)
+static void insert_tracelb_reply_icmp_ext(uint8_t *buf, uint32_t *off,
+                                          const uint32_t len,
+                                          const scamper_tracelb_reply_t *reply,
+                                          void *param)
 {
   warts_icmpext_write (buf, off, len, reply->reply_icmp_ext);
   return;
 }
 
-static int warts_tracelb_reply_state (const scamper_file_t *sf,
-                                      const scamper_tracelb_reply_t *reply,
-                                      warts_tracelb_reply_t *state,
-                                      warts_addrtable_t *table, uint32_t *len)
+static int warts_tracelb_reply_state(const scamper_file_t *sf,
+                                     const scamper_tracelb_reply_t *reply,
+                                     warts_tracelb_reply_t *state,
+                                     warts_addrtable_t *table, uint32_t *len)
 {
   const warts_var_t *var;
   scamper_icmpext_t *ie;
@@ -579,11 +578,11 @@ static int warts_tracelb_reply_state (const scamper_file_t *sf,
   return 0;
 }
 
-static int warts_tracelb_reply_read (scamper_tracelb_reply_t *reply,
-                                     warts_state_t *state,
-                                     warts_addrtable_t *table,
-                                     const uint8_t *buf, uint32_t *off,
-                                     uint32_t len)
+static int warts_tracelb_reply_read(scamper_tracelb_reply_t *reply,
+                                    warts_state_t *state,
+                                    warts_addrtable_t *table,
+                                    const uint8_t *buf, uint32_t *off,
+                                    uint32_t len)
 {
   warts_param_reader_t handlers[] =
     {
@@ -602,10 +601,10 @@ static int warts_tracelb_reply_read (scamper_tracelb_reply_t *reply,
   return warts_params_read (buf, off, len, handlers, handler_cnt);
 }
 
-static void warts_tracelb_reply_write (const scamper_tracelb_reply_t *reply,
-                                       const warts_tracelb_reply_t *state,
-                                       warts_addrtable_t *table, uint8_t *buf,
-                                       uint32_t *off, uint32_t len)
+static void warts_tracelb_reply_write(const scamper_tracelb_reply_t *reply,
+                                      const warts_tracelb_reply_t *state,
+                                      warts_addrtable_t *table, uint8_t *buf,
+                                      uint32_t *off, uint32_t len)
 {
   warts_param_writer_t handlers[] =
     {
@@ -626,7 +625,7 @@ static void warts_tracelb_reply_write (const scamper_tracelb_reply_t *reply,
   return;
 }
 
-static void warts_tracelb_probe_free (warts_tracelb_probe_t *state)
+static void warts_tracelb_probe_free(warts_tracelb_probe_t *state)
 {
   if (state->replies != NULL)
   {
@@ -636,10 +635,10 @@ static void warts_tracelb_probe_free (warts_tracelb_probe_t *state)
   return;
 }
 
-static int warts_tracelb_probe_state (const scamper_file_t *sf,
-                                      const scamper_tracelb_probe_t *probe,
-                                      warts_tracelb_probe_t *state,
-                                      warts_addrtable_t *table, uint32_t *len)
+static int warts_tracelb_probe_state(const scamper_file_t *sf,
+                                     const scamper_tracelb_probe_t *probe,
+                                     warts_tracelb_probe_t *state,
+                                     warts_addrtable_t *table, uint32_t *len)
 {
   const warts_var_t *var;
   int i, max_id = 0;
@@ -664,7 +663,7 @@ static int warts_tracelb_probe_state (const scamper_file_t *sf,
   if (probe->rxc > 0)
   {
     size = sizeof(warts_tracelb_reply_t) * probe->rxc;
-    if ((state->replies = malloc_zero (size)) == NULL)
+    if ((state->replies = malloc_zero(size)) == NULL)
     {
       return -1;
     }
@@ -680,11 +679,11 @@ static int warts_tracelb_probe_state (const scamper_file_t *sf,
   return 0;
 }
 
-static int warts_tracelb_probe_read (scamper_tracelb_probe_t *probe,
-                                     warts_state_t *state,
-                                     warts_addrtable_t *table,
-                                     const uint8_t *buf, uint32_t *off,
-                                     uint32_t len)
+static int warts_tracelb_probe_read(scamper_tracelb_probe_t *probe,
+                                    warts_state_t *state,
+                                    warts_addrtable_t *table,
+                                    const uint8_t *buf, uint32_t *off,
+                                    uint32_t len)
 {
   warts_param_reader_t handlers[] =
     {
@@ -719,10 +718,10 @@ static int warts_tracelb_probe_read (scamper_tracelb_probe_t *probe,
   return 0;
 }
 
-static void warts_tracelb_probe_write (const scamper_tracelb_probe_t *probe,
-                                       const warts_tracelb_probe_t *state,
-                                       warts_addrtable_t *table, uint8_t *buf,
-                                       uint32_t *off, uint32_t len)
+static void warts_tracelb_probe_write(const scamper_tracelb_probe_t *probe,
+                                      const warts_tracelb_probe_t *state,
+                                      warts_addrtable_t *table, uint8_t *buf,
+                                      uint32_t *off, uint32_t len)
 {
   warts_param_writer_t handlers[] =
     {
@@ -746,7 +745,7 @@ static void warts_tracelb_probe_write (const scamper_tracelb_probe_t *probe,
   return;
 }
 
-static void warts_tracelb_probeset_free (warts_tracelb_probeset_t *state)
+static void warts_tracelb_probeset_free(warts_tracelb_probeset_t *state)
 {
   uint16_t i;
 
@@ -761,11 +760,10 @@ static void warts_tracelb_probeset_free (warts_tracelb_probeset_t *state)
   return;
 }
 
-static int warts_tracelb_probeset_state (const scamper_file_t *sf,
-                                         const scamper_tracelb_probeset_t *set,
-                                         warts_tracelb_probeset_t *state,
-                                         warts_addrtable_t *table,
-                                         uint32_t *len)
+static int warts_tracelb_probeset_state(const scamper_file_t *sf,
+                                        const scamper_tracelb_probeset_t *set,
+                                        warts_tracelb_probeset_t *state,
+                                        warts_addrtable_t *table, uint32_t *len)
 {
   const warts_var_t *var;
   int i, max_id = 0;
@@ -792,7 +790,7 @@ static int warts_tracelb_probeset_state (const scamper_file_t *sf,
   if (set->probec > 0)
   {
     size = sizeof(warts_tracelb_probe_t) * set->probec;
-    if ((state->probes = malloc_zero (size)) == NULL)
+    if ((state->probes = malloc_zero(size)) == NULL)
     {
       return -1;
     }
@@ -808,11 +806,11 @@ static int warts_tracelb_probeset_state (const scamper_file_t *sf,
   return 0;
 }
 
-static int warts_tracelb_probeset_read (scamper_tracelb_probeset_t *set,
-                                        warts_state_t *state,
-                                        warts_addrtable_t *table,
-                                        const uint8_t *buf, uint32_t *off,
-                                        uint32_t len)
+static int warts_tracelb_probeset_read(scamper_tracelb_probeset_t *set,
+                                       warts_state_t *state,
+                                       warts_addrtable_t *table,
+                                       const uint8_t *buf, uint32_t *off,
+                                       uint32_t len)
 {
   warts_param_reader_t handlers[] =
     {
@@ -842,11 +840,10 @@ static int warts_tracelb_probeset_read (scamper_tracelb_probeset_t *set,
   return 0;
 }
 
-static void warts_tracelb_probeset_write (const scamper_tracelb_probeset_t *set,
-                                          const warts_tracelb_probeset_t *state,
-                                          warts_addrtable_t *table,
-                                          uint8_t *buf, uint32_t *off,
-                                          uint32_t len)
+static void warts_tracelb_probeset_write(const scamper_tracelb_probeset_t *set,
+                                         const warts_tracelb_probeset_t *state,
+                                         warts_addrtable_t *table, uint8_t *buf,
+                                         uint32_t *off, uint32_t len)
 {
   warts_param_writer_t handlers[] =
     {
@@ -866,7 +863,7 @@ static void warts_tracelb_probeset_write (const scamper_tracelb_probeset_t *set,
   return;
 }
 
-static void warts_tracelb_link_free (warts_tracelb_link_t *state)
+static void warts_tracelb_link_free(warts_tracelb_link_t *state)
 {
   uint8_t i;
   if (state->sets != NULL)
@@ -879,11 +876,11 @@ static void warts_tracelb_link_free (warts_tracelb_link_t *state)
   return;
 }
 
-static int warts_tracelb_link_state (const scamper_file_t *sf,
-                                     const scamper_tracelb_t *trace,
-                                     const scamper_tracelb_link_t *link,
-                                     warts_tracelb_link_t *state,
-                                     warts_addrtable_t *table, uint32_t *len)
+static int warts_tracelb_link_state(const scamper_file_t *sf,
+                                    const scamper_tracelb_t *trace,
+                                    const scamper_tracelb_link_t *link,
+                                    warts_tracelb_link_t *state,
+                                    warts_addrtable_t *table, uint32_t *len)
 {
   const warts_var_t *var;
   size_t size;
@@ -939,7 +936,7 @@ static int warts_tracelb_link_state (const scamper_file_t *sf,
   if (link->hopc > 0)
   {
     size = sizeof(warts_tracelb_probeset_t) * link->hopc;
-    if ((state->sets = malloc_zero (size)) == NULL)
+    if ((state->sets = malloc_zero(size)) == NULL)
     {
       return -1;
     }
@@ -955,12 +952,11 @@ static int warts_tracelb_link_state (const scamper_file_t *sf,
   return 0;
 }
 
-static int warts_tracelb_link_read (scamper_tracelb_t *trace,
-                                    scamper_tracelb_link_t *link,
-                                    warts_state_t *state,
-                                    warts_addrtable_t *table,
-                                    const uint8_t *buf, uint32_t *off,
-                                    uint32_t len)
+static int warts_tracelb_link_read(scamper_tracelb_t *trace,
+                                   scamper_tracelb_link_t *link,
+                                   warts_state_t *state,
+                                   warts_addrtable_t *table, const uint8_t *buf,
+                                   uint32_t *off, uint32_t len)
 {
   uint16_t from, to;
   warts_param_reader_t handlers[] =
@@ -1006,10 +1002,10 @@ static int warts_tracelb_link_read (scamper_tracelb_t *trace,
   return 0;
 }
 
-static void warts_tracelb_link_write (const scamper_tracelb_link_t *link,
-                                      const warts_tracelb_link_t *state,
-                                      warts_addrtable_t *table, uint8_t *buf,
-                                      uint32_t *off, uint32_t len)
+static void warts_tracelb_link_write(const scamper_tracelb_link_t *link,
+                                     const warts_tracelb_link_t *state,
+                                     warts_addrtable_t *table, uint8_t *buf,
+                                     uint32_t *off, uint32_t len)
 {
   warts_param_writer_t handlers[] =
     {
@@ -1035,8 +1031,8 @@ static void warts_tracelb_link_write (const scamper_tracelb_link_t *link,
  * warts_tracelb_read
  *
  */
-int scamper_file_warts_tracelb_read (scamper_file_t *sf, const warts_hdr_t *hdr,
-                                     scamper_tracelb_t **trace_out)
+int scamper_file_warts_tracelb_read(scamper_file_t *sf, const warts_hdr_t *hdr,
+                                    scamper_tracelb_t **trace_out)
 {
   warts_state_t *state = scamper_file_getstate (sf);
   scamper_tracelb_t *trace = NULL;
@@ -1115,7 +1111,7 @@ int scamper_file_warts_tracelb_read (scamper_file_t *sf, const warts_hdr_t *hdr,
    */
   if (trace->nodec > 0)
   {
-    if ((nlc = malloc_zero (sizeof(uint16_t) * trace->nodec)) == NULL)
+    if ((nlc = malloc_zero(sizeof(uint16_t) * trace->nodec)) == NULL)
     {
       goto err;
     }
@@ -1168,8 +1164,8 @@ err:
   return -1;
 }
 
-int scamper_file_warts_tracelb_write (const scamper_file_t *sf,
-                                      const scamper_tracelb_t *trace)
+int scamper_file_warts_tracelb_write(const scamper_file_t *sf,
+                                     const scamper_tracelb_t *trace)
 {
   const scamper_tracelb_node_t *node;
   const scamper_tracelb_link_t *link;
@@ -1200,7 +1196,7 @@ int scamper_file_warts_tracelb_write (const scamper_file_t *sf,
   if (trace->nodec > 0)
   {
     size = trace->nodec * sizeof(warts_tracelb_node_t);
-    if ((node_state = (warts_tracelb_node_t*) malloc_zero (size)) == NULL)
+    if ((node_state = (warts_tracelb_node_t*) malloc_zero(size)) == NULL)
     {
       goto err;
     }
@@ -1226,7 +1222,7 @@ int scamper_file_warts_tracelb_write (const scamper_file_t *sf,
   if (trace->linkc > 0)
   {
     size = trace->linkc * sizeof(warts_tracelb_link_t);
-    if ((link_state = (warts_tracelb_link_t*) malloc_zero (size)) == NULL)
+    if ((link_state = (warts_tracelb_link_t*) malloc_zero(size)) == NULL)
     {
       goto err;
     }
@@ -1248,7 +1244,7 @@ int scamper_file_warts_tracelb_write (const scamper_file_t *sf,
     }
   }
 
-  if ((buf = malloc_zero (len)) == NULL)
+  if ((buf = malloc_zero(len)) == NULL)
   {
     goto err;
   }

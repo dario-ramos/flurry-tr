@@ -40,7 +40,7 @@ static const char rcsid[] =
 #include "scamper_trace_text.h"
 #include "utils.h"
 
-static char* addr_str (const scamper_addr_t *addr, char *buf, const size_t len)
+static char* addr_str(const scamper_addr_t *addr, char *buf, const size_t len)
 {
   if (addr != NULL)
     scamper_addr_tostr (addr, buf, len);
@@ -56,8 +56,8 @@ static char* addr_str (const scamper_addr_t *addr, char *buf, const size_t len)
  * the caller must pass a pointer to a str buffer at least 14 chars in length
  * to be safe.
  */
-static char* icmp_tostr (const scamper_trace_hop_t *hop, char *str,
-                         const size_t len)
+static char* icmp_tostr(const scamper_trace_hop_t *hop, char *str,
+                        const size_t len)
 {
   if ((hop->hop_flags & SCAMPER_TRACE_HOP_FLAG_TCP) != 0)
   {
@@ -187,7 +187,7 @@ static char* icmp_tostr (const scamper_trace_hop_t *hop, char *str,
  * header_tostr
  *
  */
-static char* header_tostr (const scamper_trace_t *trace)
+static char* header_tostr(const scamper_trace_t *trace)
 {
   char src[64], dst[64], header[192];
 
@@ -214,7 +214,7 @@ static char* header_tostr (const scamper_trace_t *trace)
  * given a hop (with other hops possibly linked to it) create a string that
  * holds the hop.
  */
-static char* hop_tostr (const scamper_trace_t *trace, const int h)
+static char* hop_tostr(const scamper_trace_t *trace, const int h)
 {
   scamper_trace_hop_t *hop;
   char *str = NULL;
@@ -243,7 +243,7 @@ static char* hop_tostr (const scamper_trace_t *trace, const int h)
       snprintf (str_hop, sizeof(str_hop), "%2d  *", h + 1);
       str = strdup (str_hop);
     }
-    else if ((str = malloc_zero ((len = 4 + (2 * trace->attempts)))) != NULL)
+    else if ((str = malloc_zero((len = 4 + (2 * trace->attempts)))) != NULL)
     {
       snprintf (str, len, "%2d  ", h + 1);
       for (i = 0; i < trace->attempts; i++)
@@ -270,16 +270,16 @@ static char* hop_tostr (const scamper_trace_t *trace, const int h)
 
   /* we have to print out all of the replies */
   len = sizeof(char*) * replyc;
-  if ((str_addrs = malloc_zero (len)) == NULL)
+  if ((str_addrs = malloc_zero(len)) == NULL)
     goto out;
-  if ((str_rtts = malloc_zero (len)) == NULL)
+  if ((str_rtts = malloc_zero(len)) == NULL)
     goto out;
 
   /* keep track of the length of each string in the arrays */
   len = sizeof(size_t) * replyc;
-  if ((len_addrs = malloc_zero (len)) == NULL)
+  if ((len_addrs = malloc_zero(len)) == NULL)
     goto out;
-  if ((len_rtts = malloc_zero (len)) == NULL)
+  if ((len_rtts = malloc_zero(len)) == NULL)
     goto out;
 
   /* for each response we have, record an entry in the array */
@@ -292,7 +292,7 @@ static char* hop_tostr (const scamper_trace_t *trace, const int h)
      */
     addr_str (hop->hop_addr, str_addr, sizeof(str_addr));
     len = strlen (str_addr);
-    if ((str_addrs[i] = malloc_zero (len + 1)) == NULL)
+    if ((str_addrs[i] = malloc_zero(len + 1)) == NULL)
       goto out;
     memcpy (str_addrs[i], str_addr, len + 1);
     len_addrs[i] = len;
@@ -304,7 +304,7 @@ static char* hop_tostr (const scamper_trace_t *trace, const int h)
     timeval_tostr_us (&hop->hop_rtt, str_rtt, sizeof(str_rtt));
     icmp_tostr (hop, str_icmp, sizeof(str_icmp));
     len = strlen (str_rtt) + 3 + strlen (str_icmp);
-    if ((str_rtts[i] = malloc_zero (len + 1)) == NULL)
+    if ((str_rtts[i] = malloc_zero(len + 1)) == NULL)
       goto out;
     snprintf (str_rtts[i], len + 1, "%s ms%s", str_rtt, str_icmp);
     len_rtts[i] = len;
@@ -344,7 +344,7 @@ static char* hop_tostr (const scamper_trace_t *trace, const int h)
   }
 
   /* allocate a string long enough to store the hop data */
-  if ((str = malloc_zero (len)) == NULL)
+  if ((str = malloc_zero(len)) == NULL)
     goto out;
 
   /* build the string up */
@@ -409,7 +409,7 @@ out:
   return str;
 }
 
-static char* mtu_tostr (const int mtu, const int size)
+static char* mtu_tostr(const int mtu, const int size)
 {
   char str[24];
   if (mtu != size)
@@ -419,7 +419,7 @@ static char* mtu_tostr (const int mtu, const int size)
   return strdup (str);
 }
 
-static int pmtud_ver1 (const scamper_trace_t *trace, char **mtus)
+static int pmtud_ver1(const scamper_trace_t *trace, char **mtus)
 {
   scamper_trace_hop_t *hop;
   uint16_t mtu, size;
@@ -506,7 +506,7 @@ static int pmtud_ver1 (const scamper_trace_t *trace, char **mtus)
   return 0;
 }
 
-static int pmtud_ver2 (const scamper_trace_t *trace, char **mtus)
+static int pmtud_ver2(const scamper_trace_t *trace, char **mtus)
 {
   const scamper_trace_pmtud_t *pmtud = trace->pmtud;
   const scamper_trace_pmtud_n_t *note;
@@ -644,10 +644,10 @@ static int pmtud_ver2 (const scamper_trace_t *trace, char **mtus)
  *
  * return 0 on successful write, -1 otherwise.
  */
-int scamper_file_text_trace_write (const scamper_file_t *sf,
-                                   const scamper_trace_t *trace)
+int scamper_file_text_trace_write(const scamper_file_t *sf,
+                                  const scamper_trace_t *trace)
 {
-  static int (*const pmtud_tostr[]) (const scamper_trace_t*, char**) =
+  static int (*const pmtud_tostr[])(const scamper_trace_t*, char**) =
   {
     NULL,
     pmtud_ver1,
@@ -684,7 +684,7 @@ int scamper_file_text_trace_write (const scamper_file_t *sf,
 
   if (trace->hop_count > 0)
   {
-    if ((hops = malloc_zero (sizeof(char*) * trace->hop_count)) == NULL)
+    if ((hops = malloc_zero(sizeof(char*) * trace->hop_count)) == NULL)
       goto cleanup;
 
     for (i = 0; i < trace->hop_count; i++)
@@ -698,7 +698,7 @@ int scamper_file_text_trace_write (const scamper_file_t *sf,
     if (trace->pmtud != NULL && trace->pmtud->ver >= 1
         && trace->pmtud->ver <= 2)
     {
-      if ((mtus = malloc_zero (sizeof(char*) * trace->hop_count)) == NULL)
+      if ((mtus = malloc_zero(sizeof(char*) * trace->hop_count)) == NULL)
         goto cleanup;
 
       if (pmtud_tostr[trace->pmtud->ver] (trace, mtus) != 0)
@@ -714,7 +714,7 @@ int scamper_file_text_trace_write (const scamper_file_t *sf,
 
   len += 1; /* final \0 */
 
-  if ((str = malloc_zero (len)) == NULL)
+  if ((str = malloc_zero(len)) == NULL)
     goto cleanup;
 
   off = 0;
