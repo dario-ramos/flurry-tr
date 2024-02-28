@@ -34,37 +34,37 @@
 typedef struct heap heap_t;
 typedef struct heap_node heap_node_t;
 
-typedef int  (*heap_cmp_t)(const void *a, const void *b);
-typedef void (*heap_free_t)(void *ptr);
-typedef void (*heap_foreach_t)(void *param, void *item);
-typedef void (*heap_onremove_t)(void *ptr);
+typedef int (*heap_cmp_t) (const void *a, const void *b);
+typedef void (*heap_free_t) (void *ptr);
+typedef void (*heap_foreach_t) (void *param, void *item);
+typedef void (*heap_onremove_t) (void *ptr);
 
 #ifndef DMALLOC
-heap_t *heap_alloc(heap_cmp_t cmp);
-heap_node_t *heap_insert(heap_t *heap, void *ptr);
+heap_t* heap_alloc (heap_cmp_t cmp);
+heap_node_t* heap_insert (heap_t *heap, void *ptr);
 #endif
 
 #ifdef DMALLOC
 heap_t *heap_alloc_dm(heap_cmp_t cmp, const char *file, const int line);
 heap_node_t *heap_insert_dm(heap_t *heap, void *ptr, const char *file,
-			    const int line);
+                            const int line);
 #define heap_alloc(cmp) heap_alloc_dm((cmp), __FILE__, __LINE__)
 #define heap_insert(heap, ptr) heap_insert_dm((heap),(ptr),__FILE__,__LINE__)
 #endif
 
-void heap_free(heap_t *heap, heap_free_t free_func);
+void heap_free (heap_t *heap, heap_free_t free_func);
 
-void heap_remake(heap_t *heap);
-void heap_onremove(heap_t *heap, heap_onremove_t onremove);
+void heap_remake (heap_t *heap);
+void heap_onremove (heap_t *heap, heap_onremove_t onremove);
 
-void *heap_remove(heap_t *heap);
-heap_node_t *heap_head_node(heap_t *heap);
-void *heap_head_item(heap_t *heap);
-void heap_delete(heap_t *heap, heap_node_t *node);
-void heap_foreach(heap_t *heap, void *param, heap_foreach_t func);
-int heap_count(heap_t *heap);
+void* heap_remove (heap_t *heap);
+heap_node_t* heap_head_node (heap_t *heap);
+void* heap_head_item (heap_t *heap);
+void heap_delete (heap_t *heap, heap_node_t *node);
+void heap_foreach (heap_t *heap, void *param, heap_foreach_t func);
+int heap_count (heap_t *heap);
 
-void *heap_node_item(heap_node_t *node);
-int heap_node_id(heap_node_t *node);
+void* heap_node_item (heap_node_t *node);
+int heap_node_id (heap_node_t *node);
 
 #endif /* __MJL_HEAP_H */

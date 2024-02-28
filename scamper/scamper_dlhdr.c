@@ -25,7 +25,7 @@
 
 #ifndef lint
 static const char rcsid[] =
-  "$Id: scamper_dlhdr.c,v 1.16 2014/06/12 19:59:48 mjl Exp $";
+    "$Id: scamper_dlhdr.c,v 1.16 2014/06/12 19:59:48 mjl Exp $";
 #endif
 
 #ifdef HAVE_CONFIG_H
@@ -47,40 +47,40 @@ static const char rcsid[] =
 
 static void dlhdr_ethmake(scamper_dlhdr_t *dlhdr, scamper_addr_t *mac)
 {
-  if((dlhdr->buf = malloc_zero(14)) == NULL)
-    {
-      dlhdr->error = errno;
-      return;
-    }
+  if ((dlhdr->buf = malloc_zero(14)) == NULL)
+  {
+    dlhdr->error = errno;
+    return;
+  }
   dlhdr->len = 14;
 
   /* copy the destination mac address to use */
-  memcpy(dlhdr->buf, mac->addr, 6);
+  memcpy (dlhdr->buf, mac->addr, 6);
 
   /* the source mac address to use */
-  if(scamper_if_getmac(dlhdr->ifindex, dlhdr->buf+6) != 0)
-    {
-      dlhdr->error = errno;
-      scamper_debug(__func__, "could not get source mac");
-      return;
-    }
+  if (scamper_if_getmac (dlhdr->ifindex, dlhdr->buf + 6) != 0)
+  {
+    dlhdr->error = errno;
+    scamper_debug (__func__, "could not get source mac");
+    return;
+  }
 
   /* the ethertype */
-  if(SCAMPER_ADDR_TYPE_IS_IPV4(dlhdr->dst))
-    {
-      dlhdr->buf[12] = 0x08;
-      dlhdr->buf[13] = 0x00;
-    }
-  else if(SCAMPER_ADDR_TYPE_IS_IPV6(dlhdr->dst))
-    {
-      dlhdr->buf[12] = 0x86;
-      dlhdr->buf[13] = 0xDD;
-    }
+  if (SCAMPER_ADDR_TYPE_IS_IPV4(dlhdr->dst))
+  {
+    dlhdr->buf[12] = 0x08;
+    dlhdr->buf[13] = 0x00;
+  }
+  else if (SCAMPER_ADDR_TYPE_IS_IPV6(dlhdr->dst))
+  {
+    dlhdr->buf[12] = 0x86;
+    dlhdr->buf[13] = 0xDD;
+  }
   else
-    {
-      dlhdr->error = EINVAL;
-      scamper_debug(__func__, "unhandled ip->type %d", dlhdr->dst->type);
-    }
+  {
+    dlhdr->error = EINVAL;
+    scamper_debug (__func__, "unhandled ip->type %d", dlhdr->dst->type);
+  }
   return;
 }
 
@@ -93,16 +93,16 @@ static void dlhdr_ethcb(void *param, scamper_addr_t *ip, scamper_addr_t *mac)
 {
   scamper_dlhdr_t *dlhdr = param;
   dlhdr->internal = NULL;
-  if(mac != NULL)
-    {
-      scamper_addr2mac_add(dlhdr->ifindex, ip, mac);
-      dlhdr_ethmake(dlhdr, mac);
-    }
+  if (mac != NULL)
+  {
+    scamper_addr2mac_add (dlhdr->ifindex, ip, mac);
+    dlhdr_ethmake (dlhdr, mac);
+  }
   else
-    {
-      dlhdr->error = ENOENT;
-    }
-  dlhdr->cb(dlhdr);
+  {
+    dlhdr->error = ENOENT;
+  }
+  dlhdr->cb (dlhdr);
   return;
 }
 
@@ -121,61 +121,61 @@ static int dlhdr_ethernet(scamper_dlhdr_t *dlhdr)
   int ifindex = dlhdr->ifindex;
 
   /* determine what we should be looking up */
-  if(dlhdr->gw == NULL)
+  if (dlhdr->gw == NULL)
     ip = dlhdr->dst;
-  else if(dlhdr->gw->type == SCAMPER_ADDR_TYPE_ETHERNET)
+  else if (dlhdr->gw->type == SCAMPER_ADDR_TYPE_ETHERNET)
     mac = dlhdr->gw;
   else
     ip = dlhdr->gw;
 
   /* if we need to get a mac address, then look it up */
-  if(mac == NULL && (mac = scamper_addr2mac_whohas(ifindex, ip)) == NULL)
+  if (mac == NULL && (mac = scamper_addr2mac_whohas (ifindex, ip)) == NULL)
+  {
+    nd = scamper_do_neighbourdisc_do (ifindex, ip, dlhdr, dlhdr_ethcb);
+    if (nd == NULL)
     {
-      nd = scamper_do_neighbourdisc_do(ifindex, ip, dlhdr, dlhdr_ethcb);
-      if(nd == NULL)
-	{
-	  dlhdr->error = errno;
-	  goto done;
-	}
-      dlhdr->internal = nd;
-      return 0;
+      dlhdr->error = errno;
+      goto done;
     }
+    dlhdr->internal = nd;
+    return 0;
+  }
 
   /* give the user what they asked for */
-  dlhdr_ethmake(dlhdr, mac);
+  dlhdr_ethmake (dlhdr, mac);
 
- done:
-  dlhdr->cb(dlhdr);
+done:
+  dlhdr->cb (dlhdr);
   return 0;
 }
 
 static int dlhdr_ethloop(scamper_dlhdr_t *dlhdr)
 {
-  if((dlhdr->buf = malloc_zero(14)) == NULL)
-    {
-      dlhdr->error = errno;
-      goto done;
-    }
+  if ((dlhdr->buf = malloc_zero(14)) == NULL)
+  {
+    dlhdr->error = errno;
+    goto done;
+  }
   dlhdr->len = 14;
 
-  if(SCAMPER_ADDR_TYPE_IS_IPV4(dlhdr->dst))
-    {
-      dlhdr->buf[12] = 0x08;
-      dlhdr->buf[13] = 0x00;
-    }
-  else if(SCAMPER_ADDR_TYPE_IS_IPV6(dlhdr->dst))
-    {
-      dlhdr->buf[12] = 0x86;
-      dlhdr->buf[13] = 0xDD;
-    }
+  if (SCAMPER_ADDR_TYPE_IS_IPV4(dlhdr->dst))
+  {
+    dlhdr->buf[12] = 0x08;
+    dlhdr->buf[13] = 0x00;
+  }
+  else if (SCAMPER_ADDR_TYPE_IS_IPV6(dlhdr->dst))
+  {
+    dlhdr->buf[12] = 0x86;
+    dlhdr->buf[13] = 0xDD;
+  }
   else
-    {
-      dlhdr->error = EINVAL;
-      goto done;
-    }
+  {
+    dlhdr->error = EINVAL;
+    goto done;
+  }
 
- done:
-  dlhdr->cb(dlhdr);
+done:
+  dlhdr->cb (dlhdr);
   return 0;
 }
 
@@ -183,31 +183,31 @@ static int dlhdr_null(scamper_dlhdr_t *dlhdr)
 {
   int af;
 
-  if(SCAMPER_ADDR_TYPE_IS_IPV4(dlhdr->dst))
+  if (SCAMPER_ADDR_TYPE_IS_IPV4(dlhdr->dst))
     af = AF_INET;
-  else if(SCAMPER_ADDR_TYPE_IS_IPV6(dlhdr->dst))
+  else if (SCAMPER_ADDR_TYPE_IS_IPV6(dlhdr->dst))
     af = AF_INET6;
   else
-    {
-      dlhdr->error = EINVAL;
-      goto done;
-    }
+  {
+    dlhdr->error = EINVAL;
+    goto done;
+  }
 
-  if((dlhdr->buf = memdup(&af, sizeof(af))) == NULL)
-    {
-      dlhdr->error = errno;
-      goto done;
-    }
+  if ((dlhdr->buf = memdup (&af, sizeof(af))) == NULL)
+  {
+    dlhdr->error = errno;
+    goto done;
+  }
   dlhdr->len = sizeof(af);
 
- done:
-  dlhdr->cb(dlhdr);
+done:
+  dlhdr->cb (dlhdr);
   return 0;
 }
 
 static int dlhdr_raw(scamper_dlhdr_t *dlhdr)
 {
-  dlhdr->cb(dlhdr);
+  dlhdr->cb (dlhdr);
   return 0;
 }
 
@@ -223,36 +223,41 @@ static int dlhdr_unsupp(scamper_dlhdr_t *dlhdr)
  */
 int scamper_dlhdr_get(scamper_dlhdr_t *dlhdr)
 {
-  static int (*const func[])(scamper_dlhdr_t *dlhdr) = {
+  static int (*const func[])(scamper_dlhdr_t *dlhdr) =
+  {
     dlhdr_unsupp,
     dlhdr_ethernet,
     dlhdr_null,
     dlhdr_raw,
     dlhdr_ethloop,
-  };
+    };
 
-  if(dlhdr->txtype < 0 || dlhdr->txtype > 4)
-    {
-      dlhdr->error = EINVAL;
-      return -1;
-    }
+  if (dlhdr->txtype < 0 || dlhdr->txtype > 4)
+  {
+    dlhdr->error = EINVAL;
+    return -1;
+  }
 
-  return func[dlhdr->txtype](dlhdr);
+  return func[dlhdr->txtype] (dlhdr);
 }
 
-scamper_dlhdr_t *scamper_dlhdr_alloc(void)
+scamper_dlhdr_t* scamper_dlhdr_alloc(void)
 {
-  return (scamper_dlhdr_t *)malloc_zero(sizeof(scamper_dlhdr_t));
+  return (scamper_dlhdr_t*) malloc_zero(sizeof(scamper_dlhdr_t));
 }
 
 void scamper_dlhdr_free(scamper_dlhdr_t *dlhdr)
 {
-  if(dlhdr == NULL)
+  if (dlhdr == NULL)
     return;
-  if(dlhdr->gw != NULL) scamper_addr_free(dlhdr->gw);
-  if(dlhdr->dst != NULL) scamper_addr_free(dlhdr->dst);
-  if(dlhdr->buf != NULL) free(dlhdr->buf);
-  if(dlhdr->internal != NULL) scamper_neighbourdisc_do_free(dlhdr->internal);
-  free(dlhdr);
+  if (dlhdr->gw != NULL)
+    scamper_addr_free (dlhdr->gw);
+  if (dlhdr->dst != NULL)
+    scamper_addr_free (dlhdr->dst);
+  if (dlhdr->buf != NULL)
+    free (dlhdr->buf);
+  if (dlhdr->internal != NULL)
+    scamper_neighbourdisc_do_free (dlhdr->internal);
+  free (dlhdr);
   return;
 }

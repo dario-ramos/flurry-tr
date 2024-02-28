@@ -116,25 +116,25 @@ typedef struct scamper_tracelb_probeset_summary scamper_tracelb_probeset_summary
  */
 struct scamper_tracelb_reply
 {
-  scamper_addr_t        *reply_from;       /* source of response */
-  struct timeval         reply_rx;         /* receive time */
-  uint16_t               reply_ipid;       /* IP ID of reply packet */
-  uint8_t                reply_ttl;        /* ttl of the reply packet */
-  uint8_t                reply_flags;      /* reply flags */
+  scamper_addr_t *reply_from; /* source of response */
+  struct timeval reply_rx; /* receive time */
+  uint16_t reply_ipid; /* IP ID of reply packet */
+  uint8_t reply_ttl; /* ttl of the reply packet */
+  uint8_t reply_flags; /* reply flags */
 
   union
   {
     struct scamper_tracelb_reply_icmp
     {
-      uint8_t            reply_icmp_type;  /* icmp type of the reply */
-      uint8_t            reply_icmp_code;  /* icmp code of the reply */
-      uint8_t            reply_icmp_q_tos; /* tos byte in quote */
-      uint8_t            reply_icmp_q_ttl; /* ttl byte in quote */
-      scamper_icmpext_t *reply_icmp_ext;   /* icmp extensions included */
+      uint8_t reply_icmp_type; /* icmp type of the reply */
+      uint8_t reply_icmp_code; /* icmp code of the reply */
+      uint8_t reply_icmp_q_tos; /* tos byte in quote */
+      uint8_t reply_icmp_q_ttl; /* ttl byte in quote */
+      scamper_icmpext_t *reply_icmp_ext; /* icmp extensions included */
     } icmp;
     struct scamper_tracelb_reply_tcp
     {
-      uint8_t            reply_tcp_flags;  /* tcp flags of the reply */
+      uint8_t reply_tcp_flags; /* tcp flags of the reply */
     } tcp;
   } reply_un;
 };
@@ -153,12 +153,12 @@ struct scamper_tracelb_reply
  */
 struct scamper_tracelb_probe
 {
-  struct timeval                tx;
-  uint16_t                      flowid;
-  uint8_t                       ttl;
-  uint8_t                       attempt;
-  scamper_tracelb_reply_t     **rxs;
-  uint16_t                      rxc;
+  struct timeval tx;
+  uint16_t flowid;
+  uint8_t ttl;
+  uint8_t attempt;
+  scamper_tracelb_reply_t **rxs;
+  uint16_t rxc;
 };
 
 /*
@@ -168,15 +168,15 @@ struct scamper_tracelb_probe
  */
 struct scamper_tracelb_probeset
 {
-  scamper_tracelb_probe_t     **probes; /* array of probes sent */
-  uint16_t                      probec; /* number of probes sent */
+  scamper_tracelb_probe_t **probes; /* array of probes sent */
+  uint16_t probec; /* number of probes sent */
 };
 
 struct scamper_tracelb_probeset_summary
 {
-  scamper_addr_t              **addrs;
-  int                           addrc;
-  int                           nullc;
+  scamper_addr_t **addrs;
+  int addrc;
+  int nullc;
 };
 
 /*
@@ -186,12 +186,12 @@ struct scamper_tracelb_probeset_summary
  */
 struct scamper_tracelb_node
 {
-  scamper_addr_t               *addr;  /* address of the node */
-  char                         *name;  /* PTR for the addr */
-  uint8_t                       flags; /* associated flags */
-  uint8_t                       q_ttl; /* quoted ttl */
-  scamper_tracelb_link_t      **links; /* links */
-  uint16_t                      linkc; /* number of links */
+  scamper_addr_t *addr; /* address of the node */
+  char *name; /* PTR for the addr */
+  uint8_t flags; /* associated flags */
+  uint8_t q_ttl; /* quoted ttl */
+  scamper_tracelb_link_t **links; /* links */
+  uint16_t linkc; /* number of links */
 };
 
 /*
@@ -201,10 +201,10 @@ struct scamper_tracelb_node
  */
 struct scamper_tracelb_link
 {
-  scamper_tracelb_node_t       *from;  /* link from */
-  scamper_tracelb_node_t       *to;    /* link to */
-  uint8_t                       hopc;  /* distance between the nodes */
-  scamper_tracelb_probeset_t  **sets;  /* array of probesets, for each hop */
+  scamper_tracelb_node_t *from; /* link from */
+  scamper_tracelb_node_t *to; /* link to */
+  uint8_t hopc; /* distance between the nodes */
+  scamper_tracelb_probeset_t **sets; /* array of probesets, for each hop */
 };
 
 /*
@@ -216,31 +216,31 @@ struct scamper_tracelb_link
 typedef struct scamper_tracelb
 {
   /* the current list, cycle, and defaults */
-  scamper_list_t            *list;
-  scamper_cycle_t           *cycle;
-  uint32_t                   userid;
+  scamper_list_t *list;
+  scamper_cycle_t *cycle;
+  uint32_t userid;
 
   /* source and destination addresses of the load balancer trace */
-  scamper_addr_t            *src;
-  scamper_addr_t            *dst;
+  scamper_addr_t *src;
+  scamper_addr_t *dst;
 
   /* when the load balancer trace commenced */
-  struct timeval             start;
+  struct timeval start;
 
   /* load balancer traceroute parameters */
-  uint16_t                   sport;        /* base source port */
-  uint16_t                   dport;        /* base destination port */
-  uint16_t                   probe_size;   /* size of probe to send */
-  uint8_t                    type;         /* probe type to use */
-  uint8_t                    firsthop;     /* where to start probing */
-  uint8_t                    wait_timeout; /* seconds to wait before timeout */
-  uint8_t                    wait_probe;   /* min. inter-probe time per ttl */
-  uint8_t                    attempts;     /* number of attempts per probe */
-  uint8_t                    confidence;   /* confidence level to attain */
-  uint8_t                    tos;          /* type-of-service byte to use */
-  uint8_t                    gaplimit;     /* max consecutive unresp. hops */
-  uint8_t                    flags;        /* flags */
-  uint32_t                   probec_max;   /* max number of probes to send */
+  uint16_t sport; /* base source port */
+  uint16_t dport; /* base destination port */
+  uint16_t probe_size; /* size of probe to send */
+  uint8_t type; /* probe type to use */
+  uint8_t firsthop; /* where to start probing */
+  uint8_t wait_timeout; /* seconds to wait before timeout */
+  uint8_t wait_probe; /* min. inter-probe time per ttl */
+  uint8_t attempts; /* number of attempts per probe */
+  uint8_t confidence; /* confidence level to attain */
+  uint8_t tos; /* type-of-service byte to use */
+  uint8_t gaplimit; /* max consecutive unresp. hops */
+  uint8_t flags; /* flags */
+  uint32_t probec_max; /* max number of probes to send */
 
   /*
    * data collected:
@@ -260,12 +260,12 @@ typedef struct scamper_tracelb
    * error:
    *  if non-zero, something went wrong.
    */
-  scamper_tracelb_node_t   **nodes;
-  uint16_t                   nodec;
-  scamper_tracelb_link_t   **links;
-  uint16_t                   linkc;
-  uint32_t                   probec;
-  uint8_t                    error;
+  scamper_tracelb_node_t **nodes;
+  uint16_t nodec;
+  scamper_tracelb_link_t **links;
+  uint16_t linkc;
+  uint32_t probec;
+  uint8_t error;
 } scamper_tracelb_t;
 
 /*
@@ -277,11 +277,11 @@ typedef struct scamper_tracelb
  *  scamper_tracelb_type_tostr: return a string specifying the trace type
  *  scamper_tracelb_sort:  sort nodes and links in a deterministic manner
  */
-scamper_tracelb_t *scamper_tracelb_alloc(void);
-void               scamper_tracelb_free(scamper_tracelb_t *);
-scamper_addr_t    *scamper_tracelb_addr(const void *);
-const char        *scamper_tracelb_type_tostr(const scamper_tracelb_t *trace);
-int                scamper_tracelb_sort(scamper_tracelb_t *);
+scamper_tracelb_t* scamper_tracelb_alloc(void);
+void scamper_tracelb_free(scamper_tracelb_t*);
+scamper_addr_t* scamper_tracelb_addr(const void*);
+const char* scamper_tracelb_type_tostr(const scamper_tracelb_t *trace);
+int scamper_tracelb_sort(scamper_tracelb_t*);
 
 /*
  * basic scamper_tracelb_node_t routines:
@@ -292,16 +292,15 @@ int                scamper_tracelb_sort(scamper_tracelb_t *);
  *  scamper_tracelb_node_find:  find a node structure by address
  *  scamper_tracelb_node_cmp:   comparison function for comparing nodes
  */
-scamper_tracelb_node_t *scamper_tracelb_node_alloc(scamper_addr_t *);
-void                    scamper_tracelb_node_free(scamper_tracelb_node_t *);
-int                     scamper_tracelb_node_add(scamper_tracelb_t *,
-						 scamper_tracelb_node_t *);
-scamper_tracelb_node_t *scamper_tracelb_node_find(scamper_tracelb_t *,
-						  scamper_tracelb_node_t *);
-int scamper_tracelb_node_cmp(const scamper_tracelb_node_t *,
-			     const scamper_tracelb_node_t *);
-int scamper_tracelb_node_links_alloc(scamper_tracelb_node_t *, uint16_t);
-void scamper_tracelb_node_links_sort(scamper_tracelb_node_t *);
+scamper_tracelb_node_t* scamper_tracelb_node_alloc(scamper_addr_t*);
+void scamper_tracelb_node_free(scamper_tracelb_node_t*);
+int scamper_tracelb_node_add(scamper_tracelb_t*, scamper_tracelb_node_t*);
+scamper_tracelb_node_t* scamper_tracelb_node_find(scamper_tracelb_t*,
+                                                  scamper_tracelb_node_t*);
+int scamper_tracelb_node_cmp(const scamper_tracelb_node_t*,
+                             const scamper_tracelb_node_t*);
+int scamper_tracelb_node_links_alloc(scamper_tracelb_node_t*, uint16_t);
+void scamper_tracelb_node_links_sort(scamper_tracelb_node_t*);
 
 /*
  * basic scamper_tracelb_reply_t routines:
@@ -309,18 +308,18 @@ void scamper_tracelb_node_links_sort(scamper_tracelb_node_t *);
  *  scamper_tracelb_reply_alloc: allocate a scamper_tracelb_reply_t structure
  *  scamper_tracelb_reply_free:  free a reply structure
  */
-scamper_tracelb_reply_t *scamper_tracelb_reply_alloc(scamper_addr_t *);
-void scamper_tracelb_reply_free(scamper_tracelb_reply_t *);
+scamper_tracelb_reply_t* scamper_tracelb_reply_alloc(scamper_addr_t*);
+void scamper_tracelb_reply_free(scamper_tracelb_reply_t*);
 
 /*
  * basic scamper_tracelb_probe_t routines:
  *
  */
-scamper_tracelb_probe_t *scamper_tracelb_probe_alloc(void);
-void scamper_tracelb_probe_free(scamper_tracelb_probe_t *);
+scamper_tracelb_probe_t* scamper_tracelb_probe_alloc(void);
+void scamper_tracelb_probe_free(scamper_tracelb_probe_t*);
 int scamper_tracelb_probe_reply(scamper_tracelb_probe_t *probe,
-				scamper_tracelb_reply_t *reply);
-int scamper_tracelb_probe_replies_alloc(scamper_tracelb_probe_t *, uint16_t);
+                                scamper_tracelb_reply_t *reply);
+int scamper_tracelb_probe_replies_alloc(scamper_tracelb_probe_t*, uint16_t);
 
 /*
  * basic scamper_tracelb_link_t routines:
@@ -331,44 +330,43 @@ int scamper_tracelb_probe_replies_alloc(scamper_tracelb_probe_t *, uint16_t);
  *  scamper_tracelb_link_find:  convenient function to find a link in a trace
  *  scamper_tracelb_link_add:   add a link to a scamper_tracelb_t structure
  */
-scamper_tracelb_link_t *scamper_tracelb_link_alloc(void);
-scamper_tracelb_link_t *scamper_tracelb_link_find(const scamper_tracelb_t *,
-						  scamper_tracelb_link_t *);
-void scamper_tracelb_link_free(scamper_tracelb_link_t *);
-int scamper_tracelb_link_cmp(const scamper_tracelb_link_t *,
-			     const scamper_tracelb_link_t *);
-int scamper_tracelb_link_add(scamper_tracelb_t *, scamper_tracelb_link_t *);
-int scamper_tracelb_link_zerottlfwd(const scamper_tracelb_link_t *);
-int scamper_tracelb_link_probeset(scamper_tracelb_link_t *,
-				  scamper_tracelb_probeset_t *);
-int scamper_tracelb_link_probesets_alloc(scamper_tracelb_link_t *, uint8_t);
+scamper_tracelb_link_t* scamper_tracelb_link_alloc(void);
+scamper_tracelb_link_t* scamper_tracelb_link_find(const scamper_tracelb_t*,
+                                                  scamper_tracelb_link_t*);
+void scamper_tracelb_link_free(scamper_tracelb_link_t*);
+int scamper_tracelb_link_cmp(const scamper_tracelb_link_t*,
+                             const scamper_tracelb_link_t*);
+int scamper_tracelb_link_add(scamper_tracelb_t*, scamper_tracelb_link_t*);
+int scamper_tracelb_link_zerottlfwd(const scamper_tracelb_link_t*);
+int scamper_tracelb_link_probeset(scamper_tracelb_link_t*,
+                                  scamper_tracelb_probeset_t*);
+int scamper_tracelb_link_probesets_alloc(scamper_tracelb_link_t*, uint8_t);
 
 /*
  * basic scamper_tracelb_probeset_t routines:
  *
  */
-scamper_tracelb_probeset_t *scamper_tracelb_probeset_alloc(void);
-void scamper_tracelb_probeset_free(scamper_tracelb_probeset_t *);
-int scamper_tracelb_probeset_add(scamper_tracelb_probeset_t *,
-				 scamper_tracelb_probe_t *);
-int scamper_tracelb_probeset_probes_alloc(scamper_tracelb_probeset_t *,
-					  uint16_t);
+scamper_tracelb_probeset_t* scamper_tracelb_probeset_alloc(void);
+void scamper_tracelb_probeset_free(scamper_tracelb_probeset_t*);
+int scamper_tracelb_probeset_add(scamper_tracelb_probeset_t*,
+                                 scamper_tracelb_probe_t*);
+int scamper_tracelb_probeset_probes_alloc(scamper_tracelb_probeset_t*, uint16_t);
 
 /*
  * routines to summarise a set of probes beyond a specific node
  *
  */
-scamper_tracelb_probeset_summary_t *
-  scamper_tracelb_probeset_summary_alloc(scamper_tracelb_probeset_t *);
+scamper_tracelb_probeset_summary_t*
+scamper_tracelb_probeset_summary_alloc(scamper_tracelb_probeset_t*);
 void
-  scamper_tracelb_probeset_summary_free(scamper_tracelb_probeset_summary_t *);
+scamper_tracelb_probeset_summary_free(scamper_tracelb_probeset_summary_t*);
 
 /*
  * these functions allocate arrays of appropriate size, all elements
  * initialised to null.
  */
-int scamper_tracelb_nodes_alloc(scamper_tracelb_t *, uint16_t);
-int scamper_tracelb_links_alloc(scamper_tracelb_t *, uint16_t);
+int scamper_tracelb_nodes_alloc(scamper_tracelb_t*, uint16_t);
+int scamper_tracelb_links_alloc(scamper_tracelb_t*, uint16_t);
 
 /*
  * scamper_tracelb_fwdpathc
@@ -390,8 +388,8 @@ int scamper_tracelb_fwdpathc(const scamper_tracelb_t *trace, int *fwdpathc);
  * returns zero on success, or -1 if an error occurs.
  */
 int scamper_tracelb_node_convergencepoint(const scamper_tracelb_t *trace,
-					  const int *fwdpathc,
-					  int from, int *to);
+                                          const int *fwdpathc, int from,
+                                          int *to);
 
 /*
  * scamper_tracelb_nodes_extract
@@ -403,8 +401,8 @@ int scamper_tracelb_node_convergencepoint(const scamper_tracelb_t *trace,
  * error.
  */
 int scamper_tracelb_nodes_extract(const scamper_tracelb_t *trace,
-				  scamper_tracelb_node_t *from,
-				  scamper_tracelb_node_t *to,
-				  scamper_tracelb_node_t **nodes);
+                                  scamper_tracelb_node_t *from,
+                                  scamper_tracelb_node_t *to,
+                                  scamper_tracelb_node_t **nodes);
 
 #endif /* __SCAMPER_TRACELB_H */

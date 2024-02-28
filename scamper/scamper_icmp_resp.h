@@ -102,16 +102,16 @@
 typedef struct scamper_icmp_resp
 {
   /* the address family (AF_INET / AF_INET6) of the response */
-  int               ir_af;
+  int ir_af;
 
   /* the icmp file descriptor the message was received on */
-  int               ir_fd;
+  int ir_fd;
 
   /* when the ICMP response was received */
-  struct timeval    ir_rx;
+  struct timeval ir_rx;
 
   /* flags, whose meanings are defined above */
-  uint8_t           ir_flags;
+  uint8_t ir_flags;
 
   /*
    * category 1: the IP header;
@@ -124,29 +124,29 @@ typedef struct scamper_icmp_resp
    */
   union
   {
-    struct in_addr  v4;
+    struct in_addr v4;
     struct in6_addr v6;
   } ir_ip_src;
 
-  uint16_t          ir_ip_size;
-  uint16_t          ir_ip_id;
-  uint8_t           ir_ip_tos;
-  int16_t           ir_ip_ttl;  /* ir_ip_hlim; -1 if unavailable */
+  uint16_t ir_ip_size;
+  uint16_t ir_ip_id;
+  uint8_t ir_ip_tos;
+  int16_t ir_ip_ttl; /* ir_ip_hlim; -1 if unavailable */
 
   /*
    * if the response includes the IPv4 record route option, IP addresses
    * are found here.
    */
-  struct in_addr   *ir_ipopt_rrs;
-  uint8_t           ir_ipopt_rrc;
+  struct in_addr *ir_ipopt_rrs;
+  uint8_t ir_ipopt_rrc;
 
   /*
    * if the response includes the IPv4 timestamp option, the results of it
    * are found in here.
    */
-  uint8_t           ir_ipopt_tsc;
-  struct in_addr   *ir_ipopt_tsips;
-  uint32_t         *ir_ipopt_tstss;
+  uint8_t ir_ipopt_tsc;
+  struct in_addr *ir_ipopt_tsips;
+  uint32_t *ir_ipopt_tstss;
 
   /*
    * category 2: the ICMP header;
@@ -155,15 +155,15 @@ typedef struct scamper_icmp_resp
    * the type of the message, optional ICMP id and sequence fields are
    * also recorded.  if the message
    */
-  uint8_t           ir_icmp_type;
-  uint8_t           ir_icmp_code;
-  uint16_t          ir_icmp_id;
-  uint16_t          ir_icmp_seq;
-  uint16_t          ir_icmp_nhmtu;
-  uint8_t           ir_icmp_pptr;
-  uint32_t          ir_icmp_tso;
-  uint32_t          ir_icmp_tsr;
-  uint32_t          ir_icmp_tst;
+  uint8_t ir_icmp_type;
+  uint8_t ir_icmp_code;
+  uint16_t ir_icmp_id;
+  uint16_t ir_icmp_seq;
+  uint16_t ir_icmp_nhmtu;
+  uint8_t ir_icmp_pptr;
+  uint32_t ir_icmp_tso;
+  uint32_t ir_icmp_tsr;
+  uint32_t ir_icmp_tst;
 
   /*
    * category 3: the inner IP header;
@@ -175,25 +175,25 @@ typedef struct scamper_icmp_resp
    */
   union
   {
-    struct in_addr  v4;
+    struct in_addr v4;
     struct in6_addr v6;
   } ir_inner_ip_dst;
 
-  uint16_t          ir_inner_ip_size;
-  uint32_t          ir_inner_ip_id;    /* fragment id */
-  uint16_t          ir_inner_ip_off;   /* fragment offset, no bits */
-  uint32_t          ir_inner_ip_flow;  /* IPv6 flow */
-  uint8_t           ir_inner_ip_tos;
-  uint8_t           ir_inner_ip_ttl;   /* ir_inner_ip_hlim */
-  uint8_t           ir_inner_ip_proto;
-  struct in_addr   *ir_inner_ipopt_rrs;
-  uint8_t           ir_inner_ipopt_rrc;
-  uint8_t           ir_inner_ipopt_tsc;
-  struct in_addr   *ir_inner_ipopt_tsips;
-  uint32_t         *ir_inner_ipopt_tstss;
+  uint16_t ir_inner_ip_size;
+  uint32_t ir_inner_ip_id; /* fragment id */
+  uint16_t ir_inner_ip_off; /* fragment offset, no bits */
+  uint32_t ir_inner_ip_flow; /* IPv6 flow */
+  uint8_t ir_inner_ip_tos;
+  uint8_t ir_inner_ip_ttl; /* ir_inner_ip_hlim */
+  uint8_t ir_inner_ip_proto;
+  struct in_addr *ir_inner_ipopt_rrs;
+  uint8_t ir_inner_ipopt_rrc;
+  uint8_t ir_inner_ipopt_tsc;
+  struct in_addr *ir_inner_ipopt_tsips;
+  uint32_t *ir_inner_ipopt_tstss;
 
-  uint8_t          *ir_inner_data;
-  uint16_t          ir_inner_datalen;
+  uint8_t *ir_inner_data;
+  uint16_t ir_inner_datalen;
 
   /*
    * category 4: details of the transport header
@@ -218,16 +218,16 @@ typedef struct scamper_icmp_resp
 
     struct irt_icmp
     {
-      uint8_t  type;
-      uint8_t  code;
+      uint8_t type;
+      uint8_t code;
       uint16_t sum;
       uint16_t id;
       uint16_t seq;
     } irit_icmp;
   } ir_inner_trans_un;
 
-  uint8_t          *ir_ext;
-  uint16_t          ir_extlen;
+  uint8_t *ir_ext;
+  uint16_t ir_extlen;
 
 } scamper_icmp_resp_t;
 
@@ -255,7 +255,7 @@ void scamper_icmp_resp_clean(scamper_icmp_resp_t *ir);
 
 /* scamper only uses this function if it is built in debug mode */
 #if !defined(NDEBUG) || !defined(WITHOUT_DEBUGFILE)
-void    scamper_icmp_resp_print(const scamper_icmp_resp_t *resp);
+void scamper_icmp_resp_print(const scamper_icmp_resp_t *resp);
 #else
 #define scamper_icmp_resp_print(resp) ((void)0)
 #endif

@@ -32,18 +32,18 @@ typedef struct scamper_fd scamper_fd_t;
 typedef void (*scamper_fd_cb_t)(const int fd, void *param);
 
 /* these functions allocate reference to a socket shared throughout scamper */
-scamper_fd_t *scamper_fd_icmp4(void *addr);
-scamper_fd_t *scamper_fd_icmp6(void *addr);
-scamper_fd_t *scamper_fd_udp4(void *addr, uint16_t sport);
-scamper_fd_t *scamper_fd_udp6(void *addr, uint16_t sport);
-scamper_fd_t *scamper_fd_tcp4(void *addr, uint16_t sport);
-scamper_fd_t *scamper_fd_tcp6(void *addr, uint16_t sport);
-scamper_fd_t *scamper_fd_dl(int ifindex);
-scamper_fd_t *scamper_fd_ip4(void);
+scamper_fd_t* scamper_fd_icmp4(void *addr);
+scamper_fd_t* scamper_fd_icmp6(void *addr);
+scamper_fd_t* scamper_fd_udp4(void *addr, uint16_t sport);
+scamper_fd_t* scamper_fd_udp6(void *addr, uint16_t sport);
+scamper_fd_t* scamper_fd_tcp4(void *addr, uint16_t sport);
+scamper_fd_t* scamper_fd_tcp6(void *addr, uint16_t sport);
+scamper_fd_t* scamper_fd_dl(int ifindex);
+scamper_fd_t* scamper_fd_ip4(void);
 
 #ifndef _WIN32
-scamper_fd_t *scamper_fd_rtsock(void);
-scamper_fd_t *scamper_fd_ifsock(void);
+scamper_fd_t* scamper_fd_rtsock(void);
+scamper_fd_t* scamper_fd_ifsock(void);
 #endif
 
 /* return information on what the socket is bound to */
@@ -52,10 +52,10 @@ int scamper_fd_sport(const scamper_fd_t *fdn, uint16_t *sport);
 int scamper_fd_addr(const scamper_fd_t *fdn, void *addr, size_t len);
 
 /* this function allocates a socket that is exclusively held by the caller */
-scamper_fd_t *scamper_fd_private(int fd, void *param, scamper_fd_cb_t read_cb,
-				 scamper_fd_cb_t write_cb);
+scamper_fd_t* scamper_fd_private(int fd, void *param, scamper_fd_cb_t read_cb,
+                                 scamper_fd_cb_t write_cb);
 
-scamper_fd_t *scamper_fd_file(int fd, scamper_fd_cb_t read_cb, void *param);
+scamper_fd_t* scamper_fd_file(int fd, scamper_fd_cb_t read_cb, void *param);
 
 /*
  * this function reduces the reference count of the fdn, and closes the fd

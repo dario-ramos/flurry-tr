@@ -25,7 +25,7 @@
 
 #ifndef lint
 static const char rcsid[] =
-  "$Id: scamper_addr2mac.c,v 1.41 2017/12/03 09:38:26 mjl Exp $";
+    "$Id: scamper_addr2mac.c,v 1.41 2017/12/03 09:38:26 mjl Exp $";
 #endif
 
 #ifdef HAVE_CONFIG_H
@@ -56,36 +56,36 @@ static const char rcsid[] =
 #if defined(__linux__)
 struct ndmsg
 {
-  unsigned char   ndm_family;
-  unsigned char   ndm_pad1;
-  unsigned short  ndm_pad2;
-  int             ndm_ifindex;
-  uint16_t        ndm_state;
-  uint8_t         ndm_flags;
-  uint8_t         ndm_type;
+  unsigned char ndm_family;
+  unsigned char ndm_pad1;
+  unsigned short ndm_pad2;
+  int ndm_ifindex;
+  uint16_t ndm_state;
+  uint8_t ndm_flags;
+  uint8_t ndm_type;
 };
 
 struct sockaddr_nl
 {
-  sa_family_t     nl_family;
-  unsigned short  nl_pad;
-  uint32_t        nl_pid;
-  uint32_t        nl_groups;
+  sa_family_t nl_family;
+  unsigned short nl_pad;
+  uint32_t nl_pid;
+  uint32_t nl_groups;
 };
 
 struct nlmsghdr
 {
-  uint32_t        nlmsg_len;
-  uint16_t        nlmsg_type;
-  uint16_t        nlmsg_flags;
-  uint32_t        nlmsg_seq;
-  uint32_t        nlmsg_pid;
+  uint32_t nlmsg_len;
+  uint16_t nlmsg_type;
+  uint16_t nlmsg_flags;
+  uint32_t nlmsg_seq;
+  uint32_t nlmsg_pid;
 };
 
 struct rtattr
 {
-  unsigned short  rta_len;
-  unsigned short  rta_type;
+  unsigned short rta_len;
+  unsigned short rta_type;
 };
 
 #define NLMSG_ERROR         0x2
@@ -135,10 +135,10 @@ struct rtattr
 
 typedef struct addr2mac
 {
-  int             ifindex;
+  int ifindex;
   scamper_addr_t *ip;
   scamper_addr_t *mac;
-  time_t          expire;
+  time_t expire;
 } addr2mac_t;
 
 static splaytree_t *tree = NULL;
@@ -146,84 +146,93 @@ extern scamper_addrcache_t *addrcache;
 
 static int addr2mac_cmp(const addr2mac_t *a, const addr2mac_t *b)
 {
-  if(a->ifindex < b->ifindex) return -1;
-  if(a->ifindex > b->ifindex) return  1;
-  return scamper_addr_cmp(a->ip, b->ip);
+  if (a->ifindex < b->ifindex)
+    return -1;
+  if (a->ifindex > b->ifindex)
+    return 1;
+  return scamper_addr_cmp (a->ip, b->ip);
 }
 
 static void addr2mac_free(addr2mac_t *addr2mac)
 {
-  if(addr2mac->ip != NULL) scamper_addr_free(addr2mac->ip);
-  if(addr2mac->mac != NULL) scamper_addr_free(addr2mac->mac);
-  free(addr2mac);
+  if (addr2mac->ip != NULL)
+    scamper_addr_free (addr2mac->ip);
+  if (addr2mac->mac != NULL)
+    scamper_addr_free (addr2mac->mac);
+  free (addr2mac);
   return;
 }
 
-static addr2mac_t *addr2mac_alloc(const int ifindex, scamper_addr_t *ip,
-				  scamper_addr_t *mac, time_t expire)
+static addr2mac_t* addr2mac_alloc(const int ifindex, scamper_addr_t *ip,
+                                  scamper_addr_t *mac, time_t expire)
 {
   addr2mac_t *addr2mac;
 
-  if((addr2mac = malloc_zero(sizeof(addr2mac_t))) == NULL)
-    {
-      printerror(__func__, "could not malloc addr2mac");
-      return NULL;
-    }
+  if ((addr2mac = malloc_zero(sizeof(addr2mac_t))) == NULL)
+  {
+    printerror (__func__, "could not malloc addr2mac");
+    return NULL;
+  }
 
   addr2mac->ifindex = ifindex;
-  addr2mac->ip      = ip  != NULL ? scamper_addr_use(ip)  : NULL;
-  addr2mac->mac     = mac != NULL ? scamper_addr_use(mac) : NULL;
-  addr2mac->expire  = expire;
+  addr2mac->ip = ip != NULL ? scamper_addr_use (ip) : NULL;
+  addr2mac->mac = mac != NULL ? scamper_addr_use (mac) : NULL;
+  addr2mac->expire = expire;
   return addr2mac;
 }
 
 static int addr2mac_add(const int ifindex, const int type, const void *ipraw,
-			const void *macraw, const time_t expire)
+                        const void *macraw, const time_t expire)
 {
   const int mt = SCAMPER_ADDR_TYPE_ETHERNET;
   scamper_addr_t *mac = NULL;
-  scamper_addr_t *ip  = NULL;
+  scamper_addr_t *ip = NULL;
   addr2mac_t *addr2mac = NULL;
   char ipstr[128], macstr[128];
 
-  if((ip = scamper_addrcache_get(addrcache, type, ipraw)) == NULL)
-    {
-      printerror(__func__, "could not get ip");
-      goto err;
-    }
+  if ((ip = scamper_addrcache_get (addrcache, type, ipraw)) == NULL)
+  {
+    printerror (__func__, "could not get ip");
+    goto err;
+  }
 
-  if((mac = scamper_addrcache_get(addrcache, mt, macraw)) == NULL)
-    {
-      printerror(__func__, "could not get mac");
-      goto err;
-    }
+  if ((mac = scamper_addrcache_get (addrcache, mt, macraw)) == NULL)
+  {
+    printerror (__func__, "could not get mac");
+    goto err;
+  }
 
-  if((addr2mac = addr2mac_alloc(ifindex, ip, mac, expire)) == NULL)
-    {
-      goto err;
-    }
+  if ((addr2mac = addr2mac_alloc (ifindex, ip, mac, expire)) == NULL)
+  {
+    goto err;
+  }
 
-  scamper_addr_free(ip);  ip  = NULL;
-  scamper_addr_free(mac); mac = NULL;
+  scamper_addr_free (ip);
+  ip = NULL;
+  scamper_addr_free (mac);
+  mac = NULL;
 
-  if(splaytree_insert(tree, addr2mac) == NULL)
-    {
-      printerror(__func__, "could not add %s:%s to tree",
-		 scamper_addr_tostr(addr2mac->ip, ipstr, sizeof(ipstr)),
-		 scamper_addr_tostr(addr2mac->mac, macstr, sizeof(macstr)));
-      goto err;
-    }
+  if (splaytree_insert (tree, addr2mac) == NULL)
+  {
+    printerror (__func__, "could not add %s:%s to tree",
+                scamper_addr_tostr (addr2mac->ip, ipstr, sizeof(ipstr)),
+                scamper_addr_tostr (addr2mac->mac, macstr, sizeof(macstr)));
+    goto err;
+  }
 
-  scamper_debug(__func__, "ifindex %d ip %s mac %s expire %d", ifindex,
-		scamper_addr_tostr(addr2mac->ip, ipstr, sizeof(ipstr)),
-		scamper_addr_tostr(addr2mac->mac, macstr, sizeof(macstr)),
-		expire);
+  scamper_debug (__func__, "ifindex %d ip %s mac %s expire %d", ifindex,
+                 scamper_addr_tostr (addr2mac->ip, ipstr, sizeof(ipstr)),
+                 scamper_addr_tostr (addr2mac->mac, macstr, sizeof(macstr)),
+                 expire);
   return 0;
 
- err:
-  if(addr2mac != NULL) addr2mac_free(addr2mac);
-  if(mac != NULL) scamper_addr_free(mac);
-  if(ip != NULL) scamper_addr_free(ip);
+err:
+  if (addr2mac != NULL)
+    addr2mac_free (addr2mac);
+  if (mac != NULL)
+    scamper_addr_free (mac);
+  if (ip != NULL)
+    scamper_addr_free (ip);
   return -1;
 }
 
@@ -232,24 +241,24 @@ int scamper_addr2mac_add(int ifindex, scamper_addr_t *ip, scamper_addr_t *mac)
   addr2mac_t *a2m = NULL;
   char ipstr[128], macstr[128];
 
-  if(scamper_addr2mac_whohas(ifindex, ip) != NULL)
+  if (scamper_addr2mac_whohas (ifindex, ip) != NULL)
     return 0;
 
-  if((a2m = addr2mac_alloc(ifindex, ip, mac, 0)) == NULL)
+  if ((a2m = addr2mac_alloc (ifindex, ip, mac, 0)) == NULL)
     return -1;
 
-  if(splaytree_insert(tree, a2m) == NULL)
-    {
-      printerror(__func__, "could not add %s:%s to tree",
-		 scamper_addr_tostr(a2m->ip, ipstr, sizeof(ipstr)),
-		 scamper_addr_tostr(a2m->mac, macstr, sizeof(macstr)));
-      addr2mac_free(a2m);
-      return -1;
-    }
+  if (splaytree_insert (tree, a2m) == NULL)
+  {
+    printerror (__func__, "could not add %s:%s to tree",
+                scamper_addr_tostr (a2m->ip, ipstr, sizeof(ipstr)),
+                scamper_addr_tostr (a2m->mac, macstr, sizeof(macstr)));
+    addr2mac_free (a2m);
+    return -1;
+  }
 
-  scamper_debug(__func__, "ifindex %d ip %s mac %s", ifindex,
-		scamper_addr_tostr(a2m->ip, ipstr, sizeof(ipstr)),
-		scamper_addr_tostr(a2m->mac, macstr, sizeof(macstr)));
+  scamper_debug (__func__, "ifindex %d ip %s mac %s", ifindex,
+                 scamper_addr_tostr (a2m->ip, ipstr, sizeof(ipstr)),
+                 scamper_addr_tostr (a2m->mac, macstr, sizeof(macstr)));
   return 0;
 }
 
@@ -258,7 +267,7 @@ int scamper_addr2mac_add(int ifindex, scamper_addr_t *ip, scamper_addr_t *mac)
  *
  * return the MAC address associated with an IP address, if it is cached.
  */
-scamper_addr_t *scamper_addr2mac_whohas(const int ifindex, scamper_addr_t *dst)
+scamper_addr_t* scamper_addr2mac_whohas(const int ifindex, scamper_addr_t *dst)
 {
   addr2mac_t findme, *addr2mac;
 
@@ -266,10 +275,10 @@ scamper_addr_t *scamper_addr2mac_whohas(const int ifindex, scamper_addr_t *dst)
   findme.ip = dst;
 
   /* see if this IP address has a record in our tree */
-  if((addr2mac = splaytree_find(tree, &findme)) != NULL)
-    {
-      return addr2mac->mac;
-    }
+  if ((addr2mac = splaytree_find (tree, &findme)) != NULL)
+  {
+    return addr2mac->mac;
+  }
 
   return NULL;
 }
@@ -277,156 +286,157 @@ scamper_addr_t *scamper_addr2mac_whohas(const int ifindex, scamper_addr_t *dst)
 #if defined(__linux__)
 static int addr2mac_init_linux()
 {
-  struct nlmsghdr   *nlmsg;
-  struct ndmsg      *ndmsg;
-  struct rtattr     *rta, *tb[NDA_MAX];
+  struct nlmsghdr *nlmsg;
+  struct ndmsg *ndmsg;
+  struct rtattr *rta, *tb[NDA_MAX];
   struct sockaddr_nl snl;
-  struct msghdr      msg;
-  struct iovec       iov;
-  struct timeval     tv;
-  pid_t              pid;
-  uint8_t            buf[16384];
-  ssize_t            ssize;
-  ssize_t            len;
-  int                rlen;
-  int                fd = -1;
-  void              *ip, *mac;
-  int                iptype;
+  struct msghdr msg;
+  struct iovec iov;
+  struct timeval tv;
+  pid_t pid;
+  uint8_t buf[16384];
+  ssize_t ssize;
+  ssize_t len;
+  int rlen;
+  int fd = -1;
+  void *ip, *mac;
+  int iptype;
 
-  pid = getpid();
+  pid = getpid ();
 
-  memset(buf, 0, sizeof(buf));
-  nlmsg = (struct nlmsghdr *)buf;
-  nlmsg->nlmsg_len   = NLMSG_LENGTH(sizeof(struct ndmsg));
-  nlmsg->nlmsg_type  = RTM_GETNEIGH;
+  memset (buf, 0, sizeof(buf));
+  nlmsg = (struct nlmsghdr*) buf;
+  nlmsg->nlmsg_len = NLMSG_LENGTH(sizeof(struct ndmsg));
+  nlmsg->nlmsg_type = RTM_GETNEIGH;
   nlmsg->nlmsg_flags = NLM_F_REQUEST | NLM_F_ROOT | NLM_F_MATCH;
-  nlmsg->nlmsg_seq   = 0;
-  nlmsg->nlmsg_pid   = pid;
+  nlmsg->nlmsg_seq = 0;
+  nlmsg->nlmsg_pid = pid;
 
   ndmsg = NLMSG_DATA(nlmsg);
   ndmsg->ndm_family = AF_UNSPEC;
 
-  if((fd = socket(PF_NETLINK, SOCK_DGRAM, NETLINK_ROUTE)) == -1)
-    {
-      printerror(__func__, "could not open netlink");
-      goto err;
-    }
+  if ((fd = socket (PF_NETLINK, SOCK_DGRAM, NETLINK_ROUTE)) == -1)
+  {
+    printerror (__func__, "could not open netlink");
+    goto err;
+  }
 
   len = nlmsg->nlmsg_len;
-  if((ssize = send(fd, buf, len, 0)) < len)
+  if ((ssize = send (fd, buf, len, 0)) < len)
+  {
+    if (ssize == -1)
     {
-      if(ssize == -1)
-	{
-	  printerror(__func__, "could not send netlink");
-	}
+      printerror (__func__, "could not send netlink");
+    }
+    goto err;
+  }
+
+  for (;;)
+  {
+    iov.iov_base = buf;
+    iov.iov_len = sizeof(buf);
+
+    msg.msg_name = &snl;
+    msg.msg_namelen = sizeof(snl);
+    msg.msg_iov = &iov;
+    msg.msg_iovlen = 1;
+    msg.msg_control = NULL;
+    msg.msg_controllen = 0;
+    msg.msg_flags = 0;
+
+    if ((len = recvmsg (fd, &msg, 0)) == -1)
+    {
+      if (errno == EINTR)
+        continue;
+      printerror (__func__, "could not recvmsg");
       goto err;
     }
 
-  for(;;)
+    gettimeofday_wrap (&tv);
+
+    nlmsg = (struct nlmsghdr*) buf;
+    while (NLMSG_OK(nlmsg, len))
     {
-      iov.iov_base = buf;
-      iov.iov_len = sizeof(buf);
+      if (nlmsg->nlmsg_pid != pid || nlmsg->nlmsg_seq != 0)
+      {
+        goto skip;
+      }
 
-      msg.msg_name = &snl;
-      msg.msg_namelen = sizeof(snl);
-      msg.msg_iov = &iov;
-      msg.msg_iovlen = 1;
-      msg.msg_control = NULL;
-      msg.msg_controllen = 0;
-      msg.msg_flags = 0;
+      if (nlmsg->nlmsg_type == NLMSG_DONE)
+      {
+        goto done;
+      }
 
-      if((len = recvmsg(fd, &msg, 0)) == -1)
-	{
-	  if(errno == EINTR) continue;
-	  printerror(__func__, "could not recvmsg");
-	  goto err;
-	}
+      if (nlmsg->nlmsg_type == NLMSG_ERROR)
+      {
+        scamper_debug (__func__, "nlmsg error");
+        goto err;
+      }
 
-      gettimeofday_wrap(&tv);
+      /* get current neighbour entries only */
+      if (nlmsg->nlmsg_type != RTM_NEWNEIGH)
+      {
+        goto skip;
+      }
 
-      nlmsg = (struct nlmsghdr *)buf;
-      while(NLMSG_OK(nlmsg, len))
-	{
-	  if(nlmsg->nlmsg_pid != pid || nlmsg->nlmsg_seq != 0)
-	    {
-	      goto skip;
-	    }
+      /* make sure the address is reachable */
+      ndmsg = NLMSG_DATA(nlmsg);
+      if ((ndmsg->ndm_state & NUD_REACHABLE) == 0)
+      {
+        goto skip;
+      }
 
-	  if(nlmsg->nlmsg_type == NLMSG_DONE)
-	    {
-	      goto done;
-	    }
+      /* make sure we can process this address type */
+      switch (ndmsg->ndm_family)
+      {
+        case AF_INET:
+          iptype = SCAMPER_ADDR_TYPE_IPV4;
+          break;
 
-	  if(nlmsg->nlmsg_type == NLMSG_ERROR)
-	    {
-	      scamper_debug(__func__, "nlmsg error");
-	      goto err;
-	    }
+        case AF_INET6:
+          iptype = SCAMPER_ADDR_TYPE_IPV6;
+          break;
 
-	  /* get current neighbour entries only */
-	  if(nlmsg->nlmsg_type != RTM_NEWNEIGH)
-	    {
-	      goto skip;
-	    }
+        default:
+          goto skip;
+      }
 
-	  /* make sure the address is reachable */
-	  ndmsg = NLMSG_DATA(nlmsg);
-	  if((ndmsg->ndm_state & NUD_REACHABLE) == 0)
-	    {
-	      goto skip;
-	    }
+      /* fill a table with parameters from the payload */
+      memset (tb, 0, sizeof(tb));
+      rlen = nlmsg->nlmsg_len - NLMSG_LENGTH(sizeof(struct ndmsg));
+      for (rta = NDA_RTA(ndmsg); RTA_OK(rta, rlen); rta = RTA_NEXT(rta, rlen))
+      {
+        if (rta->rta_type >= NDA_MAX)
+          continue;
+        tb[rta->rta_type] = rta;
+      }
 
-	  /* make sure we can process this address type */
-	  switch(ndmsg->ndm_family)
-	    {
-	    case AF_INET:
-	      iptype = SCAMPER_ADDR_TYPE_IPV4;
-	      break;
+      /*
+       * skip if we don't have a destination IP address, or if
+       * we don't have an ethernet mac address
+       */
+      if (tb[NDA_DST] == NULL || tb[NDA_LLADDR] == NULL
+          || RTA_PAYLOAD(tb[NDA_LLADDR]) != 6)
+      {
+        goto skip;
+      }
 
-	    case AF_INET6:
-	      iptype = SCAMPER_ADDR_TYPE_IPV6;
-	      break;
+      ip = RTA_DATA(tb[NDA_DST]);
+      mac = RTA_DATA(tb[NDA_LLADDR]);
 
-	    default:
-	      goto skip;
-	    }
+      addr2mac_add (ndmsg->ndm_ifindex, iptype, ip, mac, tv.tv_sec + 600);
 
-	  /* fill a table with parameters from the payload */
-	  memset(tb, 0, sizeof(tb));
-	  rlen = nlmsg->nlmsg_len - NLMSG_LENGTH(sizeof(struct ndmsg));
-	  for(rta = NDA_RTA(ndmsg); RTA_OK(rta,rlen); rta = RTA_NEXT(rta,rlen))
-	    {
-	      if(rta->rta_type >= NDA_MAX)
-		continue;
-	      tb[rta->rta_type] = rta;
-	    }
-
-	  /*
-	   * skip if we don't have a destination IP address, or if
-	   * we don't have an ethernet mac address
-	   */
-	  if(tb[NDA_DST] == NULL ||
-	     tb[NDA_LLADDR] == NULL || RTA_PAYLOAD(tb[NDA_LLADDR]) != 6)
-	    {
-	      goto skip;
-	    }
-
-	  ip = RTA_DATA(tb[NDA_DST]);
-	  mac = RTA_DATA(tb[NDA_LLADDR]);
-
-	  addr2mac_add(ndmsg->ndm_ifindex, iptype, ip, mac, tv.tv_sec+600);
-
-	skip:
-	  nlmsg = NLMSG_NEXT(nlmsg, len);
-	}
+skip:
+      nlmsg = NLMSG_NEXT(nlmsg, len);
     }
+  }
 
- done:
-  close(fd);
+done:
+  close (fd);
   return 0;
 
- err:
-  close(fd);
+err:
+  close (fd);
   return -1;
 }
 #endif
@@ -612,13 +622,13 @@ static int addr2mac_init_win32()
 
 int scamper_addr2mac_init()
 {
-  if((tree = splaytree_alloc((splaytree_cmp_t)addr2mac_cmp)) == NULL)
-    {
-      printerror(__func__, "could not alloc tree");
-      return -1;
-    }
+  if ((tree = splaytree_alloc ((splaytree_cmp_t) addr2mac_cmp)) == NULL)
+  {
+    printerror (__func__, "could not alloc tree");
+    return -1;
+  }
 
-  if(scamper_option_noinitndc() != 0)
+  if (scamper_option_noinitndc () != 0)
     return 0;
 
 #ifdef HAVE_BSD_ARPCACHE
@@ -629,10 +639,10 @@ int scamper_addr2mac_init()
 #endif
 
 #ifdef __linux__
-  if(addr2mac_init_linux() != 0)
-    {
-      return -1;
-    }
+  if (addr2mac_init_linux () != 0)
+  {
+    return -1;
+  }
 #endif
 
 #ifdef _WIN32
@@ -647,6 +657,6 @@ int scamper_addr2mac_init()
 
 void scamper_addr2mac_cleanup()
 {
-  splaytree_free(tree, (splaytree_free_t)addr2mac_free);
+  splaytree_free (tree, (splaytree_free_t) addr2mac_free);
   return;
 }

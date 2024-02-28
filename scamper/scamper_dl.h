@@ -252,19 +252,19 @@
 typedef struct scamper_dl_rec
 {
   /* flags, meanings defined above */
-  uint32_t         dl_flags;
+  uint32_t dl_flags;
 
   /* type of the datalink which passed the packet */
-  uint32_t         dl_type;
+  uint32_t dl_type;
 
   /* the time that the packet was seen on the datalink */
-  struct timeval   dl_tv;
+  struct timeval dl_tv;
 
   /*
    * the index assigned by the OS that identifies the interface the
    * packet was pulled off
    */
-  int              dl_ifindex;
+  int dl_ifindex;
 
   /*
    * category 1: the datalink frame header, if any.
@@ -272,8 +272,8 @@ typedef struct scamper_dl_rec
    * scamper records the source and destination link local addresses if the
    * frame is ethernet or firewire; otherwise these fields are null;
    */
-  uint8_t         *dl_lladdr_src;
-  uint8_t         *dl_lladdr_dst;
+  uint8_t *dl_lladdr_src;
+  uint8_t *dl_lladdr_dst;
 
   /*
    * category 2: the network layer
@@ -281,42 +281,42 @@ typedef struct scamper_dl_rec
    * scamper records the network headers found.  either IPv4/IPv6, or ARP.
    *
    */
-  uint8_t          dl_net_type;
-  uint8_t         *dl_net_raw;
-  size_t           dl_net_rawlen;
+  uint8_t dl_net_type;
+  uint8_t *dl_net_raw;
+  size_t dl_net_rawlen;
 
   union
   {
     struct dl_ip
     {
-      int            af;    /* AF_INET or AF_INET6 */
-      uint8_t        hl;    /* header length */
-      uint8_t       *src;   /* pointer to raw source IP address */
-      uint8_t       *dst;   /* pointer to raw destination IP address */
-      uint16_t       size;  /* size of IP packet including header */
-      uint16_t       off;   /* fragment offset */
-      uint16_t       ipid;  /* IPv4 IP-ID */
-      uint32_t       id;    /* IPv6 frag ID */
-      uint32_t       flow;  /* IPv6 flowid (20 bits) */
-      uint8_t        tos;   /* 8 bits formerly known as type of service */
-      uint8_t        ttl;   /* time to live */
-      uint8_t        proto; /* IP protocol */
-      uint8_t        flags; /* flags */
-      uint8_t       *data;  /* payload after the IP header */
-      uint16_t       len;   /* length of data after the IP header */
+      int af; /* AF_INET or AF_INET6 */
+      uint8_t hl; /* header length */
+      uint8_t *src; /* pointer to raw source IP address */
+      uint8_t *dst; /* pointer to raw destination IP address */
+      uint16_t size; /* size of IP packet including header */
+      uint16_t off; /* fragment offset */
+      uint16_t ipid; /* IPv4 IP-ID */
+      uint32_t id; /* IPv6 frag ID */
+      uint32_t flow; /* IPv6 flowid (20 bits) */
+      uint8_t tos; /* 8 bits formerly known as type of service */
+      uint8_t ttl; /* time to live */
+      uint8_t proto; /* IP protocol */
+      uint8_t flags; /* flags */
+      uint8_t *data; /* payload after the IP header */
+      uint16_t len; /* length of data after the IP header */
     } net_ip;
 
     struct dl_arp
     {
-      uint16_t       hrd; /* hardware address space */
-      uint16_t       pro; /* protocol address space */
-      uint8_t        hln; /* hardware address length */
-      uint8_t        pln; /* protocol address length */
-      uint16_t       op;  /* opcode */
-      uint8_t       *sha; /* hardware address of sender */
-      uint8_t       *spa; /* protocol address of sender */
-      uint8_t       *tha; /* hardware address of target */
-      uint8_t       *tpa; /* protocol address of target */
+      uint16_t hrd; /* hardware address space */
+      uint16_t pro; /* protocol address space */
+      uint8_t hln; /* hardware address length */
+      uint8_t pln; /* protocol address length */
+      uint16_t op; /* opcode */
+      uint8_t *sha; /* hardware address of sender */
+      uint8_t *spa; /* protocol address of sender */
+      uint8_t *tha; /* hardware address of target */
+      uint8_t *tpa; /* protocol address of target */
     } net_arp;
 
   } dl_net_un;
@@ -338,82 +338,82 @@ typedef struct scamper_dl_rec
 
     struct dl_tcp
     {
-      uint16_t  sport;
-      uint16_t  dport;
-      uint32_t  seq;
-      uint32_t  ack;
-      uint8_t   hl;
-      uint8_t   flags;
-      uint16_t  win;
-      uint16_t  mss;
-      uint8_t   opts;
-      int8_t    sack_edgec;
-      uint32_t  sack_edges[8];
-      uint32_t  tsval;
-      uint32_t  tsecr;
-      uint8_t  *data;
-      uint16_t  datalen;
-      uint8_t   fo_cookie[16];
-      uint8_t   fo_cookielen;
+      uint16_t sport;
+      uint16_t dport;
+      uint32_t seq;
+      uint32_t ack;
+      uint8_t hl;
+      uint8_t flags;
+      uint16_t win;
+      uint16_t mss;
+      uint8_t opts;
+      int8_t sack_edgec;
+      uint32_t sack_edges[8];
+      uint32_t tsval;
+      uint32_t tsecr;
+      uint8_t *data;
+      uint16_t datalen;
+      uint8_t fo_cookie[16];
+      uint8_t fo_cookielen;
     } tcp;
 
     struct dl_icmp
     {
-      uint8_t  type;
-      uint8_t  code;
+      uint8_t type;
+      uint8_t code;
 
       union
       {
-	struct dl_icmp6_nd
-	{
-	  uint8_t  *target;
-	  uint8_t  *opts;
-	  uint16_t  opts_len;
-	} nd;
+        struct dl_icmp6_nd
+        {
+          uint8_t *target;
+          uint8_t *opts;
+          uint16_t opts_len;
+        } nd;
 
-	struct dl_icmp_echo
-	{
-	  uint16_t  id;
-	  uint16_t  seq;
-	} echo;
+        struct dl_icmp_echo
+        {
+          uint16_t id;
+          uint16_t seq;
+        } echo;
 
-	struct dl_icmp_err
-	{
-	  uint16_t  nhmtu;
-	  uint8_t  *ip_src;
-	  uint8_t  *ip_dst;
-	  uint16_t  ip_size;
-	  uint16_t  ip_id;   /* IPv4 ID */
-	  uint32_t  ip_flow; /* IPv6 flow */
-	  uint8_t   ip_tos;
-	  uint8_t   ip_ttl;
-	  uint8_t   ip_proto;
+        struct dl_icmp_err
+        {
+          uint16_t nhmtu;
+          uint8_t *ip_src;
+          uint8_t *ip_dst;
+          uint16_t ip_size;
+          uint16_t ip_id; /* IPv4 ID */
+          uint32_t ip_flow; /* IPv6 flow */
+          uint8_t ip_tos;
+          uint8_t ip_ttl;
+          uint8_t ip_proto;
 
-	  union
-	  {
-	    struct icmp_udp
-	    {
-	      uint16_t sport;
-	      uint16_t dport;
-	      uint16_t sum;
-	    } udp;
+          union
+          {
+            struct icmp_udp
+            {
+              uint16_t sport;
+              uint16_t dport;
+              uint16_t sum;
+            } udp;
 
-	    struct icmp_tcp
-	    {
-	      uint16_t sport;
-	      uint16_t dport;
-	      uint32_t seq;
-	    } tcp;
+            struct icmp_tcp
+            {
+              uint16_t sport;
+              uint16_t dport;
+              uint32_t seq;
+            } tcp;
 
-	    struct icmp_icmp
-	    {
-	      uint8_t  type;
-	      uint8_t  code;
-	      uint16_t id;
-	      uint16_t seq;
-	    } icmp;
-	  } trans;
-	} err;
+            struct icmp_icmp
+            {
+              uint8_t type;
+              uint8_t code;
+              uint16_t id;
+              uint16_t seq;
+            } icmp;
+          } trans;
+        } err;
       } un;
     } icmp;
   } dl_trans_un;
@@ -515,7 +515,7 @@ typedef struct scamper_dl scamper_dl_t;
 int scamper_dl_init(void);
 void scamper_dl_cleanup(void);
 
-int scamper_dl_tx_type(scamper_dl_t *);
+int scamper_dl_tx_type(scamper_dl_t*);
 
 /*
  * scamper_dl_open:    open datalink interface, use privsep if required
@@ -544,8 +544,7 @@ void scamper_dl_read_cb(const int fd, void *param);
  * transmit the packet, including relevant headers which are included, on
  * the datalink.
  */
-int scamper_dl_tx(const scamper_dl_t *dl,
-		  const uint8_t *pkt, const size_t len);
+int scamper_dl_tx(const scamper_dl_t *dl, const uint8_t *pkt, const size_t len);
 
 #ifdef __SCAMPER_ADDR_H
 int scamper_dl_rec_src(scamper_dl_rec_t *dl, scamper_addr_t *addr);
@@ -553,10 +552,10 @@ int scamper_dl_rec_icmp_ip_dst(scamper_dl_rec_t *dl, scamper_addr_t *addr);
 #endif
 
 #if !defined(NDEBUG) && !defined(WITHOUT_DEBUGFILE)
-void    scamper_dl_rec_tcp_print(const scamper_dl_rec_t *dl);
-void    scamper_dl_rec_udp_print(const scamper_dl_rec_t *dl);
-void    scamper_dl_rec_frag_print(const scamper_dl_rec_t *dl);
-void    scamper_dl_rec_icmp_print(const scamper_dl_rec_t *dl);
+void scamper_dl_rec_tcp_print(const scamper_dl_rec_t *dl);
+void scamper_dl_rec_udp_print(const scamper_dl_rec_t *dl);
+void scamper_dl_rec_frag_print(const scamper_dl_rec_t *dl);
+void scamper_dl_rec_icmp_print(const scamper_dl_rec_t *dl);
 #else
 #define scamper_dl_rec_tcp_print(dl) ((void)0)
 #define scamper_dl_rec_udp_print(dl) ((void)0)

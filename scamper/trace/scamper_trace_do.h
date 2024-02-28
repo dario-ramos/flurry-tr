@@ -25,17 +25,16 @@
 #ifndef __SCAMPER_DO_TRACE_H
 #define __SCAMPER_DO_TRACE_H
 
-void *scamper_do_trace_alloc(char *str);
+void* scamper_do_trace_alloc(char *str);
 
-scamper_task_t *scamper_do_trace_alloctask(void *data,
-					   scamper_list_t *list,
-					   scamper_cycle_t *cycle);
+scamper_task_t* scamper_do_trace_alloctask(void *data, scamper_list_t *list,
+                                           scamper_cycle_t *cycle);
 
 int scamper_do_trace_arg_validate(int argc, char *argv[], int *stop);
 
 void scamper_do_trace_free(void *data);
 
-const char *scamper_do_trace_usage(void);
+const char* scamper_do_trace_usage(void);
 
 int scamper_do_trace_dtree_lss_clear(char *name);
 

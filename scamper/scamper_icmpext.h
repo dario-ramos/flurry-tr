@@ -32,10 +32,10 @@
  */
 typedef struct scamper_icmpext
 {
-  uint8_t                 ie_cn;   /* class number */
-  uint8_t                 ie_ct;   /* class type */
-  uint16_t                ie_dl;   /* data length */
-  uint8_t                *ie_data; /* data */
+  uint8_t ie_cn; /* class number */
+  uint8_t ie_ct; /* class type */
+  uint16_t ie_dl; /* data length */
+  uint8_t *ie_data; /* data */
   struct scamper_icmpext *ie_next;
 } scamper_icmpext_t;
 
@@ -89,23 +89,23 @@ typedef struct scamper_icmpext
 
 typedef struct scamper_icmpext_unnumbered
 {
-  uint8_t  flags;
+  uint8_t flags;
   uint32_t ifindex;
-  int      af;
+  int af;
   union
-    {
-      struct in_addr v4;
-      struct in6_addr v6;
-    } un;
+  {
+    struct in_addr v4;
+    struct in6_addr v6;
+  } un;
   char name[64];
   uint32_t mtu;
 } scamper_icmpext_unnumbered_t;
 
 void scamper_icmpext_unnumbered_parse(scamper_icmpext_t *ext,
-				      scamper_icmpext_unnumbered_t *unn);
+                                      scamper_icmpext_unnumbered_t *unn);
 
-scamper_icmpext_t *scamper_icmpext_alloc(uint8_t cn, uint8_t ct, uint16_t dl,
-					 const void *data);
+scamper_icmpext_t* scamper_icmpext_alloc(uint8_t cn, uint8_t ct, uint16_t dl,
+                                         const void *data);
 int scamper_icmpext_parse(scamper_icmpext_t **ext, void *data, uint16_t len);
 void scamper_icmpext_free(scamper_icmpext_t *exts);
 

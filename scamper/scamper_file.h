@@ -32,11 +32,10 @@ typedef struct scamper_file scamper_file_t;
 /* handle for filtering objects from a file when reading */
 typedef struct scamper_file_filter scamper_file_filter_t;
 
-typedef int (*scamper_file_writefunc_t)(void *param,
-					const void *data, size_t len);
+typedef int (*scamper_file_writefunc_t)(void *param, const void *data,
+                                        size_t len);
 
-typedef int (*scamper_file_readfunc_t)(void *param,
-				       uint8_t **data, size_t len);
+typedef int (*scamper_file_readfunc_t)(void *param, uint8_t **data, size_t len);
 
 /* types of objects that scamper understands */
 #define SCAMPER_FILE_OBJ_LIST          0x01
@@ -54,85 +53,82 @@ typedef int (*scamper_file_readfunc_t)(void *param,
 #define SCAMPER_FILE_OBJ_SNIFF         0x0d
 #define SCAMPER_FILE_OBJ_HOST          0x0e
 
-scamper_file_t *scamper_file_open(char *fn, char mode, char *type);
-scamper_file_t *scamper_file_openfd(int fd, char *fn, char mode, char *type);
-scamper_file_t *scamper_file_opennull(char mode, char *format);
+scamper_file_t* scamper_file_open(char *fn, char mode, char *type);
+scamper_file_t* scamper_file_openfd(int fd, char *fn, char mode, char *type);
+scamper_file_t* scamper_file_opennull(char mode, char *format);
 void scamper_file_close(scamper_file_t *sf);
 void scamper_file_free(scamper_file_t *sf);
 
-scamper_file_filter_t *scamper_file_filter_alloc(uint16_t *types,uint16_t num);
+scamper_file_filter_t* scamper_file_filter_alloc(uint16_t *types, uint16_t num);
 void scamper_file_filter_free(scamper_file_filter_t *filter);
 int scamper_file_filter_isset(scamper_file_filter_t *filter, uint16_t type);
 
 int scamper_file_read(scamper_file_t *sf, scamper_file_filter_t *filter,
-		      uint16_t *obj_type, void **obj_data);
+                      uint16_t *obj_type, void **obj_data);
 
-int scamper_file_write_obj(scamper_file_t *sf,uint16_t type,const void *data);
+int scamper_file_write_obj(scamper_file_t *sf, uint16_t type, const void *data);
 
 struct scamper_cycle;
 int scamper_file_write_cycle_start(scamper_file_t *sf,
-				   struct scamper_cycle *cycle);
+                                   struct scamper_cycle *cycle);
 int scamper_file_write_cycle_stop(scamper_file_t *sf,
-				  struct scamper_cycle *cycle);
+                                  struct scamper_cycle *cycle);
 
 struct scamper_trace;
 int scamper_file_write_trace(scamper_file_t *sf,
-			     const struct scamper_trace *trace);
+                             const struct scamper_trace *trace);
 
 struct scamper_traceb;
 int scamper_file_write_traceb(scamper_file_t *sf,
-                 const struct scamper_traceb *trace);
+                              const struct scamper_traceb *trace);
 
 struct scamper_tracelb;
 int scamper_file_write_tracelb(scamper_file_t *sf,
-			       const struct scamper_tracelb *trace);
+                               const struct scamper_tracelb *trace);
 
 struct scamper_ping;
-int scamper_file_write_ping(scamper_file_t *sf,
-			    const struct scamper_ping *ping);
+int scamper_file_write_ping(scamper_file_t *sf, const struct scamper_ping *ping);
 
 struct scamper_sting;
 int scamper_file_write_sting(scamper_file_t *sf,
-			     const struct scamper_sting *sting);
+                             const struct scamper_sting *sting);
 
 struct scamper_dealias;
 int scamper_file_write_dealias(scamper_file_t *sf,
-			       const struct scamper_dealias *dealias);
+                               const struct scamper_dealias *dealias);
 
 struct scamper_neighbourdisc;
 int scamper_file_write_neighbourdisc(scamper_file_t *sf,
-				     const struct scamper_neighbourdisc *nd);
+                                     const struct scamper_neighbourdisc *nd);
 
 struct scamper_tbit;
-int scamper_file_write_tbit(scamper_file_t *sf,
-			    const struct scamper_tbit *tbit);
+int scamper_file_write_tbit(scamper_file_t *sf, const struct scamper_tbit *tbit);
 
 struct scamper_sniff;
 int scamper_file_write_sniff(scamper_file_t *sf,
-			     const struct scamper_sniff *sniff);
+                             const struct scamper_sniff *sniff);
 
 struct scamper_host;
-int scamper_file_write_host(scamper_file_t *sf,
-			    const struct scamper_host *host);
+int scamper_file_write_host(scamper_file_t *sf, const struct scamper_host *host);
 
-char *scamper_file_type_tostr(scamper_file_t *sf, char *buf, size_t len);
-char *scamper_file_getfilename(scamper_file_t *sf);
+char* scamper_file_type_tostr(scamper_file_t *sf, char *buf, size_t len);
+char* scamper_file_getfilename(scamper_file_t *sf);
 
-int   scamper_file_geteof(scamper_file_t *sf);
-void  scamper_file_seteof(scamper_file_t *sf);
+int scamper_file_geteof(scamper_file_t *sf);
+void scamper_file_seteof(scamper_file_t *sf);
 
-void  scamper_file_setreadfunc(scamper_file_t *sf, void *param,
-			       scamper_file_readfunc_t readfunc);
+void scamper_file_setreadfunc(scamper_file_t *sf, void *param,
+                              scamper_file_readfunc_t readfunc);
 scamper_file_readfunc_t scamper_file_getreadfunc(const scamper_file_t *sf);
-void *scamper_file_getreadparam(const scamper_file_t *sf);
+void* scamper_file_getreadparam(const scamper_file_t *sf);
 
-void  scamper_file_setwritefunc(scamper_file_t *sf, void *param,
-				scamper_file_writefunc_t writefunc);
+void scamper_file_setwritefunc(scamper_file_t *sf, void *param,
+                               scamper_file_writefunc_t writefunc);
 scamper_file_writefunc_t scamper_file_getwritefunc(const scamper_file_t *sf);
-void *scamper_file_getwriteparam(const scamper_file_t *sf);
+void* scamper_file_getwriteparam(const scamper_file_t *sf);
 
-int   scamper_file_getfd(const scamper_file_t *sf);
-void *scamper_file_getstate(const scamper_file_t *sf);
-void  scamper_file_setstate(scamper_file_t *sf, void *state);
+int scamper_file_getfd(const scamper_file_t *sf);
+void* scamper_file_getstate(const scamper_file_t *sf);
+void scamper_file_setstate(scamper_file_t *sf, void *state);
 
 #endif /* __SCAMPER_FILE_H */

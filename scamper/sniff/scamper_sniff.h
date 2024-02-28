@@ -32,36 +32,36 @@
 
 typedef struct scamper_sniff_pkt
 {
-  struct timeval        tv;
-  uint8_t              *data;
-  uint16_t              len;
+  struct timeval tv;
+  uint8_t *data;
+  uint16_t len;
 } scamper_sniff_pkt_t;
 
 typedef struct scamper_sniff
 {
-  scamper_list_t       *list;
-  scamper_cycle_t      *cycle;
-  uint32_t              userid;
+  scamper_list_t *list;
+  scamper_cycle_t *cycle;
+  uint32_t userid;
 
-  struct timeval        start;
-  struct timeval        finish;
-  uint8_t               stop_reason;
-  uint32_t              limit_pktc;
-  uint16_t              limit_time;
+  struct timeval start;
+  struct timeval finish;
+  uint8_t stop_reason;
+  uint32_t limit_pktc;
+  uint16_t limit_time;
 
-  scamper_addr_t       *src;
-  uint16_t              icmpid;
+  scamper_addr_t *src;
+  uint16_t icmpid;
 
   scamper_sniff_pkt_t **pkts;
-  uint32_t              pktc;
+  uint32_t pktc;
 
 } scamper_sniff_t;
 
-scamper_sniff_t *scamper_sniff_alloc(void);
-void scamper_sniff_free(scamper_sniff_t *);
+scamper_sniff_t* scamper_sniff_alloc(void);
+void scamper_sniff_free(scamper_sniff_t*);
 
-scamper_sniff_pkt_t *scamper_sniff_pkt_alloc(uint8_t *data, uint16_t len,
-					     struct timeval *tv);
+scamper_sniff_pkt_t* scamper_sniff_pkt_alloc(uint8_t *data, uint16_t len,
+                                             struct timeval *tv);
 void scamper_sniff_pkt_free(scamper_sniff_pkt_t *pkt);
 
 int scamper_sniff_pkts_alloc(scamper_sniff_t *sniff, int pktc);

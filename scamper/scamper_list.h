@@ -38,11 +38,11 @@
  */
 typedef struct scamper_list
 {
-  uint32_t  id;
-  char     *name;
-  char     *descr;
-  char     *monitor;
-  int       refcnt;
+  uint32_t id;
+  char *name;
+  char *descr;
+  char *monitor;
+  int refcnt;
 } scamper_list_t;
 
 /*
@@ -60,11 +60,11 @@ typedef struct scamper_list
 typedef struct scamper_cycle
 {
   scamper_list_t *list;
-  uint32_t        id;
-  uint32_t        start_time;
-  uint32_t        stop_time;
-  char           *hostname;
-  int             refcnt;
+  uint32_t id;
+  uint32_t start_time;
+  uint32_t stop_time;
+  char *hostname;
+  int refcnt;
 } scamper_cycle_t;
 
 /*
@@ -74,14 +74,14 @@ typedef struct scamper_cycle
  * for use by data objects, we use a reference counter in each structure
  * so that it is allocated just the once.
  */
-scamper_list_t *scamper_list_alloc(const uint32_t id, const char *name,
-				   const char *descr, const char *monitor);
-scamper_list_t *scamper_list_use(scamper_list_t *list);
+scamper_list_t* scamper_list_alloc(const uint32_t id, const char *name,
+                                   const char *descr, const char *monitor);
+scamper_list_t* scamper_list_use(scamper_list_t *list);
 void scamper_list_free(scamper_list_t *list);
 int scamper_list_cmp(const scamper_list_t *a, const scamper_list_t *b);
 
-scamper_cycle_t *scamper_cycle_alloc(scamper_list_t *list);
-scamper_cycle_t *scamper_cycle_use(scamper_cycle_t *cycle);
+scamper_cycle_t* scamper_cycle_alloc(scamper_list_t *list);
+scamper_cycle_t* scamper_cycle_use(scamper_cycle_t *cycle);
 void scamper_cycle_free(scamper_cycle_t *cycle);
 int scamper_cycle_cmp(scamper_cycle_t *a, scamper_cycle_t *b);
 

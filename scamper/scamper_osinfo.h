@@ -34,11 +34,11 @@ typedef struct scamper_osinfo
 {
   /* name of the OS, and an ID for it */
   char *os;
-  int   os_id;
+  int os_id;
 
   /* parse the OS version string into integers */
   long *os_rel;
-  int   os_rel_dots;
+  int os_rel_dots;
 
 } scamper_osinfo_t;
 
@@ -47,4 +47,4 @@ typedef struct scamper_osinfo
 int scamper_osinfo_init(void);
 void scamper_osinfo_cleanup(void);
 
-const scamper_osinfo_t *scamper_osinfo_get(void);
+const scamper_osinfo_t* scamper_osinfo_get(void);

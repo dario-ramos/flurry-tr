@@ -24,7 +24,7 @@
 
 #ifndef lint
 static const char rcsid[] =
-  "$Id: scamper_if.c,v 1.25 2017/12/03 09:38:27 mjl Exp $";
+    "$Id: scamper_if.c,v 1.25 2017/12/03 09:38:27 mjl Exp $";
 #endif
 
 #ifdef HAVE_CONFIG_H
@@ -43,11 +43,11 @@ int scamper_if_getifindex(const char *ifname, int *ifindex)
 {
   unsigned int i;
 
-  if((i = if_nametoindex(ifname)) == 0)
-    {
-      printerror(__func__, "could not get index for %s", ifname);
-      return -1;
-    }
+  if ((i = if_nametoindex (ifname)) == 0)
+  {
+    printerror (__func__, "could not get index for %s", ifname);
+    return -1;
+  }
 
   *ifindex = i;
   return 0;
@@ -83,19 +83,19 @@ int scamper_if_getifname(char *str, size_t len, int ifindex)
 {
   char ifname[IFNAMSIZ];
 
-  if(if_indextoname(ifindex, ifname) == NULL)
-    {
-      printerror(__func__, "could not get name for %d", ifindex);
-      return -1;
-    }
+  if (if_indextoname (ifindex, ifname) == NULL)
+  {
+    printerror (__func__, "could not get name for %d", ifindex);
+    return -1;
+  }
 
-  if(strlen(ifname) + 1 > len)
-    {
-      scamper_debug(__func__, "ifname too small");
-      return -1;
-    }
+  if (strlen (ifname) + 1 > len)
+  {
+    scamper_debug (__func__, "ifname too small");
+    return -1;
+  }
 
-  strncpy(str, ifname, len);
+  strncpy (str, ifname, len);
   return 0;
 }
 #endif
@@ -116,25 +116,25 @@ int scamper_if_getmtu(const int ifindex, uint16_t *ifmtu)
   assert(ifindex >= 0);
 
   /* given the index, return the interface name to query */
-  if(if_indextoname((unsigned int)ifindex, ifr.ifr_name) == NULL)
-    {
-      printerror(__func__, "could not if_indextoname");
-      return -1;
-    }
+  if (if_indextoname ((unsigned int) ifindex, ifr.ifr_name) == NULL)
+  {
+    printerror (__func__, "could not if_indextoname");
+    return -1;
+  }
 
-  if((fd = scamper_fd_ifsock()) == NULL)
-    {
-      printerror(__func__, "could not get ifsock");
-      return -1;
-    }
+  if ((fd = scamper_fd_ifsock ()) == NULL)
+  {
+    printerror (__func__, "could not get ifsock");
+    return -1;
+  }
 
-  if(ioctl(scamper_fd_fd_get(fd), SIOCGIFMTU, &ifr) == -1)
-    {
-      printerror(__func__, "could not SIOCGIFMTU");
-      scamper_fd_free(fd);
-      return -1;
-    }
-  scamper_fd_free(fd);
+  if (ioctl (scamper_fd_fd_get (fd), SIOCGIFMTU, &ifr) == -1)
+  {
+    printerror (__func__, "could not SIOCGIFMTU");
+    scamper_fd_free (fd);
+    return -1;
+  }
+  scamper_fd_free (fd);
 
 #if defined(__sun__)
   mtu = ifr.ifr_metric;
@@ -142,11 +142,11 @@ int scamper_if_getmtu(const int ifindex, uint16_t *ifmtu)
   mtu = ifr.ifr_mtu;
 #endif
 
-  if(mtu >= 0 && mtu <= 65535)
-    {
-      *ifmtu = mtu;
-      return 0;
-    }
+  if (mtu >= 0 && mtu <= 65535)
+  {
+    *ifmtu = mtu;
+    return 0;
+  }
 
   return -1;
 }
@@ -173,30 +173,31 @@ int scamper_if_getmac(const int ifindex, uint8_t *mac)
   scamper_fd_t *fd = NULL;
   struct ifreq ifr;
 
-  if(if_indextoname(ifindex, ifr.ifr_name) == NULL)
-    {
-      printerror(__func__, "could not if_indextoname");
-      goto err;
-    }
+  if (if_indextoname (ifindex, ifr.ifr_name) == NULL)
+  {
+    printerror (__func__, "could not if_indextoname");
+    goto err;
+  }
 
-  if((fd = scamper_fd_ifsock()) == NULL)
-    {
-      printerror(__func__, "could not get ifsock");
-      goto err;
-    }
+  if ((fd = scamper_fd_ifsock ()) == NULL)
+  {
+    printerror (__func__, "could not get ifsock");
+    goto err;
+  }
 
-  if(ioctl(scamper_fd_fd_get(fd), SIOCGIFHWADDR, &ifr) == -1)
-    {
-      printerror(__func__, "could not SIOCGIFHWADDR");
-      goto err;
-    }
-  memcpy(mac, ifr.ifr_hwaddr.sa_data, 6);
+  if (ioctl (scamper_fd_fd_get (fd), SIOCGIFHWADDR, &ifr) == -1)
+  {
+    printerror (__func__, "could not SIOCGIFHWADDR");
+    goto err;
+  }
+  memcpy (mac, ifr.ifr_hwaddr.sa_data, 6);
 
-  scamper_fd_free(fd);
+  scamper_fd_free (fd);
   return 0;
 
- err:
-  if(fd != NULL) scamper_fd_free(fd);
+err:
+  if (fd != NULL)
+    scamper_fd_free (fd);
   return -1;
 }
 #elif defined(_WIN32)
@@ -328,38 +329,40 @@ int scamper_if_getifindex_byaddr(const struct sockaddr *addr, int *ifindex)
   struct ifaddrs *ifa = NULL, *ifp;
   int rc;
 
-  if(getifaddrs(&ifa) != 0)
+  if (getifaddrs (&ifa) != 0)
     goto err;
 
-  for(ifp = ifa; ifp != NULL; ifp = ifp->ifa_next)
-    {
-      if(ifp->ifa_addr == NULL || ifp->ifa_addr->sa_family != addr->sa_family)
-	continue;
+  for (ifp = ifa; ifp != NULL; ifp = ifp->ifa_next)
+  {
+    if (ifp->ifa_addr == NULL || ifp->ifa_addr->sa_family != addr->sa_family)
+      continue;
 
-      if(addr->sa_family == AF_INET)
-	rc = addr4_cmp(&((struct sockaddr_in *)addr)->sin_addr,
-		       &((struct sockaddr_in *)ifp->ifa_addr)->sin_addr);
-      else if(addr->sa_family == AF_INET6)
-	rc = addr6_cmp(&((struct sockaddr_in6 *)addr)->sin6_addr,
-		       &((struct sockaddr_in6 *)ifp->ifa_addr)->sin6_addr);
-      else goto err;
-
-      if(rc == 0)
-	break;
-    }
-
-  if(ifp == NULL)
-    {
-      errno = ENOENT;
+    if (addr->sa_family == AF_INET)
+      rc = addr4_cmp (&((struct sockaddr_in*) addr)->sin_addr,
+                      &((struct sockaddr_in*) ifp->ifa_addr)->sin_addr);
+    else if (addr->sa_family == AF_INET6)
+      rc = addr6_cmp (&((struct sockaddr_in6*) addr)->sin6_addr,
+                      &((struct sockaddr_in6*) ifp->ifa_addr)->sin6_addr);
+    else
       goto err;
-    }
 
-  rc = scamper_if_getifindex(ifp->ifa_name, ifindex);
-  freeifaddrs(ifa);
+    if (rc == 0)
+      break;
+  }
+
+  if (ifp == NULL)
+  {
+    errno = ENOENT;
+    goto err;
+  }
+
+  rc = scamper_if_getifindex (ifp->ifa_name, ifindex);
+  freeifaddrs (ifa);
   return rc;
 
- err:
-  if(ifa != NULL) freeifaddrs(ifa);
+err:
+  if (ifa != NULL)
+    freeifaddrs (ifa);
   return -1;
 }
 #else

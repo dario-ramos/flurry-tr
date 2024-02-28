@@ -39,10 +39,10 @@ int scamper_window_get(void);
 int scamper_window_set(const int window);
 
 #define SCAMPER_COMMAND_DEF   "trace"
-const char *scamper_command_get(void);
+const char* scamper_command_get(void);
 int scamper_command_set(const char *command);
 
-const char *scamper_monitorname_get(void);
+const char* scamper_monitorname_get(void);
 int scamper_monitorname_set(const char *monitorname);
 
 int scamper_option_planetlab(void);

@@ -72,9 +72,9 @@ typedef struct scamper_option_in
  */
 typedef struct scamper_option_out
 {
-  int                        id;
-  int                        type;
-  char                      *str;
+  int id;
+  int type;
+  char *str;
   struct scamper_option_out *next;
 } scamper_option_out_t;
 
@@ -91,14 +91,13 @@ typedef struct scamper_option_out
  * this function will modify the opt_str parameter passed in rather than
  * duplicate portions of the input string.
  */
-int scamper_options_parse(char *opt_str,
-			  const scamper_option_in_t *opts_in, const int cnt_in,
-			  scamper_option_out_t **opts_out, char **stop);
+int scamper_options_parse(char *opt_str, const scamper_option_in_t *opts_in,
+                          const int cnt_in, scamper_option_out_t **opts_out,
+                          char **stop);
 
-int scamper_options_validate(const scamper_option_in_t *opts, const int cnt,
-			     int argc, char *argv[], int *stop,
-			     int validate(int optid, char *param,
-					  long long *out));
+int scamper_options_validate(
+    const scamper_option_in_t *opts, const int cnt, int argc, char *argv[],
+    int *stop, int validate(int optid, char *param, long long *out));
 
 /*
  * scamper_options_count
@@ -107,7 +106,7 @@ int scamper_options_validate(const scamper_option_in_t *opts, const int cnt,
  */
 int scamper_options_count(scamper_option_out_t *opts);
 
-int scamper_options_c2id(const scamper_option_in_t *opts,const int cnt,char c);
+int scamper_options_c2id(const scamper_option_in_t *opts, const int cnt, char c);
 
 /*
  * scamper_options_free

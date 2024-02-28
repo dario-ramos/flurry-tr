@@ -8,4 +8,3 @@ Feature: Trace command
       Given I am running scamper trace from the command line
       When I run the trace scamper command with just an IP address argument
       Then I should get a trace response without errors
-

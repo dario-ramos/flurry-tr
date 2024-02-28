@@ -24,15 +24,14 @@
 #ifndef __SCAMPER_DO_SNIFF_H
 #define __SCAMPER_DO_SNIFF_H
 
-const char *scamper_do_sniff_usage(void);
+const char* scamper_do_sniff_usage(void);
 
-void *scamper_do_sniff_alloc(char *str);
+void* scamper_do_sniff_alloc(char *str);
 
 void scamper_do_sniff_free(void *data);
 
-scamper_task_t *scamper_do_sniff_alloctask(void *data,
-					  scamper_list_t *list,
-					  scamper_cycle_t *cycle);
+scamper_task_t* scamper_do_sniff_alloctask(void *data, scamper_list_t *list,
+                                           scamper_cycle_t *cycle);
 
 int scamper_do_sniff_arg_validate(int argc, char *argv[], int *stop);
 

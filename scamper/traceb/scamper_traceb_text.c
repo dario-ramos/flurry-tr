@@ -44,8 +44,8 @@ static const char rcsid[] =
  *
  * return 0 on successful write, -1 otherwise.
  */
-int scamper_file_text_traceb_write (const scamper_file_t *sf,
-                                    const scamper_traceb_t *trace)
+int scamper_file_text_traceb_write(const scamper_file_t *sf,
+                                   const scamper_traceb_t *trace)
 {
   /* current return code */
   int rc = -1;

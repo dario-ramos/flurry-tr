@@ -92,3 +92,6 @@ utils/sc_wartsfix/sc_wartsfix
 
 # Behavior tests
 tests/features/steps/__pycache__
+
+# Scamper debug files
+*.log

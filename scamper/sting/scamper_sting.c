@@ -31,7 +31,7 @@
 
 #ifndef lint
 static const char rcsid[] =
-  "$Id: scamper_sting.c,v 1.11 2014/06/12 19:59:48 mjl Exp $";
+    "$Id: scamper_sting.c,v 1.11 2014/06/12 19:59:48 mjl Exp $";
 #endif
 
 #ifdef HAVE_CONFIG_H
@@ -44,41 +44,44 @@ static const char rcsid[] =
 #include "scamper_sting.h"
 #include "utils.h"
 
-scamper_sting_pkt_t *scamper_sting_pkt_alloc(uint8_t flags, uint8_t *data,
-					     uint16_t len, struct timeval *tv)
+scamper_sting_pkt_t* scamper_sting_pkt_alloc(uint8_t flags, uint8_t *data,
+                                             uint16_t len, struct timeval *tv)
 {
   scamper_sting_pkt_t *pkt;
 
-  if((pkt = malloc_zero(sizeof(scamper_sting_pkt_t))) == NULL)
+  if ((pkt = malloc_zero(sizeof(scamper_sting_pkt_t))) == NULL)
     goto err;
 
   pkt->flags = flags;
-  if(len != 0 && data != NULL)
-    {
-      if((pkt->data = memdup(data, len)) == NULL)
-	goto err;
-      pkt->len = len;
-    }
-  if(tv != NULL) timeval_cpy(&pkt->tv, tv);
+  if (len != 0 && data != NULL)
+  {
+    if ((pkt->data = memdup (data, len)) == NULL)
+      goto err;
+    pkt->len = len;
+  }
+  if (tv != NULL)
+    timeval_cpy (&pkt->tv, tv);
   return pkt;
 
- err:
-  free(pkt);
+err:
+  free (pkt);
   return NULL;
 }
 
 void scamper_sting_pkt_free(scamper_sting_pkt_t *pkt)
 {
-  if(pkt == NULL)
+  if (pkt == NULL)
     return;
-  if(pkt->data != NULL) free(pkt->data);
-  free(pkt);
+  if (pkt->data != NULL)
+    free (pkt->data);
+  free (pkt);
   return;
 }
 
-int scamper_sting_data(scamper_sting_t *sting,const uint8_t *data,uint16_t len)
+int scamper_sting_data(scamper_sting_t *sting, const uint8_t *data,
+                       uint16_t len)
 {
-  if(len == 0 || (sting->data = memdup(data, len)) == NULL)
+  if (len == 0 || (sting->data = memdup (data, len)) == NULL)
     return -1;
   sting->datalen = len;
   return 0;
@@ -86,10 +89,10 @@ int scamper_sting_data(scamper_sting_t *sting,const uint8_t *data,uint16_t len)
 
 int scamper_sting_pkt_record(scamper_sting_t *sting, scamper_sting_pkt_t *pkt)
 {
-  size_t len = (sting->pktc + 1) * sizeof(scamper_sting_pkt_t *);
+  size_t len = (sting->pktc + 1) * sizeof(scamper_sting_pkt_t*);
 
   /* Add a new element to the pkts array */
-  if(realloc_wrap((void**)&sting->pkts, len) != 0)
+  if (realloc_wrap ((void**) &sting->pkts, len) != 0)
     return -1;
 
   sting->pkts[sting->pktc++] = pkt;
@@ -98,28 +101,33 @@ int scamper_sting_pkt_record(scamper_sting_t *sting, scamper_sting_pkt_t *pkt)
 
 int scamper_sting_pkts_alloc(scamper_sting_t *sting, uint32_t pktc)
 {
-  size_t size = pktc * sizeof(scamper_sting_pkt_t *);
-  if((sting->pkts = (scamper_sting_pkt_t **)malloc_zero(size)) == NULL)
+  size_t size = pktc * sizeof(scamper_sting_pkt_t*);
+  if ((sting->pkts = (scamper_sting_pkt_t**) malloc_zero(size)) == NULL)
     return -1;
   return 0;
 }
 
 void scamper_sting_free(scamper_sting_t *sting)
 {
-  if(sting == NULL)
+  if (sting == NULL)
     return;
 
-  if(sting->src != NULL)   scamper_addr_free(sting->src);
-  if(sting->dst != NULL)   scamper_addr_free(sting->dst);
-  if(sting->list != NULL)  scamper_list_free(sting->list);
-  if(sting->cycle != NULL) scamper_cycle_free(sting->cycle);
-  if(sting->data != NULL)  free(sting->data);
+  if (sting->src != NULL)
+    scamper_addr_free (sting->src);
+  if (sting->dst != NULL)
+    scamper_addr_free (sting->dst);
+  if (sting->list != NULL)
+    scamper_list_free (sting->list);
+  if (sting->cycle != NULL)
+    scamper_cycle_free (sting->cycle);
+  if (sting->data != NULL)
+    free (sting->data);
 
-  free(sting);
+  free (sting);
   return;
 }
 
-scamper_sting_t *scamper_sting_alloc(void)
+scamper_sting_t* scamper_sting_alloc(void)
 {
-  return (scamper_sting_t *)malloc_zero(sizeof(scamper_sting_t));
+  return (scamper_sting_t*) malloc_zero(sizeof(scamper_sting_t));
 }

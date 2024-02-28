@@ -67,9 +67,9 @@
  */
 typedef struct scamper_addr
 {
-  int   type;
+  int type;
   void *addr;
-  int   refcnt;
+  int refcnt;
   void *internal;
 } scamper_addr_t;
 
@@ -104,10 +104,10 @@ typedef struct scamper_addr
  * scamper_addr_netaddr:
  *  return the network address for the supplied address given prefix length.
  */
-scamper_addr_t *scamper_addr_alloc(const int type, const void *addr);
-scamper_addr_t *scamper_addr_use(scamper_addr_t *sa);
+scamper_addr_t* scamper_addr_alloc(const int type, const void *addr);
+scamper_addr_t* scamper_addr_use(scamper_addr_t *sa);
 void scamper_addr_free(scamper_addr_t *sa);
-scamper_addr_t *scamper_addr_resolve(const int af, const char *str);
+scamper_addr_t* scamper_addr_resolve(const int af, const char *str);
 int scamper_addr_af(const scamper_addr_t *sa);
 int scamper_addr_inprefix(const scamper_addr_t *sa, const void *p, int len);
 int scamper_addr_prefix(const scamper_addr_t *a, const scamper_addr_t *b);
@@ -147,8 +147,8 @@ int scamper_addr_raw_cmp(const scamper_addr_t *a, const void *raw);
  *  given a scamper address, convert it to a string representation in the
  *  buffer of specified size.
  */
-const char *scamper_addr_tostr(const scamper_addr_t *sa,
-			       char *dst, const size_t size);
+const char* scamper_addr_tostr(const scamper_addr_t *sa, char *dst,
+                               const size_t size);
 
 /*
  * scamper_addr_size
@@ -170,7 +170,7 @@ size_t scamper_addr_size(const scamper_addr_t *sa);
  *  address is freed as well.
  */
 typedef struct scamper_addrcache scamper_addrcache_t;
-scamper_addrcache_t *scamper_addrcache_alloc(void);
+scamper_addrcache_t* scamper_addrcache_alloc(void);
 void scamper_addrcache_free(scamper_addrcache_t *ac);
 
 /*
@@ -178,11 +178,11 @@ void scamper_addrcache_free(scamper_addrcache_t *ac);
  *  return a pointer to a scamper_addr_t which corresponds to the address
  *  out of the cache; allocate the address from scratch if necessary
  */
-scamper_addr_t *scamper_addrcache_get(scamper_addrcache_t *ac,
-				      const int type, const void *addr);
+scamper_addr_t* scamper_addrcache_get(scamper_addrcache_t *ac, const int type,
+                                      const void *addr);
 
-scamper_addr_t *scamper_addrcache_resolve(scamper_addrcache_t *ac,
-					  const int af, const char *addr);
+scamper_addr_t* scamper_addrcache_resolve(scamper_addrcache_t *ac, const int af,
+                                          const char *addr);
 
 /*
  * scamper_addr_islinklocal:

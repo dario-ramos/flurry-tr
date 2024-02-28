@@ -24,7 +24,7 @@
 
 #ifndef lint
 static const char rcsid[] =
-  "$Id: scamper_firewall.c,v 1.53 2017/12/03 09:42:27 mjl Exp $";
+    "$Id: scamper_firewall.c,v 1.53 2017/12/03 09:42:27 mjl Exp $";
 #endif
 
 #ifdef HAVE_CONFIG_H
@@ -1088,7 +1088,8 @@ static int pf_init(char *opts)
 }
 #endif /* HAVE_PF */
 
-scamper_firewall_entry_t *scamper_firewall_entry_get(scamper_firewall_rule_t *sfw)
+scamper_firewall_entry_t* scamper_firewall_entry_get(
+    scamper_firewall_rule_t *sfw)
 {
 #if defined(HAVE_IPFW) || defined(HAVE_PF)
   scamper_firewall_entry_t findme, *entry = NULL;
