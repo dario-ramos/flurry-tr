@@ -73,5 +73,10 @@ utils/sc_wartsfix/sc_wartsfix
 .project
 .settings/
 
-# Scamper debug files
+# Scamper application files (input, output, debug logs)
 *.log
+*.warts
+*.txt
+
+# Backup files
+configure~
