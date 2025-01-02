@@ -43,6 +43,10 @@
 #include "trace/scamper_trace_warts.h"
 #include "trace/scamper_trace_json.h"
 #endif
+#if !defined(BUILDING_SCAMPER) || !defined(DISABLE_SCAMPER_TRACEB)
+#include "traceb/scamper_traceb.h"
+#include "traceb/scamper_traceb_text.h"
+#endif
 #if !defined(BUILDING_SCAMPER) || !defined(DISABLE_SCAMPER_PING)
 #include "ping/scamper_ping.h"
 #include "ping/scamper_ping_text.h"
@@ -181,6 +185,9 @@ typedef struct write_handlers
 #if !defined(BUILDING_SCAMPER) || !defined(DISABLE_SCAMPER_TRACE)
   int (*trace)(const scamper_file_t *sf, const scamper_trace_t *trace, void *p);
 #endif
+#if !defined(BUILDING_SCAMPER) || !defined(DISABLE_SCAMPER_TRACEB)
+  int (*traceb)(const scamper_file_t *sf, const scamper_traceb_t *traceb, void *p);
+#endif
 #if !defined(BUILDING_SCAMPER) || !defined(DISABLE_SCAMPER_PING)
   int (*ping)(const scamper_file_t *sf, const scamper_ping_t *ping, void *p);
 #endif
@@ -222,6 +229,9 @@ static write_handlers_t warts_write_handlers =
 #if !defined(BUILDING_SCAMPER) || !defined(DISABLE_SCAMPER_TRACE)
   scamper_file_warts_trace_write,         /* trace */
 #endif
+#if !defined(BUILDING_SCAMPER) || !defined(DISABLE_SCAMPER_TRACEB)
+  NULL,                                   /* traceb */
+#endif
 #if !defined(BUILDING_SCAMPER) || !defined(DISABLE_SCAMPER_PING)
   scamper_file_warts_ping_write,          /* ping */
 #endif
@@ -258,6 +268,9 @@ static write_handlers_t json_write_handlers =
   scamper_file_json_cyclestop_write,      /* cycle_stop */
 #if !defined(BUILDING_SCAMPER) || !defined(DISABLE_SCAMPER_TRACE)
   scamper_file_json_trace_write,          /* trace */
+#endif
+#if !defined(BUILDING_SCAMPER) || !defined(DISABLE_SCAMPER_TRACEB)
+  NULL,                                   /* traceb */
 #endif
 #if !defined(BUILDING_SCAMPER) || !defined(DISABLE_SCAMPER_PING)
   scamper_file_json_ping_write,           /* ping */
@@ -296,6 +309,9 @@ static write_handlers_t text_write_handlers =
 #if !defined(BUILDING_SCAMPER) || !defined(DISABLE_SCAMPER_TRACE)
   scamper_file_text_trace_write,          /* trace */
 #endif
+#if !defined(BUILDING_SCAMPER) || !defined(DISABLE_SCAMPER_TRACEB)
+  scamper_file_text_traceb_write,         /* traceb */
+#endif
 #if !defined(BUILDING_SCAMPER) || !defined(DISABLE_SCAMPER_PING)
   scamper_file_text_ping_write,           /* ping */
 #endif
@@ -332,6 +348,9 @@ static write_handlers_t null_write_handlers =
   NULL,                                   /* cycle_stop */
 #if !defined(BUILDING_SCAMPER) || !defined(DISABLE_SCAMPER_TRACE)
   NULL,                                   /* trace */
+#endif
+#if !defined(BUILDING_SCAMPER) || !defined(DISABLE_SCAMPER_TRACEB)
+  NULL,                                   /* traceb */
 #endif
 #if !defined(BUILDING_SCAMPER) || !defined(DISABLE_SCAMPER_PING)
   NULL,                                   /* ping */
@@ -558,6 +577,17 @@ int scamper_file_write_trace(scamper_file_t *sf,
 }
 #endif
 
+#if !defined(BUILDING_SCAMPER) || !defined(DISABLE_SCAMPER_TRACEB)
+int scamper_file_write_traceb(scamper_file_t *sf,
+			     const scamper_traceb_t *trace, void *p)
+{
+  assert(sf->type < handler_cnt);
+  if(handlers[sf->type].write->traceb != NULL)
+    return handlers[sf->type].write->traceb(sf, trace, p);
+  return -1;
+}
+#endif
+
 #if !defined(BUILDING_SCAMPER) || !defined(DISABLE_SCAMPER_PING)
 int scamper_file_write_ping(scamper_file_t *sf,
 			    const scamper_ping_t *ping, void *p)
@@ -678,6 +708,11 @@ int scamper_file_write_obj(scamper_file_t *sf, uint16_t type, const void *data)
     NULL, /* SCAMPER_FILE_OBJ_ADDR */
 #if !defined(BUILDING_SCAMPER) || !defined(DISABLE_SCAMPER_TRACE)
     (write_obj_func_t)scamper_file_write_trace,
+#else
+    NULL,
+#endif
+#if !defined(BUILDING_SCAMPER) || !defined(DISABLE_SCAMPER_TRACEB)
+    (write_obj_func_t)scamper_file_write_traceb,
 #else
     NULL,
 #endif

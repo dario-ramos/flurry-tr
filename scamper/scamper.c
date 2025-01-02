@@ -66,6 +66,10 @@
 #include "trace/scamper_trace_cmd.h"
 #include "trace/scamper_trace_do.h"
 #endif
+#ifndef DISABLE_SCAMPER_TRACEB
+#include "traceb/scamper_traceb_cmd.h"
+#include "traceb/scamper_traceb_do.h"
+#endif
 #ifndef DISABLE_SCAMPER_PING
 #include "ping/scamper_ping_cmd.h"
 #include "ping/scamper_ping_do.h"
@@ -546,6 +550,10 @@ static int check_options(int argc, char *argv[])
 #ifndef DISABLE_SCAMPER_TRACE
     {"scamper-trace",   "trace",
      scamper_do_trace_arg_validate, scamper_do_trace_usage},
+#endif
+#ifndef DISABLE_SCAMPER_TRACEB
+    {"scamper-traceb",   "traceb",
+     scamper_do_traceb_arg_validate, scamper_do_traceb_usage},
 #endif
 #ifndef DISABLE_SCAMPER_PING
     {"scamper-ping",    "ping",

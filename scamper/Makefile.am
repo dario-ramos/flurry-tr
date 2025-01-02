@@ -32,6 +32,8 @@ libscamperfile_la_SOURCES = \
 	trace/scamper_trace_text.c \
 	trace/scamper_trace_json.c \
 	trace/scamper_trace_lib.c \
+	traceb/scamper_traceb.c \
+	traceb/scamper_traceb_text.c \
 	ping/scamper_ping.c \
 	ping/scamper_ping_warts.c \
 	ping/scamper_ping_text.c \
@@ -139,6 +141,13 @@ scamper_SOURCES += \
 	trace/scamper_trace_cmd.c \
 	trace/scamper_trace_do.c
 endif
+if ENABLE_SCAMPER_TRACEB
+scamper_SOURCES += \
+	traceb/scamper_traceb.c \
+	traceb/scamper_traceb_text.c \
+	traceb/scamper_traceb_cmd.c \
+	traceb/scamper_traceb_do.c
+endif
 if ENABLE_SCAMPER_PING
 scamper_SOURCES += \
 	ping/scamper_ping.c \
@@ -233,6 +242,7 @@ include_HEADERS = \
 	scamper_list.h \
 	scamper_icmpext.h \
 	trace/scamper_trace.h \
+	traceb/scamper_traceb.h \
 	ping/scamper_ping.h \
 	tracelb/scamper_tracelb.h \
 	dealias/scamper_dealias.h \
@@ -250,5 +260,5 @@ man_MANS = \
 	warts.5
 
 CLEANFILES = *~ *.core \
-	trace/*~ ping/*~ tracelb/*~ dealias/*~ sting/*~ \
+	trace/*~ traceb/*~ ping/*~ tracelb/*~ dealias/*~ sting/*~ \
 	neighbourdisc/*~ tbit/*~ sniff/*~ host/*~ http/*~ udpprobe/*~

@@ -81,6 +81,19 @@ if test "x$enable_scamper_trace" = xno; then
 fi
 AM_CONDITIONAL([ENABLE_SCAMPER_TRACE], [test x$enable_scamper_trace = xyes])
 
+# --disable-scamper-traceb
+AC_ARG_ENABLE([scamper_traceb],
+  [AS_HELP_STRING([--disable-scamper-traceb],
+		  [disable traceb method in scamper])],
+  [enable_scamper_traceb=$enableval],
+  [enable_scamper_traceb=yes]
+)
+if test "x$enable_scamper_traceb" = xno; then
+  AC_DEFINE([DISABLE_SCAMPER_TRACEB], [1],
+  	    [Define to 1 to disable traceb method in scamper])
+fi
+AM_CONDITIONAL([ENABLE_SCAMPER_TRACEB], [test x$enable_scamper_traceb = xyes])
+
 # --disable-scamper-ping
 AC_ARG_ENABLE([scamper_ping],
   [AS_HELP_STRING([--disable-scamper-ping], [disable ping method in scamper])],
